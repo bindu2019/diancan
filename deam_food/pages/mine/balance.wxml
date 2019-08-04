@@ -1,0 +1,15 @@
+<scroll-view bindscrolltolower="getRecordList" class="container" lowerThreshold="50" scrollY="true" style="height:{{scrollHeight}}px" wx:if="{{isShow==1}}">
+    <view class="dui-cell-group nomargin">
+        <view class="dui-cell">
+            <view class="dui-cell-text credits-title">当前余额</view>
+            <view class="dui-cell-remark noremark credits-value">{{memberInfo.credit2}}元</view>
+        </view>
+        <view class="dui-cell" wx:if="{{total>0}}" wx:for="{{list}}">
+            <view class="dui-cell-text">
+                <view class="credits-title">{{item.remark}}</view>
+                <view class="credits-time">{{item.createtime}}</view>
+            </view>
+            <view class="dui-cell-remark noremark credits-num">{{item.num}}</view>
+        </view>
+    </view>
+</scroll-view>

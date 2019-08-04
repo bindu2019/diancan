@@ -1,0 +1,85 @@
+page {
+    background: #f2f2f2;
+}
+
+.slide-image {
+    width: 100%;
+}
+
+.index-button {
+    padding: 30rpx 20rpx 0 20rpx;
+}
+
+.tobuy {
+    background-color: #f08c2a;
+    color: #FFFFFF;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.button-box {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 15px 0;
+    display: flex;
+    margin-bottom: 30rpx;
+}
+
+.button-box i.icon {
+    margin-left: 40px;
+    font-size: 70px;
+    line-height: 70px;
+    color: #f14353;
+}
+
+.button-box .intro {
+    margin-left: 40px;
+    margin-top: 5px;
+}
+
+.button-box .intro .title {
+    background: #ffa1a1;
+    color: #ffffff;
+    font-size: 12pt;
+    line-height: 30px;
+    padding: 0px 50px;
+    border-radius: 15px;
+    display: inline-block;
+}
+
+.button-box .intro .remark {
+    text-align: center;
+    color: #afaeae;
+    font-size: 11pt;
+    margin-top: 5px;
+}
+
+.button-box .intro .title.getself {
+    background: #76bdef;
+}
+
+.button-box .intro .title.takeout {
+    background: #faa040;
+}
+
+.button-box i.icon.icon-store {
+    color: #f7a84b;
+}
+
+.button-box i.icon.icon-takeout {
+    color: #63aee3;
+}
+
+.icon-image {
+    width: 70px;
+    height: 70px;
+    margin-left: 40px;
+}
+
+.ad-box {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99999999;
+}

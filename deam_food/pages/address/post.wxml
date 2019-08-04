@@ -1,0 +1,32 @@
+<view class="dui-cell-group">
+    <view class="dui-cell">
+        <view class="dui-cell-label">联系人</view>
+        <view class="dui-cell-info">
+            <input bindinput="bindKeyRealname" class="dui-input" data-name="realname" placeholder="姓名" placeholderClass="placeholder" type="text" value="{{realname}}"></input>
+        </view>
+    </view>
+    <view class="dui-cell">
+        <view class="dui-cell-label">电话</view>
+        <view class="dui-cell-info">
+            <input bindinput="bindKeyTelphone" class="dui-input" data-name="telphone" maxlength="11" placeholder="手机号码" placeholderClass="placeholder" type="number" value="{{telphone}}"></input>
+        </view>
+    </view>
+    <view bindtap="chooseAddr" class="dui-cell">
+        <view class="dui-cell-label">地址</view>
+        <view class="dui-cell-text choose-addr">
+            <text wx:if="{{name==''}}">点击选择地址</text>
+            <text class="addr-name" wx:if="{{name!=''}}">{{name}}</text>
+            <text class="addr-address" wx:if="{{address!=''}}">{{address}}</text>
+        </view>
+        <view class="dui-cell-remark"></view>
+    </view>
+    <view class="dui-cell">
+        <view class="dui-cell-label">门牌号</view>
+        <view class="dui-cell-info">
+            <input bindinput="bindKeyAddrNumber" class="dui-input" data-name="addrNumber" placeholder="例：1号楼905" placeholderClass="placeholder" type="text" value="{{addrNumber}}"></input>
+        </view>
+    </view>
+</view>
+<view class="button-box">
+    <button bindtap="submitAddr" type="confirm">确定</button>
+</view>

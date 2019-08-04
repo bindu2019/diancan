@@ -1,0 +1,32 @@
+.dui-cell-group .dui-cell .dui-cell-remark.credits-value {
+    font-size: 18pt;
+    color: #666666!important;
+}
+
+.dui-cell-group .dui-cell .dui-cell-remark.credits-num {
+    font-size: 14pt;
+    color: #666666!important;
+}
+
+.dui-cell-group .dui-cell .dui-cell-text.credits-title {
+    font-size: 14pt;
+}
+
+.credits-title {
+    color: #000;
+    font-size: 12pt;
+}
+
+.credits-time {
+    color: #808080;
+    font-size: 11pt;
+}
+
+.dui-cell-group .dui-cell:nth-child(1):before {
+    border-top: 2px solid #ebebeb;
+    right: 0;
+}
+
+.dui-cell-group .dui-cell:before {
+    border-top: 2px dashed #ebebeb;
+}

@@ -1,0 +1,132 @@
+page {
+    background: #f3f3f3;
+}
+
+.container {
+    padding-bottom: 50px;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.content-empty i {
+    font-size: 80pt;
+}
+
+.content-empty text {
+    display: block;
+}
+
+.address-add {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    color: #ff9c37;
+    font-size: 12pt;
+    text-align: center;
+    padding: 12px 0;
+    border-top: 1px solid #f4f4f4;
+}
+
+.dui-list {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 10px 15px;
+    transition-duration: 300ms;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.dui-list:before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #ebebeb;
+    color: #ebebeb;
+    transform-origin: 0 0;
+    transform: scaleY(0.5);
+    left: 15px;
+}
+
+.dui-list:first-child:before {
+    display: none;
+}
+
+.dui-list-inner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    -webkit-box-flex: 1;
+    flex: 1;
+    display: block;
+}
+
+.dui-list-inner .title {
+    position: relative;
+    font-size: 12pt;
+    line-height: 22px;
+    color: #000;
+    overflow: hidden;
+}
+
+.dui-list-inner .text {
+    position: relative;
+    font-size: 10pt;
+    color: #666;
+}
+
+.dui-list-angle {
+    position: relative;
+    vertical-align: middle;
+    margin-right: 18px;
+    margin-left: 15px;
+}
+
+.dui-list-group .address-body:first-child .dui-list:before {
+    display: none!important;
+}
+
+.dui-list:first-child:before {
+    display: block;
+}
+
+.dui-list-angle {
+    margin-right: 5px;
+}
+
+.dui-list-angle .icon {
+    color: #999999;
+    font-size: 14pt;
+}
+
+.address-body {
+    position: relative;
+}
+
+.dui-list {
+    transform: translateX(0px);
+}
+
+.del-btn {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0px;
+    height: 100%;
+    background: #ff3b30;
+    color: #fff;
+    padding: 0 25px;
+    font-size: 14pt;
+    display: flex;
+    align-items: center;
+    transform: translateX(88px);
+}

@@ -1,0 +1,43 @@
+<block wx:if="{{isShow==1}}">
+    <view class="container" wx:if="{{total>0}}">
+        <view class="dui-list-group" style="margin-top:0;margin-bottom: 15px" wx:if="{{truecount>0}}">
+            <view class="address-body" wx:for="{{trueList}}">
+                <view bindtouchend="touchE" bindtouchmove="touchM" bindtouchstart="touchS" class="dui-list" data-index="{{index}}" data-type="1" style="{{item.txtStyle}}">
+                    <view bindtap="chooseAddr" class="dui-list-media" data-address="{{item.address}}" data-address_road="{{item.address_road}}" data-id="{{item.id}}" data-latitude="{{item.latitude}}" data-longitude="{{item.longitude}}" data-number="{{item.number}}" data-realname="{{item.realname}}" data-telphone="{{item.telphone}}">
+                        <i class="icon icon-checked" wx:if="{{address_id==item.id}}"></i>
+                    </view>
+                    <view bindtap="chooseAddr" class="dui-list-inner" data-address="{{item.address}}" data-address_road="{{item.address_road}}" data-id="{{item.id}}" data-latitude="{{item.latitude}}" data-longitude="{{item.longitude}}" data-number="{{item.number}}" data-realname="{{item.realname}}" data-telphone="{{item.telphone}}">
+                        <view class="title">{{item.address}} {{item.address_road}} {{item.number}}</view>
+                        <view class="text">{{item.realname}} {{item.telphone}}</view>
+                    </view>
+                    <view bindtap="jumpLink" class="dui-list-angle" data-url="/deam_food/pages/address/post?addr_id={{item.id}}">
+                        <i class="icon icon-edit"></i>
+                    </view>
+                </view>
+                <view bindtap="delAddr" class="del-btn" data-addrid="{{item.id}}" style="{{item.delStyle}}">删除</view>
+            </view>
+        </view>
+        <block wx:if="{{falsecount>0}}">
+            <view class="address-title">以下地址超出配送范围</view>
+            <view class="dui-list-group nomargin errorlist">
+                <view class="address-body" wx:for="{{falseList}}">
+                    <view bindtouchend="touchE" bindtouchmove="touchM" bindtouchstart="touchS" class="dui-list" data-index="{{index}}" data-type="0" style="{{item.txtStyle}}">
+                        <view class="dui-list-inner">
+                            <view class="title">{{item.address}} {{item.address_road}} {{item.number}}</view>
+                            <view class="text">{{item.realname}} {{item.telphone}}</view>
+                        </view>
+                        <view bindtap="jumpLink" class="dui-list-angle" data-url="/deam_food/pages/address/post?addr_id={{item.id}}">
+                            <i class="icon icon-edit"></i>
+                        </view>
+                    </view>
+                    <view bindtap="delAddr" class="del-btn" data-addrid="{{item.id}}" style="{{item.delStyle}}">删除</view>
+                </view>
+            </view>
+        </block>
+    </view>
+    <view class="content-empty" wx:if="{{total==0}}">
+        <i class="icon icon-address2"></i>
+        <text>您还未添加收货地址</text>
+    </view>
+    <view bindtap="jumpLink" class="address-add" data-url="/deam_food/pages/address/post">+ 新增地址</view>
+</block>

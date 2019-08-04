@@ -1,0 +1,128 @@
+<official-account wx:if="{{canIUseOfficialAccount}}"></official-account>
+<movable-area style="height:{{windowHeight}}px; width: 100%">
+    <movable-view direction="all" outOfBounds="false" style="z-index:999;" x="10" y="300" wx:if="{{settings.call_waiter=='1'}}">
+        <i bindtap="clickBell" class="icon icon-bell" style="font-size:30pt;color:{{bg_color}};border-radius:100%;background:#fff"></i>
+    </movable-view>
+    <view class="store-desknumber" wx:if="{{isShow!='0'&&deskname!=''}}">{{deskname}}</view>
+    <view class="store-detail" wx:if="{{isShow!='0'}}">
+        <scroll-view class="store-class" scrollY="true" style="height:{{windowHeight}}px">
+            <view bindtap="chooseClass" class="class {{currentId==index?'active':''}}" data-classid="{{index}}" data-classname="{{item.classname}}" wx:for="{{classList}}">{{item.classname}}</view>
+        </scroll-view>
+        <scroll-view bindscroll="scrollGoods" class="store-goods" scrollIntoView="class_{{currentIdRight}}" scrollY="true" style="height:{{windowHeight}}px">
+            <view class="currentClass">
+                <text>{{currentClassname}}</text>
+            </view>
+            <view class="goods-box" id="class_{{index}}" style="{{index==0?'padding-top:28px;':''}}{{index==lastClass?'min-height:'+windowHeight+'px;':''}}" wx:for="{{goodsList}}" wx:for-item="goodsArr">
+                <view class="goods-class" wx:if="{{index>0}}">{{classList[index]['classname']}}</view>
+                <view bindtap="showDetail" class="goods" data-goodsimg="{{goods.img}}" data-goodsintro="{{goods.intro}}" data-goodsname="{{goods.name}}" data-goodsprice="{{goods.price}}" wx:for="{{goodsArr}}" wx:for-index="goodsIndex" wx:for-item="goods">
+                    <view class="goods-img" style="background-image: url(\"{{goods.img}}\");" wx:if="{{goods.img!=''}}"></view>
+                    <view class="goods-detail">
+                        <view class="name">{{goods.name}}</view>
+                        <view class="desc">{{goods.intro}}</view>
+                        <view class="price">
+                            <text>￥{{goods.price}}</text>
+                            <text class="unit"> /{{goods.unit}}</text>
+                            <view class="number">
+                                <i catchtap="minus" class="icon icon-minus" data-goodsid="{{goods.id}}" data-goodsprice="{{goods.price}}" data-hasoption="{{goods.hasoption}}" data-ispbox="{{goods.is_pbox}}" data-pboxprice="{{goods.pbox_price}}" wx:if="{{cart[goods.id]['count']>0}}"></i>
+                                <text wx:if="{{cart[goods.id]['count']>0}}">{{cart[goods.id]['count']}}</text>
+                                <i catchtap="plus" class="icon icon-plus" data-goodsid="{{goods.id}}" data-goodsname="{{goods.name}}" data-goodsprice="{{goods.price}}" data-hasoption="{{goods.hasoption}}" data-ispbox="{{goods.is_pbox}}" data-pboxprice="{{goods.pbox_price}}"></i>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+        <view class="enough-deduct" wx:if="{{storeInfo.enoughmoney>0&&storeInfo.enoughdeduct>0}}">单笔订单满{{storeInfo.enoughmoney}}减{{storeInfo.enoughdeduct}}</view>
+        <view class="cart-box">
+            <i bindtap="showCart" class="icon icon-cart {{cartCount>0?'hasgoods':''}}"></i>
+            <view class="cart-goodscount" wx:if="{{cartCount>0}}">{{cartCount}}</view>
+            <text class="cart-empty" wx:if="{{cartCount<=0}}">购物车是空的</text>
+            <text class="cart-price" wx:if="{{cartCount>0}}">￥{{cartPrice}}</text>
+            <view bindtap="submitCart" class="submit-btn {{cartCount>0?'active':''}}" wx:if="{{storeType!='takeout'||startPrice<=0}}">选好了</view>
+            <view bindtap="{{cartRealPrice>=startPrice?'submitCart':''}}" class="submit-btn {{cartRealPrice>=startPrice?'active':''}}" wx:if="{{storeType=='takeout'&&startPrice>0}}">
+                <block wx:if="{{cartRealPrice<=0}}">￥{{startPrice}}起送</block>
+                <block wx:elif="{{cartRealPrice>0&&cartRealPrice<startPrice}}">还差￥{{lastPrice}}起送</block>
+                <block wx:else>选好了</block>
+            </view>
+        </view>
+    </view>
+    <view bindtap="hiddenOption" class="alert-mask" wx:if="{{optionShow=='1'}}"></view>
+    <view class="goods-options-box" wx:if="{{optionShow=='1'}}">
+        <view class="name">{{goodsDetailList[currentGoodsid]['name']}}</view>
+        <view class="options-box">
+            <view class="options" wx:for="{{goodsDetailList[currentGoodsid]['specs']}}" wx:for-index="optionsid" wx:for-item="options">
+                <view class="title">{{options.title}}</view>
+                <view class="select">
+                    <text bindtap="chooseSelect" class="{{select.active}}" data-goodsid="{{currentGoodsid}}" data-id="{{select.id}}" data-optionid="{{optionsid}}" wx:for="{{options.items}}" wx:for-item="select">{{select.title}}</text>
+                </view>
+            </view>
+            <view class="options-bottom">
+                <text class="price">￥{{goodsDetailList[currentGoodsid]['price']}}</text>
+                <text bindtap="addCart" class="cart-btn" data-goodsid="{{currentGoodsid}}" data-ispbox="{{optionsIspbox}}" data-pboxprice="{{optionsPboxprice}}" data-status="{{isSubmit}}">加入购物车</text>
+            </view>
+        </view>
+    </view>
+    <view bindtap="hiddenCart" class="alert-mask" style="height:{{windowHeight}}px" wx:if="{{cartShow=='1'&&cartCount>0}}"></view>
+    <view class="cart-list" wx:if="{{cartShow=='1'&&cartCount>0}}">
+        <view class="cart-title">
+            <view class="title">
+                <text>已选商品</text>
+            </view>
+            <view bindtap="trashCart" class="remark">
+                <i class="icon icon-trash"></i>清空购物车</view>
+        </view>
+        <scroll-view scrollY="true" style="max-height:{{windowHeight*0.5}}px">
+            <block wx:for="{{cart}}">
+                <view class="cart-goods" wx:if="{{item.count>0&&item.hasoption=='0'}}">
+                    <view class="cart-text">
+                        <view class="title">{{item.name}}</view>
+                    </view>
+                    <view class="price">￥{{item.totalprice}}</view>
+                    <view class="number">
+                        <i bindtap="minus" class="icon icon-minus" data-goodsid="{{item.goodsid}}" data-goodsprice="{{item.marketprice}}" data-hasoption="{{item.hasoption}}" data-ispbox="{{item.is_pbox}}" data-pboxprice="{{item.pbox_price}}"></i>
+                        <text>{{item.count}}</text>
+                        <i bindtap="plus" class="icon icon-plus" data-goodsid="{{item.goodsid}}" data-goodsname="{{item.name}}" data-goodsprice="{{item.marketprice}}" data-hasoption="{{item.hasoption}}" data-ispbox="{{item.is_pbox}}" data-pboxprice="{{item.pbox_price}}"></i>
+                    </view>
+                </view>
+                <view class="cart-goods" wx:if="{{item.count>0&&item.hasoption=='1'&&option.count>0}}" wx:for="{{item.options}}" wx:for-index="optionid" wx:for-item="option">
+                    <view class="cart-text">
+                        <view class="title">{{item.name}}</view>
+                        <view class="desc">{{option.name}}</view>
+                    </view>
+                    <view class="price">￥{{option.price}}</view>
+                    <view class="number">
+                        <i bindtap="optionMinus" class="icon icon-minus" data-goodsid="{{item.goodsid}}" data-goodsprice="{{option.marketprice}}" data-ispbox="{{item.is_pbox}}" data-optionid="{{option.id}}" data-pboxprice="{{item.pbox_price}}"></i>
+                        <text>{{option.count}}</text>
+                        <i bindtap="optionPlus" class="icon icon-plus" data-goodsid="{{item.goodsid}}" data-goodsname="{{item.name}}" data-goodsprice="{{option.marketprice}}" data-ispbox="{{item.is_pbox}}" data-optionid="{{option.id}}" data-pboxprice="{{item.pbox_price}}"></i>
+                    </view>
+                </view>
+            </block>
+            <view class="cart-goods" wx:if="{{storeType=='takeout'&&pboxPrice>0}}">
+                <view class="cart-text">
+                    <view class="title">餐盒费</view>
+                </view>
+                <view class="price">￥{{pboxPrice}}</view>
+                <view class="number"></view>
+            </view>
+        </scroll-view>
+    </view>
+    <view class="alert-mask" wx:if="{{statusMask>0}}"></view>
+    <view class="store-status" wx:if="{{statusMask>0}}">
+        <i class="icon icon-store-rest" wx:if="{{storeInfo.storeStatus=='2'}}"></i>
+        <i class="icon icon-store-closed" style="color:#5b4f50" wx:if="{{storeInfo.storeStatus=='0'}}"></i>
+        <view class="status-text">{{storeInfo.statusText}}</view>
+        <view class="reason">{{storeInfo.close_reason}}</view>
+    </view>
+    <view bindtap="hiddenDetail" class="alert-mask" wx:if="{{goodsMask>0}}"></view>
+    <view class="goods-maskshow" style="height:{{goodsMaskHeight}}px;width:{{goodsMaskWidth}}px" wx:if="{{goodsMask>0}}">
+        <view class="goods-img" style="background-image: url(\"{{dGoodsImage}}\");"></view>
+        <view class="goods-info">
+            <view class="title">{{dGoodsName}}</view>
+            <view class="price">¥ {{dGoodsPrice}}</view>
+        </view>
+        <view class="goods-detail">
+            <view class="title">商品信息</view>
+            <scroll-view scrollY class="intro" style="height:{{goodsDetailHeight}}px;">{{dGoodsDetail}}</scroll-view>
+        </view>
+    </view>
+</movable-area>

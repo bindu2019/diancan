@@ -1,0 +1,10 @@
+<import src="../../../wxParse/wxParse.wxml"></import>
+<block wx:if="{{isShow==1}}">
+    <view class="main-body" style="min-height:{{mainBodyHeight}}px">
+        <template is="wxParse" data="{{wxParseData:content.nodes}}"></template>
+    </view>
+    <view class="bottom-copyright">
+        <image class="store-blogo" src="{{store_blogo}}" wx:if="{{store_blogo}}"></image>
+        <view class="copyright" wx:if="{{copyright}}">{{copyright}}</view>
+    </view>
+</block>

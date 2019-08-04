@@ -1,0 +1,2 @@
+<text>开通1003+1004+1005</text>
+<view bindtap="topay" class="button">点击开通</view>

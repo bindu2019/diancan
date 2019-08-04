@@ -1,0 +1,36 @@
+<view wx:if="isShow=='1'">
+    <view class="dui-cell-group">
+        <view bindtap="chooseCoupon" class="dui-cell" data-couponid="0">
+            <view class="dui-cell-label" style="width:auto;color:#333333">不使用优惠券</view>
+            <view class="dui-cell-info"></view>
+            <view class="dui-cell-remark noremark">
+                <i class="icon icon-checked {{isChoose=='0'?'checked':''}}"></i>
+            </view>
+        </view>
+    </view>
+    <view class="content-empty" wx:if="{{couponCount==0}}">
+        <i class="icon icon-coupon"></i>
+        <text>暂无可用优惠券</text>
+    </view>
+    <view bindtap="chooseCoupon" class="coupon-box" data-couponid="{{item.id}}" wx:for="{{couponList}}">
+        <view class="coupon-con">
+            <view class="price">
+                <view class="coupon-price">￥<text>{{item.reduce_cost}}</text>
+                </view>
+                <view class="use-condition">满{{item.least_cost}}元可用</view>
+            </view>
+            <view class="title">
+                <view class="coupon-title">{{item.title}}</view>
+                <view class="coupon-usetime">{{item.starttime}}-{{item.endtime}}</view>
+            </view>
+            <view class="check">
+                <i class="icon icon-checked {{isChoose==item.id?'checked':''}}"></i>
+            </view>
+        </view>
+        <view class="coupon-bottom">
+            <view class="around-left"></view>
+            <view class="around-right"></view>
+            <view class="description">数量：<text>{{item.coupon_count}}</text>张，本次可用：<text>{{item.max_use}}</text>张</view>
+        </view>
+    </view>
+</view>

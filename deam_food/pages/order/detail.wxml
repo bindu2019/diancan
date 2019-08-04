@@ -1,0 +1,97 @@
+<view class="order-detail-content" wx:if="{{isShow=='1'}}">
+    <view class="order-number-box" wx:if="{{orderInfo.status>1&&orderInfo.order_type!='2'}}">
+        <view class="number-ticket">
+            <view class="ticket-dots">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+            </view>
+            <view class="ticket-title">取餐号</view>
+            <view class="ticket-content">
+                <view class="ticket-number">{{orderNumber}}<text style="font-size:11pt;color:#777" wx:if="{{orderInfo.order_type=='1'}}">{{orderInfo.getfood_time==''?'立即':orderInfo.getfood_time}}取餐</text>
+                </view>
+                <view class="ticket-remark">{{ticketRemark}}</view>
+            </view>
+        </view>
+    </view>
+    <view class="order-goods">
+        <view class="order-title">订单详情</view>
+        <block wx:for="{{goodsList}}">
+            <view class="cart-goods" wx:if="{{item.count>0&&item.hasoption=='0'}}">
+                <view class="list-title">
+                    <view class="title">{{item.name}}</view>
+                </view>
+                <view class="count">x{{item.count}}</view>
+                <view class="price">￥{{item.totalprice}}</view>
+            </view>
+            <view class="cart-goods" wx:if="{{item.count>0&&item.hasoption=='1'&&option.count>0}}" wx:for="{{item.options}}" wx:for-index="optionid" wx:for-item="option">
+                <view class="list-title">
+                    <view class="title">{{item.name}}</view>
+                    <view class="remark">{{option.name}}</view>
+                </view>
+                <view class="count">x{{option.count}}</view>
+                <view class="price">￥{{option.price}}</view>
+            </view>
+        </block>
+        <view class="cart-goods" wx:if="{{orderInfo.order_type=='2'&&orderInfo.pbox_fee>0}}">
+            <view class="list-title">
+                <view class="title">餐盒费</view>
+            </view>
+            <view class="price">￥{{orderInfo.pbox_fee}}</view>
+        </view>
+        <view class="cart-goods" wx:if="{{orderInfo.order_type=='2'}}">
+            <view class="list-title">
+                <view class="title">配送费</view>
+            </view>
+            <view class="price">￥{{orderInfo.send_fee}}</view>
+        </view>
+        <view class="cart-goods" wx:if="{{orderInfo.enoughdeduct>0}}">
+            <view class="list-title">
+                <view class="title">满减活动</view>
+            </view>
+            <view class="price">-￥{{orderInfo.enoughdeduct}}</view>
+        </view>
+        <view class="cart-goods" wx:if="{{couponPrice>0}}">
+            <view class="list-title">
+                <view class="title">优惠券抵用</view>
+            </view>
+            <view class="price">-￥{{couponPrice}}</view>
+        </view>
+        <view class="order-cart-count">
+            <view class="title">总计</view>
+            <view class="price">￥{{totalPrice}}</view>
+        </view>
+    </view>
+    <view class="dui-cell-group">
+        <view class="title">订单信息</view>
+        <view class="dui-cell" wx:if="{{orderInfo.order_type=='2'}}">
+            <view class="dui-cell-label">订单状态</view>
+            <view class="dui-cell-info">{{orderInfo.takeout_status_text}}</view>
+        </view>
+        <view class="dui-cell" wx:if="{{orderInfo.store.name}}">
+            <view class="dui-cell-label">所在门店</view>
+            <view class="dui-cell-info">{{orderInfo.store.name}}</view>
+        </view>
+        <view class="dui-cell">
+            <view class="dui-cell-label">订单号码</view>
+            <view class="dui-cell-info">{{orderInfo.ordersn}}</view>
+        </view>
+        <view class="dui-cell">
+            <view class="dui-cell-label">支付方式</view>
+            <view class="dui-cell-info">{{orderInfo.pay_type}}</view>
+        </view>
+        <view class="dui-cell">
+            <view class="dui-cell-label">支付时间</view>
+            <view class="dui-cell-info">{{orderInfo.paytime}}</view>
+        </view>
+    </view>
+</view>

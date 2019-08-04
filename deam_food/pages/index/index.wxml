@@ -1,0 +1,44 @@
+<block wx:if="{{isShow==1}}">
+    <view class="main-body" style="min-height:{{mainBodyHeight}}px">
+        <swiper autoplay="true" class="swiper" duration="500" interval="5000" style="height:{{swiperHeight}}px" wx:if="{{advShow=='1'&&swiperHeight>0}}">
+            <swiper-item class="swiper-item" wx:for="{{adv}}">
+                <image bindtap="jumpToAdvUrl" class="slide-image" data-id="{{item.id}}" data-index="{{index}}" data-url="{{item.adv_url}}" lazyLoad="true" mode="widthFix" src="{{item.adv_img}}" style="height:{{swiperHeight}}px" width="100%"></image>
+            </swiper-item>
+        </swiper>
+        <official-account class="official-account" wx:if="{{canIUseOfficialAccount}}"></official-account>
+        <view class="index-button">
+            <view bindtap="scanWxacode" class="button-box" wx:if="{{wxappScan==1}}">
+                <i class="icon icon-scan" wx:if="{{wxappSettings.wxapp_scan_logo==''}}"></i>
+                <image class="icon-image" src="{{wxappSettings.wxapp_scan_logo}}" wx:if="{{wxappSettings.wxapp_scan_logo!=''}}"></image>
+                <view class="intro">
+                    <view class="title" style="background-color:{{wxappSettings.wxapp_scan_color}}">{{wxappSettings.wxapp_scan_name==''?'堂食':wxappSettings.wxapp_scan_name}}</view>
+                    <view class="remark">{{wxappSettings.wxapp_scan_intro==''?'点我扫码进入':wxappSettings.wxapp_scan_intro}}</view>
+                </view>
+            </view>
+            <view bindtap="jumpStore" class="button-box" wx:if="{{wxappGetself==1}}">
+                <i class="icon icon-store" wx:if="{{wxappSettings.wxapp_getself_logo==''}}"></i>
+                <image class="icon-image" src="{{wxappSettings.wxapp_getself_logo}}" wx:if="{{wxappSettings.wxapp_getself_logo!=''}}"></image>
+                <view class="intro">
+                    <view class="title getself" style="background-color:{{wxappSettings.wxapp_getself_color}}">{{wxappSettings.wxapp_getself_name==''?'自取':wxappSettings.wxapp_getself_name}}</view>
+                    <view class="remark">{{wxappSettings.wxapp_getself_intro==''?'点我开始订餐':wxappSettings.wxapp_getself_intro}}</view>
+                </view>
+            </view>
+            <view bindtap="jumpTakeout" class="button-box" wx:if="{{wxappTakeout==1}}">
+                <i class="icon icon-takeout" wx:if="{{wxappSettings.wxapp_takeout_logo==''}}"></i>
+                <image class="icon-image" src="{{wxappSettings.wxapp_takeout_logo}}" wx:if="{{wxappSettings.wxapp_takeout_logo!=''}}"></image>
+                <view class="intro">
+                    <view class="title takeout" style="background-color:{{wxappSettings.wxapp_takeout_color}}">{{wxappSettings.wxapp_takeout_name==''?'外卖':wxappSettings.wxapp_takeout_name}}</view>
+                    <view class="remark">{{wxappSettings.wxapp_takeout_intro==''?'点餐快速配送':wxappSettings.wxapp_takeout_intro}}</view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="ad-box" style="height:{{adHeight}}px" wx:if="{{advertisement['index_bottom_0']['status']=='1'}}">
+        <ad binderror="adError" bindload="adLoad" class="ad" unitId="{{advertisement['index_bottom_0']['unit_id']}}"></ad>
+    </view>
+    <ad class="ad" unitId="{{advertisement['index_bottom_1']['unit_id']}}" wx:if="{{advertisement['index_bottom_1']['status']=='1'}}"></ad>
+    <view class="bottom-copyright" style="{{adHeight>0?'padding-bottom:'+adHeight+'px':''}}">
+        <image class="store-blogo" src="{{store_blogo}}" wx:if="{{store_blogo}}"></image>
+        <view class="copyright" wx:if="{{copyright}}">{{copyright}}</view>
+    </view>
+</block>

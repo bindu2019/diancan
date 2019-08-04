@@ -1,0 +1,132 @@
+<block wx:if="{{isShow=='1'}}">
+    <view class="alert-mask" wx:if="{{choosePayType>0}}"></view>
+    <view class="alert-box" wx:if="{{choosePayType>0}}">
+        <i bindtap="closeBtn" class="icon icon-close"></i>
+        <view class="title">选择支付方式</view>
+        <view class="dui-cell-group nomargin">
+            <view bindtap="submitOrderConfirm" class="dui-cell {{balance<realPayPrice?'forbid-click':''}}" data-status="{{isSubmit}}" data-type="balance">
+                <view class="dui-cell-icon" style="margin-right:15px;">
+                    <i class="icon icon-yue" style="font-size:18pt;color:#e16531"></i>
+                </view>
+                <view class="dui-cell-text" style="font-size:11pt;">
+                    <view>余额支付(剩余￥{{balance}})</view>
+                    <view wx:if="{{balance<realPayPrice}}">余额不足，剩余{{balance}}元</view>
+                </view>
+                <view class="dui-cell-remark"></view>
+            </view>
+            <view bindtap="transferPay" class="dui-cell" data-status="{{isSubmit}}" data-type="wechat">
+                <view class="dui-cell-icon" style="margin-right:15px;">
+                    <i class="icon icon-wechat" style="font-size:18pt;color:#0e932e"></i>
+                </view>
+                <view class="dui-cell-text" style="font-size:11pt">微信支付</view>
+                <view class="dui-cell-remark"></view>
+            </view>
+        </view>
+    </view>
+    <view class="order-page">
+        <view wx:if="{{storeType!='takeout'}}">
+            <picker bindchange="bindPickerChange" mode="selector" range="{{getFoodTimeArr}}">
+                <view class="dui-list">
+                    <view class="dui-list-inner" style="font-size:12pt;">
+          取餐时间
+      </view>
+                    <view class="dui-list-angle">
+                        <view class="angle" style="font-size:10pt;color:#555555">{{getFoodTime}}</view>
+                    </view>
+                </view>
+            </picker>
+        </view>
+        <view bindtap="selectAddr" class="dui-list-group nomargin" id="addressInfo" wx:if="{{storeType=='takeout'}}">
+            <view class="dui-list">
+                <view class="dui-list-media">
+                    <i class="icon icon-address"></i>
+                </view>
+                <view class="dui-list-inner">
+                    <view class="title has-address" style="{{myAddrInfo.id?'':'display:none'}}">
+                        <text class="realname">{{myAddrInfo.realname}}</text>
+                        <text class="mobile">{{myAddrInfo.telphone}}</text>
+                    </view>
+                    <view class="text has-address" style="{{myAddrInfo.id?'':'display:none'}}">
+                        <text class="address">{{myAddrInfo.address}}{{myAddrInfo.address_road}}{{myAddrInfo.number}}</text>
+                    </view>
+                    <view class="text no-address" style="{{myAddrInfo.id?'display:none':''}}">
+                        <i class="icon icon-icon02"></i> 添加收货地址</view>
+                </view>
+                <view class="dui-list-angle">
+                    <view class="angle"></view>
+                </view>
+            </view>
+        </view>
+        <view class="order-content">
+            <view class="order-title">订单详情</view>
+            <block wx:for="{{cart}}">
+                <view class="cart-goods" wx:if="{{item.count>0&&item.hasoption=='0'}}">
+                    <view class="order-cart-title">
+                        <view class="title">{{item.name}}</view>
+                        <view class="count">x{{item.count}}</view>
+                    </view>
+                    <view class="order-cart-price">￥{{item.marketprice}}</view>
+                </view>
+                <view class="cart-goods" wx:if="{{item.count>0&&item.hasoption=='1'&&option.count>0}}" wx:for="{{item.options}}" wx:for-index="optionid" wx:for-item="option">
+                    <view class="order-cart-title">
+                        <view class="title">{{item.name}}</view>
+                        <view class="count">x{{option.count}}</view>
+                    </view>
+                    <view class="order-cart-remark">{{option.name}}</view>
+                    <view class="order-cart-price">￥{{option.marketprice}}</view>
+                </view>
+            </block>
+            <view class="cart-goods" wx:if="{{storeType=='takeout'&&pboxPrice>0}}">
+                <view class="order-cart-title">
+                    <view class="title">餐盒费</view>
+                    <view class="order-cart-price">￥{{pboxPrice}}</view>
+                </view>
+                <view class="order-cart-price"></view>
+            </view>
+            <view class="cart-goods" wx:if="{{storeType=='takeout'}}">
+                <view class="order-cart-title">
+                    <view class="title">配送费</view>
+                    <view class="order-cart-price">
+                        <text class="deliver-label">{{deliverText}}</text>￥{{sendFee}}</view>
+                </view>
+                <view class="order-cart-price"></view>
+            </view>
+        </view>
+        <view class="order-content">
+            <view class="cart-goods" wx:if="{{enoughdeduct>0}}">
+                <view class="order-cart-title">
+                    <view class="title">满减活动</view>
+                    <view class="order-cart-price" style="font-size:11pt;color:#fd4966;">-￥{{enoughdeduct}}</view>
+                </view>
+                <view class="order-cart-price"></view>
+            </view>
+            <view bindtap="chooseCoupon" class="choose-coupon">
+                <view class="title">我的优惠券</view>
+                <view class="remark">
+                    <text wx:if="{{useCoupon==0}}">选择优惠券</text>
+                    <text style="color:#ff9c37" wx:if="{{useCoupon>0}}">{{couponTitle}} x{{couponUse}}</text>
+                </view>
+            </view>
+            <view class="order-cart-count">
+                <view class="title"></view>
+                <view class="price">总计：<text>￥{{payPrice}}</text>
+                </view>
+            </view>
+        </view>
+        <view class="order-remark">
+            <view class="title">备注</view>
+            <view class="remark">
+                <textarea bindblur="saveRemark" bindinput="checkCount" focus="{{focus}}" maxlength="20" placeholder="{{placeholder}}" placeholderStyle="color:#999999;font-size:11pt;" style="{{textareaInputField=='1'?'display:block;padding:10px;':''}}"></textarea>
+                <view bindtap="switchInputField" class="textarea {{remarkLength=='20'?'':'c00'}}" style="{{textareaInputField=='1'?'display:none':''}}">{{texareaCon}}</view>
+                <text class="count">{{remarkLength}}/20字</text>
+            </view>
+        </view>
+    </view>
+    <view class="cart-box">
+        <i bindtap="showCart" class="icon icon-cart {{cartCount>0?'hasgoods':''}}"></i>
+        <view class="cart-goodscount" wx:if="{{cartCount>0}}">{{cartCount}}</view>
+        <text class="cart-empty" wx:if="{{cartCount<=0}}">购物车是空的</text>
+        <text class="cart-price" wx:if="{{cartCount>0}}">￥{{payPrice}}</text>
+        <view bindtap="submitOrder0" class="submit-btn {{cartCount>0?'active':''}}" data-status="{{isSubmit}}">去支付</view>
+    </view>
+</block>

@@ -1,0 +1,99 @@
+.search-box {
+    background: #ffffff;
+    padding: 10px 15px;
+    border-bottom: 10px solid #f8f8f8;
+}
+
+.search-box .search-input {
+    padding: 0 10px;
+    border: 1px solid #999999;
+    border-radius: 20px;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 34px;
+    font-size: 12pt;
+}
+
+.search-box .search-input .icon-search {
+    color: #848484;
+    font-size: 15pt;
+}
+
+.get-position {
+    background: #ffffff;
+    padding: 10px 15px;
+    color: #ff9c37;
+    font-size: 12pt;
+    line-height: 30px;
+}
+
+.get-position .icon-location {
+    font-size: 15pt;
+    color: #ff9c37;
+}
+
+.get-position text {
+    padding-left: 5px;
+}
+
+.store-list {
+    border-top: 10px solid #f8f8f8;
+}
+
+.none-store {
+    font-size: 12pt;
+    color: #999999;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.dui-list {
+    padding: 20px 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.dui-list:before {
+    content: " ";
+    position: absolute;
+    left: 15px;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    border-top: 1px solid #e5e5e5;
+    color: #e5e5e5;
+    transform-origin: 0 0;
+    transform: scaleY(0.5);
+}
+
+.dui-list .dui-title {
+    color: #333;
+    overflow: hidden;
+}
+
+.dui-list .dui-title .title {
+    float: left;
+    width: 80%;
+    font-size: 12pt;
+    line-height: 18px;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dui-list .dui-title .distance {
+    float: right;
+    width: 20%;
+    font-size: 10pt;
+    line-height: 18px;
+    text-align: right;
+}
+
+.dui-list .address {
+    color: #999999;
+    margin-top: 12px;
+    font-size: 12pt;
+}

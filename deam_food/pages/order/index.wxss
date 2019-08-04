@@ -1,0 +1,81 @@
+.container {
+    padding-bottom: 15px;
+}
+
+.content-empty i {
+    font-size: 80pt;
+}
+
+.content-empty text {
+    display: block;
+}
+
+.dui-list-group.dui-list-group-o {
+    border: 1px solid #e5e5e5;
+}
+
+.dui-list-group-title {
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.dui-list-group-title .status {
+    color: #ff9c37;
+    float: right;
+    font-size: 12pt;
+}
+
+.dui-list-group-title:before {
+    content: " ";
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: -1px;
+    height: 1px;
+    border-top: 1px solid #e5e5e5;
+    color: #e5e5e5;
+    transform-origin: 0 0;
+    transform: scaleY(0.5);
+}
+
+.order-goods {
+    margin: 0px 15px;
+    padding-bottom: 2px;
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    transition-duration: 300ms;
+    transition-property: background-color;
+}
+
+.order-goods .list-title {
+    flex: 1;
+}
+
+.order-goods .list-title .title {
+    color: #555555;
+    font-size: 11pt;
+}
+
+.order-goods .count {
+    color: #999999;
+    font-size: 11pt;
+    margin-right: 10px;
+}
+
+.order-bottom {
+    margin: 10px 15px;
+}
+
+.show-detail {
+    color: #ffffff;
+    background: #ff9c37;
+    border-radius: 4px;
+    font-size: 11pt;
+    padding: 5px 10px;
+}

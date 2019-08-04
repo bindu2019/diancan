@@ -1,0 +1,50 @@
+page {
+    background: #f3f3f3;
+    box-sizing: border-box;
+}
+
+.dui-according-header .text {
+    color: #666666;
+    font-size: 11pt;
+    text-align: right;
+}
+
+.dui-cell-group.recharge {
+    padding: .6rem 0;
+}
+
+.dui-cell-group.recharge .dui-cell {
+    padding: 0;
+    font-size: 11pt;
+    height: 30px;
+    line-height: 30px;
+}
+
+.dui-cell-group.recharge .dui-cell .dui-cell-text {
+    color: #666;
+    font-size: 11pt;
+    line-height: 30px;
+}
+
+.dui-cell-group.recharge .dui-cell:before {
+    display: none;
+}
+
+.dui-cell-group.recharge:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+    border-top: 1px solid #ebebeb;
+    color: #D9D9D9;
+    transform-origin: 0 0;
+    transform: scaleY(0.5);
+}
+
+.dui-according.expanded .dui-according-header .text {
+    filter: alpha(opacity=0);
+    -khtml-opacity: 0;
+    opacity: 0;
+}

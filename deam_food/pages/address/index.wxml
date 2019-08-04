@@ -1,0 +1,23 @@
+<block wx:if="{{isShow==1}}">
+    <view class="container" wx:if="{{total>0}}">
+        <view class="dui-list-group nomargin">
+            <view class="address-body" wx:for="{{list}}">
+                <view bindtouchend="touchE" bindtouchmove="touchM" bindtouchstart="touchS" class="dui-list" data-index="{{index}}" style="{{item.txtStyle}}">
+                    <view class="dui-list-inner">
+                        <view class="title">{{item.address}} {{item.address_road}}</view>
+                        <view class="text">{{item.realname}} {{item.telphone}}</view>
+                    </view>
+                    <view bindtap="jumpLink" class="dui-list-angle" data-url="./post?addr_id={{item.id}}">
+                        <i class="icon icon-edit"></i>
+                    </view>
+                </view>
+                <view bindtap="delAddr" class="del-btn" data-addrid="{{item.id}}" style="{{item.delStyle}}">删除</view>
+            </view>
+        </view>
+    </view>
+    <view class="content-empty" wx:if="{{total==0}}">
+        <i class="icon icon-address2"></i>
+        <text>您还未添加收货地址</text>
+    </view>
+    <view bindtap="jumpLink" class="address-add" data-url="./post">+ 新增地址</view>
+</block>

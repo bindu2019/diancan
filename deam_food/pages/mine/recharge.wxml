@@ -1,0 +1,32 @@
+<view class="dui-cell-group nomargin" wx:if="{{actsCount>0}}">
+    <view bindtap="tabActive" class="dui-{{actsCount>1?'according':''}} {{isopen=='0'?'':'expanded'}}">
+        <view class="dui-according-header" style="color: #666;">充值活动
+      <view class="text">
+        充值满 <text class="text-danger">{{acts[0]['enough']}}</text> 元立即送 <text class="text-danger">{{acts[0]['give']}}</text> 元
+      </view>
+            <text class="remark" wx:if="{{actsCount>1}}"></text>
+        </view>
+        <view class="dui-according-content">
+            <view class="content-block" style="padding: 0 0.6rem;">
+                <view class="dui-cell-group recharge" style="margin-top: 0;">
+                    <view class="dui-cell" style="" wx:for="{{acts}}">
+                        <view class="dui-cell-text">充值满 <span class="text-danger">{{item['enough']}}</span> 元立即送 <span class="text-danger">{{item['give']}}</span> 元</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="dui-cell-group {{actsCount>0?'':'nomargin'}}">
+    <view class="dui-cell">
+        <view class="dui-cell-text">当前余额</view>
+        <view class="dui-cell-remark">￥{{memberInfo.credit2}}元</view>
+    </view>
+    <view class="dui-cell">
+        <view style="margin-right:20px">充值金额</view>
+        <view class="dui-cell-text">
+            <input bindinput="bindKeyRechargeValue" placeholder="请输入充值金额" type="digit"></input>
+        </view>
+    </view>
+</view>
+<button bindtap="payBtn" style="margin:20px 15px;background-color:#e88500;" type="primary"> 立即充值 </button>

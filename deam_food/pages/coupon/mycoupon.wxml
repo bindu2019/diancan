@@ -1,0 +1,45 @@
+<block wx:if="{{isShow=='1'}}">
+    <view class="dui-tab">
+        <text bindtap="changeTab" class="{{tabid=='0'?'active':''}}" data-id="0">未使用</text>
+        <text bindtap="changeTab" class="{{tabid=='1'?'active':''}}" data-id="1">已使用</text>
+        <text bindtap="changeTab" class="{{tabid=='2'?'active':''}}" data-id="2">已过期</text>
+    </view>
+    <view class="content-empty" wx:if="{{total==0}}">
+        <i class="icon icon-coupon"></i>
+        <text>{{noneTips}}</text>
+    </view>
+    <view class="coupon-content">
+        <view class="coupon-box status{{tabid}}" data-couponid="{{item.id}}" wx:for="{{list}}">
+            <view class="coupon-border"></view>
+            <view class="coupon-dots">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+            </view>
+            <view class="coupon-con">
+                <view class="price">
+                    <view class="around-top"></view>
+                    <view class="around-bottom"></view>
+                    <view class="coupon-price">￥<text>{{item.reduce_cost}}</text>
+                    </view>
+                </view>
+                <view class="title">
+                    <view>
+                        <view class="coupon-title">{{item.title}}</view>
+                        <view class="coupon-usetime">{{item.starttime}}-{{item.endtime}}</view>
+                    </view>
+                    <i bindtap="uploadWechat" class="icon icon-tongbu" data-couponid="{{item.id}}" wx:if="{{item.code==''&&tabid=='0'}}"></i>
+                </view>
+            </view>
+        </view>
+    </view>
+</block>

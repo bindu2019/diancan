@@ -1,0 +1,13 @@
+<view class="top-con">
+    <image src="{{authSetting.logo}}"></image>
+    <view class="platform-title">{{authSetting.name}}</view>
+    <view class="platform-intro">{{authSetting.intro}}</view>
+</view>
+<view class="main-con">
+    <view class="auth-title">该程序将获取以下授权：</view>
+    <view class="auth-info">· 获取您的公开信息（昵称、头像等）</view>
+    <view class="btn-con">
+        <button bindgetuserinfo="updateUserInfo" class="success" hoverClass="none" openType="getUserInfo" size="default">确认授权</button>
+        <button bindtap="jumpUrl" data-url="/deam_food/pages/index/index" hoverClass="none" size="default">返回首页</button>
+    </view>
+</view>

@@ -1,0 +1,131 @@
+page {
+    background: #f5f5f5;
+}
+
+.dui-cell-group .dui-cell .dui-cell-remark.noremark:after {
+    display: none;
+    margin-left: 0;
+}
+
+.icon-checked {
+    font-size: 14pt;
+    color: #dedede;
+}
+
+.icon-checked.checked {
+    color: #ff9c37;
+}
+
+.content-empty i {
+    font-size: 80pt;
+}
+
+.content-empty text {
+    display: block;
+}
+
+.coupon-box {
+    margin: 10px 8px;
+    border: 1px solid #e8e8e8;
+    border-radius: 5px;
+}
+
+.coupon-box .coupon-con {
+    padding: 15px 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background: #ffffff;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    transition-duration: 300ms;
+    transition-property: background-color;
+    line-height: 1;
+}
+
+.coupon-box .coupon-con .price {
+    margin-left: 24px;
+}
+
+.coupon-box .coupon-con .price .coupon-price {
+    color: #ea333e;
+    font-size: 12pt;
+    text-align: center;
+}
+
+.coupon-box .coupon-con .price .coupon-price text {
+    font-size: 18pt;
+}
+
+.coupon-box .coupon-con .price .use-condition {
+    font-size: 11pt;
+    margin-top: 5px;
+    color: #666666;
+}
+
+.coupon-box .coupon-con .title {
+    -webkit-box-flex: 1;
+    flex: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: #333333;
+    margin-left: 20px;
+}
+
+.coupon-box .coupon-con .title .coupon-title {
+    font-size: 14pt;
+}
+
+.coupon-box .coupon-con .title .coupon-usetime {
+    margin-top: 10px;
+    font-size: 11pt;
+    color: #666666;
+}
+
+.coupon-box .coupon-con .check {
+    margin-right: 15px;
+}
+
+.coupon-box .coupon-bottom {
+    background: #fcfcfc;
+    border-top: 1px #eeeeee dashed;
+    position: relative;
+    min-height: 24px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.coupon-box .coupon-bottom {
+    padding: 5px 15px;
+}
+
+.coupon-box .coupon-bottom .description {
+    font-size: 11pt;
+    color: #666666;
+}
+
+.coupon-box .coupon-bottom .description text {
+    color: #ff9c37;
+}
+
+.around-left,.around-right {
+    background: #f5f5f5;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: -8px;
+    border-radius: 16px;
+}
+
+.around-left {
+    left: -8px;
+}
+
+.around-right {
+    right: -8px;
+}

@@ -1,0 +1,9 @@
+@import "../../../wxParse/wxParse.wxss";
+
+.main-body {
+    margin: 10px 10px 0 10px;
+}
+
+.main-body image {
+    max-width: 100%!important;
+}

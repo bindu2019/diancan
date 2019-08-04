@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "deam_food/pages/index/index",
+    "deam_food/pages/store/location",
+    "deam_food/pages/store/detail",
+    "deam_food/pages/order/confirm",
+    "deam_food/pages/order/detail",
+    "deam_food/pages/order/index",
+    "deam_food/pages/mine/index",
+    "deam_food/pages/mine/recharge",
+    "deam_food/pages/mine/balance",
+    "deam_food/pages/mine/credit",
+    "deam_food/pages/store/aboutus",
+    "deam_food/pages/coupon/mycoupon",
+    "deam_food/pages/coupon/choose",
+    "deam_food/pages/address/index",
+    "deam_food/pages/address/post",
+    "deam_food/pages/address/selector",
+    "deam_food/pages/ads/link",
+    "deam_food/pages/sandbox/wechat",
+    "deam_food/pages/auth/auth"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "",
+    "navigationBarBackgroundColor": "#fff"
+  },
+  "tabBar": {
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "selectedColor": "#ff9c37",
+    "list": [
+      {
+        "pagePath": "deam_food/pages/index/index",
+        "text": "首页",
+        "iconPath": "static/images/icon/icon-home.png",
+        "selectedIconPath": "static/images/icon/icon-home-hover.png"
+      },
+      {
+        "pagePath": "deam_food/pages/order/index",
+        "text": "订单",
+        "iconPath": "static/images/icon/icon-order.png",
+        "selectedIconPath": "static/images/icon/icon-order-hover.png"
+      },
+      {
+        "pagePath": "deam_food/pages/mine/index",
+        "text": "我的",
+        "iconPath": "static/images/icon/icon-person.png",
+        "selectedIconPath": "static/images/icon/icon-person-hover.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}
