@@ -1,0 +1,57 @@
+page {
+    background: #f3f3f3;
+}
+
+.dui-cell-group .dui-cell .dui-cell-label {
+    color: #333333;
+}
+
+.placeholder {
+    color: #cccccc;
+}
+
+.dui-cell-group .dui-cell .dui-cell-text.choose-addr text {
+    color: #cccccc;
+}
+
+.button-box {
+    margin: 20rpx;
+}
+
+button.confirm {
+    color: #FFFFFF;
+    background-color: #ff9c37;
+}
+
+button.confirm::after {
+    border: 0;
+}
+
+.dui-cell-group .dui-cell .dui-cell-text.choose-addr text.addr-name {
+    display: block;
+    color: #666666;
+}
+
+.dui-cell-group .dui-cell .dui-cell-text.choose-addr text.addr-address {
+    display: block;
+    color: #666666;
+    font-size: 10pt;
+}
+
+.dui-input {
+    color: #000000;
+}
+
+.dui-cell-remark button {
+    color: #ff9c37;
+    display: inline-block;
+    background-color: rgba(255,255,255,0.2);
+    padding: 5rpx 10rpx;
+    border-radius: 8rpx;
+    font-size: 28rpx;
+    line-height: 1.5;
+}
+
+.dui-cell-remark button::after {
+    border: 0;
+}

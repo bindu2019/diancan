@@ -1,0 +1,23 @@
+<form bindsubmit="formSubmit" reportSubmit="true">
+    <view class="dui-cell-group">
+        <view class="dui-cell">
+            <view class="dui-cell-label">姓名</view>
+            <view class="dui-cell-info">
+                <input bindinput="bindKeyRealname" class="dui-input" data-name="realname" name="realname" placeholder="请输入姓名" placeholderClass="placeholder" type="text" value="{{realname}}"></input>
+            </view>
+        </view>
+        <view class="dui-cell">
+            <view class="dui-cell-label">手机号</view>
+            <view class="dui-cell-info">
+                <input disabled class="dui-input" maxlength="15" placeholder="手机号码" placeholderClass="placeholder" type="number" value="{{memberInfo.telephone}}"></input>
+            </view>
+            <view class="dui-cell-remark noremark" style="color:#ff9c37">
+                <button bindgetphonenumber="getPhoneNumber" openType="getPhoneNumber" wx:if="{{memberInfo.telephone==''}}">获取手机号</button>
+                <button bindgetphonenumber="getPhoneNumber" openType="getPhoneNumber" wx:if="{{memberInfo.telephone!=''}}">重新获取</button>
+            </view>
+        </view>
+    </view>
+    <view class="button-box">
+        <button class="confirm" formType="submit">保存</button>
+    </view>
+</form>

@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -15,7 +15,7 @@ Page({
     onReady: function() {},
     onShow: function() {
         var o = this;
-        app.util.request({
+        t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !1,
@@ -29,7 +29,7 @@ Page({
                     isShow: 1
                 }));
             }
-        }), app.util.request({
+        }), t.util.request({
             url: "entry/wxapp/coupon",
             cachetime: "0",
             showLoading: !0,
@@ -40,7 +40,7 @@ Page({
                 op: "choose"
             },
             success: function(t) {
-                0 <= (t = t.data).status && o.setData({
+                (t = t.data).status >= 0 && o.setData({
                     couponCount: t.status,
                     couponList: t.result.list
                 });
@@ -53,7 +53,7 @@ Page({
     onReachBottom: function() {},
     chooseCoupon: function(t) {
         var o = this, e = t.currentTarget.dataset.couponid, a = o.data.couponList;
-        0 < e ? (a.forEach(function(t, o) {
+        e > 0 ? (a.forEach(function(t, o) {
             t.id == e && (a[o].checked = "checked");
         }), o.setData({
             couponList: a,

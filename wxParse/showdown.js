@@ -1,10 +1,4 @@
-var _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e) {
-    return typeof e;
-} : function(e) {
-    return e && "function" == typeof Symbol && e.constructor === Symbol && e !== Symbol.prototype ? "symbol" : typeof e;
-};
-
-function getDefaultOpts(e) {
+function e(e) {
     var r = {
         omitExtraWLInCodeBlocks: {
             defaultValue: !1,
@@ -78,12 +72,63 @@ function getDefaultOpts(e) {
         }
     };
     if (!1 === e) return JSON.parse(JSON.stringify(r));
-    var n = {};
-    for (var t in r) r.hasOwnProperty(t) && (n[t] = r[t].defaultValue);
-    return n;
+    var t = {};
+    for (var n in r) r.hasOwnProperty(n) && (t[n] = r[n].defaultValue);
+    return t;
 }
 
-var showdown = {}, parsers = {}, extensions = {}, globalOptions = getDefaultOpts(!0), flavor = {
+function r(e, r) {
+    var t = r ? "Error in " + r + " extension->" : "Error in unnamed extension", a = {
+        valid: !0,
+        error: ""
+    };
+    s.helper.isArray(e) || (e = [ e ]);
+    for (var o = 0; o < e.length; ++o) {
+        var i = t + " sub-extension " + o + ": ", l = e[o];
+        if ("object" !== (void 0 === l ? "undefined" : n(l))) return a.valid = !1, a.error = i + "must be an object, but " + (void 0 === l ? "undefined" : n(l)) + " given", 
+        a;
+        if (!s.helper.isString(l.type)) return a.valid = !1, a.error = i + 'property "type" must be a string, but ' + n(l.type) + " given", 
+        a;
+        var c = l.type = l.type.toLowerCase();
+        if ("language" === c && (c = l.type = "lang"), "html" === c && (c = l.type = "output"), 
+        "lang" !== c && "output" !== c && "listener" !== c) return a.valid = !1, a.error = i + "type " + c + ' is not recognized. Valid values: "lang/language", "output/html" or "listener"', 
+        a;
+        if ("listener" === c) {
+            if (s.helper.isUndefined(l.listeners)) return a.valid = !1, a.error = i + '. Extensions of type "listener" must have a property called "listeners"', 
+            a;
+        } else if (s.helper.isUndefined(l.filter) && s.helper.isUndefined(l.regex)) return a.valid = !1, 
+        a.error = i + c + ' extensions must define either a "regex" property or a "filter" method', 
+        a;
+        if (l.listeners) {
+            if ("object" !== n(l.listeners)) return a.valid = !1, a.error = i + '"listeners" property must be an object but ' + n(l.listeners) + " given", 
+            a;
+            for (var u in l.listeners) if (l.listeners.hasOwnProperty(u) && "function" != typeof l.listeners[u]) return a.valid = !1, 
+            a.error = i + '"listeners" property must be an hash of [event name]: [callback]. listeners.' + u + " must be a function but " + n(l.listeners[u]) + " given", 
+            a;
+        }
+        if (l.filter) {
+            if ("function" != typeof l.filter) return a.valid = !1, a.error = i + '"filter" must be a function, but ' + n(l.filter) + " given", 
+            a;
+        } else if (l.regex) {
+            if (s.helper.isString(l.regex) && (l.regex = new RegExp(l.regex, "g")), !l.regex instanceof RegExp) return a.valid = !1, 
+            a.error = i + '"regex" property must either be a string or a RegExp object, but ' + n(l.regex) + " given", 
+            a;
+            if (s.helper.isUndefined(l.replace)) return a.valid = !1, a.error = i + '"regex" extensions must implement a replace string or function', 
+            a;
+        }
+    }
+    return a;
+}
+
+function t(e, r) {
+    return "~E" + r.charCodeAt(0) + "E";
+}
+
+var n = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e) {
+    return typeof e;
+} : function(e) {
+    return e && "function" == typeof Symbol && e.constructor === Symbol && e !== Symbol.prototype ? "symbol" : typeof e;
+}, s = {}, a = {}, o = {}, i = e(!0), l = {
     github: {
         omitExtraWLInCodeBlocks: !0,
         prefixHeaderId: "user-content-",
@@ -95,134 +140,87 @@ var showdown = {}, parsers = {}, extensions = {}, globalOptions = getDefaultOpts
         ghCodeBlocks: !0,
         tasklists: !0
     },
-    vanilla: getDefaultOpts(!0)
+    vanilla: e(!0)
 };
 
-function validate(e, r) {
-    var n = r ? "Error in " + r + " extension->" : "Error in unnamed extension", t = {
-        valid: !0,
-        error: ""
-    };
-    showdown.helper.isArray(e) || (e = [ e ]);
-    for (var o = 0; o < e.length; ++o) {
-        var s = n + " sub-extension " + o + ": ", a = e[o];
-        if ("object" !== (void 0 === a ? "undefined" : _typeof(a))) return t.valid = !1, 
-        t.error = s + "must be an object, but " + (void 0 === a ? "undefined" : _typeof(a)) + " given", 
-        t;
-        if (!showdown.helper.isString(a.type)) return t.valid = !1, t.error = s + 'property "type" must be a string, but ' + _typeof(a.type) + " given", 
-        t;
-        var i = a.type = a.type.toLowerCase();
-        if ("language" === i && (i = a.type = "lang"), "html" === i && (i = a.type = "output"), 
-        "lang" !== i && "output" !== i && "listener" !== i) return t.valid = !1, t.error = s + "type " + i + ' is not recognized. Valid values: "lang/language", "output/html" or "listener"', 
-        t;
-        if ("listener" === i) {
-            if (showdown.helper.isUndefined(a.listeners)) return t.valid = !1, t.error = s + '. Extensions of type "listener" must have a property called "listeners"', 
-            t;
-        } else if (showdown.helper.isUndefined(a.filter) && showdown.helper.isUndefined(a.regex)) return t.valid = !1, 
-        t.error = s + i + ' extensions must define either a "regex" property or a "filter" method', 
-        t;
-        if (a.listeners) {
-            if ("object" !== _typeof(a.listeners)) return t.valid = !1, t.error = s + '"listeners" property must be an object but ' + _typeof(a.listeners) + " given", 
-            t;
-            for (var l in a.listeners) if (a.listeners.hasOwnProperty(l) && "function" != typeof a.listeners[l]) return t.valid = !1, 
-            t.error = s + '"listeners" property must be an hash of [event name]: [callback]. listeners.' + l + " must be a function but " + _typeof(a.listeners[l]) + " given", 
-            t;
-        }
-        if (a.filter) {
-            if ("function" != typeof a.filter) return t.valid = !1, t.error = s + '"filter" must be a function, but ' + _typeof(a.filter) + " given", 
-            t;
-        } else if (a.regex) {
-            if (showdown.helper.isString(a.regex) && (a.regex = new RegExp(a.regex, "g")), !a.regex instanceof RegExp) return t.valid = !1, 
-            t.error = s + '"regex" property must either be a string or a RegExp object, but ' + _typeof(a.regex) + " given", 
-            t;
-            if (showdown.helper.isUndefined(a.replace)) return t.valid = !1, t.error = s + '"regex" extensions must implement a replace string or function', 
-            t;
-        }
+s.helper = {}, s.extensions = {}, s.setOption = function(e, r) {
+    return i[e] = r, this;
+}, s.getOption = function(e) {
+    return i[e];
+}, s.getOptions = function() {
+    return i;
+}, s.resetOptions = function() {
+    i = e(!0);
+}, s.setFlavor = function(e) {
+    if (l.hasOwnProperty(e)) {
+        var r = l[e];
+        for (var t in r) r.hasOwnProperty(t) && (i[t] = r[t]);
     }
-    return t;
-}
-
-function escapeCharactersCallback(e, r) {
-    return "~E" + r.charCodeAt(0) + "E";
-}
-
-showdown.helper = {}, showdown.extensions = {}, showdown.setOption = function(e, r) {
-    return globalOptions[e] = r, this;
-}, showdown.getOption = function(e) {
-    return globalOptions[e];
-}, showdown.getOptions = function() {
-    return globalOptions;
-}, showdown.resetOptions = function() {
-    globalOptions = getDefaultOpts(!0);
-}, showdown.setFlavor = function(e) {
-    if (flavor.hasOwnProperty(e)) {
-        var r = flavor[e];
-        for (var n in r) r.hasOwnProperty(n) && (globalOptions[n] = r[n]);
-    }
-}, showdown.getDefaultOptions = function(e) {
-    return getDefaultOpts(e);
-}, showdown.subParser = function(e, r) {
-    if (showdown.helper.isString(e)) {
+}, s.getDefaultOptions = function(r) {
+    return e(r);
+}, s.subParser = function(e, r) {
+    if (s.helper.isString(e)) {
         if (void 0 === r) {
-            if (parsers.hasOwnProperty(e)) return parsers[e];
+            if (a.hasOwnProperty(e)) return a[e];
             throw Error("SubParser named " + e + " not registered!");
         }
-        parsers[e] = r;
+        a[e] = r;
     }
-}, showdown.extension = function(e, r) {
-    if (!showdown.helper.isString(e)) throw Error("Extension 'name' must be a string");
-    if (e = showdown.helper.stdExtName(e), showdown.helper.isUndefined(r)) {
-        if (!extensions.hasOwnProperty(e)) throw Error("Extension named " + e + " is not registered!");
-        return extensions[e];
+}, s.extension = function(e, t) {
+    if (!s.helper.isString(e)) throw Error("Extension 'name' must be a string");
+    if (e = s.helper.stdExtName(e), s.helper.isUndefined(t)) {
+        if (!o.hasOwnProperty(e)) throw Error("Extension named " + e + " is not registered!");
+        return o[e];
     }
-    "function" == typeof r && (r = r()), showdown.helper.isArray(r) || (r = [ r ]);
-    var n = validate(r, e);
+    "function" == typeof t && (t = t()), s.helper.isArray(t) || (t = [ t ]);
+    var n = r(t, e);
     if (!n.valid) throw Error(n.error);
-    extensions[e] = r;
-}, showdown.getAllExtensions = function() {
-    return extensions;
-}, showdown.removeExtension = function(e) {
-    delete extensions[e];
-}, showdown.resetExtensions = function() {
-    extensions = {};
-}, showdown.validateExtension = function(e) {
-    var r = validate(e, null);
-    return !!r.valid || (console.warn(r.error), !1);
-}, showdown.hasOwnProperty("helper") || (showdown.helper = {}), showdown.helper.isString = function(e) {
+    o[e] = t;
+}, s.getAllExtensions = function() {
+    return o;
+}, s.removeExtension = function(e) {
+    delete o[e];
+}, s.resetExtensions = function() {
+    o = {};
+}, s.validateExtension = function(e) {
+    var t = r(e, null);
+    return !!t.valid || (console.warn(t.error), !1);
+}, s.hasOwnProperty("helper") || (s.helper = {}), s.helper.isString = function(e) {
     return "string" == typeof e || e instanceof String;
-}, showdown.helper.isFunction = function(e) {
-    return e && "[object Function]" === {}.toString.call(e);
-}, showdown.helper.forEach = function(e, r) {
-    if ("function" == typeof e.forEach) e.forEach(r); else for (var n = 0; n < e.length; n++) r(e[n], n, e);
-}, showdown.helper.isArray = function(e) {
+}, s.helper.isFunction = function(e) {
+    var r = {};
+    return e && "[object Function]" === r.toString.call(e);
+}, s.helper.forEach = function(e, r) {
+    if ("function" == typeof e.forEach) e.forEach(r); else for (var t = 0; t < e.length; t++) r(e[t], t, e);
+}, s.helper.isArray = function(e) {
     return e.constructor === Array;
-}, showdown.helper.isUndefined = function(e) {
+}, s.helper.isUndefined = function(e) {
     return void 0 === e;
-}, showdown.helper.stdExtName = function(e) {
+}, s.helper.stdExtName = function(e) {
     return e.replace(/[_-]||\s/g, "").toLowerCase();
-}, showdown.helper.escapeCharactersCallback = escapeCharactersCallback, showdown.helper.escapeCharacters = function(e, r, n) {
-    var t = "([" + r.replace(/([\[\]\\])/g, "\\$1") + "])";
-    n && (t = "\\\\" + t);
-    var o = new RegExp(t, "g");
-    return e = e.replace(o, escapeCharactersCallback);
+}, s.helper.escapeCharactersCallback = t, s.helper.escapeCharacters = function(e, r, n) {
+    var s = "([" + r.replace(/([\[\]\\])/g, "\\$1") + "])";
+    n && (s = "\\\\" + s);
+    var a = new RegExp(s, "g");
+    return e = e.replace(a, t);
 };
 
-var rgxFindMatchPos = function(e, r, n, t) {
-    var o, s, a, i, l, c = t || "", h = -1 < c.indexOf("g"), d = new RegExp(r + "|" + n, "g" + c.replace(/g/g, "")), u = new RegExp(r, c.replace(/g/g, "")), p = [];
+var c = function(e, r, t, n) {
+    var s, a, o, i, l, c = n || "", u = c.indexOf("g") > -1, p = new RegExp(r + "|" + t, "g" + c.replace(/g/g, "")), h = new RegExp(r, c.replace(/g/g, "")), d = [];
     do {
-        for (o = 0; a = d.exec(e); ) if (u.test(a[0])) o++ || (i = (s = d.lastIndex) - a[0].length); else if (o && !--o) {
-            l = a.index + a[0].length;
-            var w = {
+        for (s = 0; o = p.exec(e); ) if (h.test(o[0])) s++ || (i = (a = p.lastIndex) - o[0].length); else if (s && !--s) {
+            l = o.index + o[0].length;
+            var f = {
                 left: {
                     start: i,
-                    end: s
+                    end: a
                 },
                 match: {
-                    start: s,
-                    end: a.index
+                    start: a,
+                    end: o.index
                 },
                 right: {
-                    start: a.index,
+                    start: o.index,
                     end: l
                 },
                 wholeMatch: {
@@ -230,33 +228,33 @@ var rgxFindMatchPos = function(e, r, n, t) {
                     end: l
                 }
             };
-            if (p.push(w), !h) return p;
+            if (d.push(f), !u) return d;
         }
-    } while (o && (d.lastIndex = s));
-    return p;
+    } while (s && (p.lastIndex = a));
+    return d;
 };
 
-showdown.helper.matchRecursiveRegExp = function(e, r, n, t) {
-    for (var o = rgxFindMatchPos(e, r, n, t), s = [], a = 0; a < o.length; ++a) s.push([ e.slice(o[a].wholeMatch.start, o[a].wholeMatch.end), e.slice(o[a].match.start, o[a].match.end), e.slice(o[a].left.start, o[a].left.end), e.slice(o[a].right.start, o[a].right.end) ]);
-    return s;
-}, showdown.helper.replaceRecursiveRegExp = function(e, r, n, t, o) {
-    if (!showdown.helper.isFunction(r)) {
-        var s = r;
+s.helper.matchRecursiveRegExp = function(e, r, t, n) {
+    for (var s = c(e, r, t, n), a = [], o = 0; o < s.length; ++o) a.push([ e.slice(s[o].wholeMatch.start, s[o].wholeMatch.end), e.slice(s[o].match.start, s[o].match.end), e.slice(s[o].left.start, s[o].left.end), e.slice(s[o].right.start, s[o].right.end) ]);
+    return a;
+}, s.helper.replaceRecursiveRegExp = function(e, r, t, n, a) {
+    if (!s.helper.isFunction(r)) {
+        var o = r;
         r = function() {
-            return s;
+            return o;
         };
     }
-    var a = rgxFindMatchPos(e, n, t, o), i = e, l = a.length;
-    if (0 < l) {
-        var c = [];
-        0 !== a[0].wholeMatch.start && c.push(e.slice(0, a[0].wholeMatch.start));
-        for (var h = 0; h < l; ++h) c.push(r(e.slice(a[h].wholeMatch.start, a[h].wholeMatch.end), e.slice(a[h].match.start, a[h].match.end), e.slice(a[h].left.start, a[h].left.end), e.slice(a[h].right.start, a[h].right.end))), 
-        h < l - 1 && c.push(e.slice(a[h].wholeMatch.end, a[h + 1].wholeMatch.start));
-        a[l - 1].wholeMatch.end < e.length && c.push(e.slice(a[l - 1].wholeMatch.end)), 
-        i = c.join("");
+    var i = c(e, t, n, a), l = e, u = i.length;
+    if (u > 0) {
+        var p = [];
+        0 !== i[0].wholeMatch.start && p.push(e.slice(0, i[0].wholeMatch.start));
+        for (var h = 0; h < u; ++h) p.push(r(e.slice(i[h].wholeMatch.start, i[h].wholeMatch.end), e.slice(i[h].match.start, i[h].match.end), e.slice(i[h].left.start, i[h].left.end), e.slice(i[h].right.start, i[h].right.end))), 
+        h < u - 1 && p.push(e.slice(i[h].wholeMatch.end, i[h + 1].wholeMatch.start));
+        i[u - 1].wholeMatch.end < e.length && p.push(e.slice(i[u - 1].wholeMatch.end)), 
+        l = p.join("");
     }
-    return i;
-}, showdown.helper.isUndefined(console) && (console = {
+    return l;
+}, s.helper.isUndefined(console) && (console = {
     warn: function(e) {
         alert(e);
     },
@@ -266,70 +264,73 @@ showdown.helper.matchRecursiveRegExp = function(e, r, n, t) {
     error: function(e) {
         throw e;
     }
-}), showdown.Converter = function(n) {
-    var s = {}, a = [], i = [], l = {};
-    function t(e, r) {
-        if (r = r || null, showdown.helper.isString(e)) {
-            if (r = e = showdown.helper.stdExtName(e), showdown.extensions[e]) return console.warn("DEPRECATION WARNING: " + e + " is an old extension that uses a deprecated loading method.Please inform the developer that the extension should be updated!"), 
-            void function(e, r) {
-                "function" == typeof e && (e = e(new showdown.Converter()));
-                showdown.helper.isArray(e) || (e = [ e ]);
-                var n = validate(e, r);
-                if (!n.valid) throw Error(n.error);
-                for (var t = 0; t < e.length; ++t) switch (e[t].type) {
-                  case "lang":
-                    a.push(e[t]);
-                    break;
-
-                  case "output":
-                    i.push(e[t]);
-                    break;
-
-                  default:
-                    throw Error("Extension loader error: Type unrecognized!!!");
-                }
-            }(showdown.extensions[e], e);
-            if (showdown.helper.isUndefined(extensions[e])) throw Error('Extension "' + e + '" could not be loaded. It was either not found or is not a valid extension.');
-            e = extensions[e];
+}), s.Converter = function(e) {
+    function t(e, t) {
+        if (t = t || null, s.helper.isString(e)) {
+            if (e = s.helper.stdExtName(e), t = e, s.extensions[e]) return console.warn("DEPRECATION WARNING: " + e + " is an old extension that uses a deprecated loading method.Please inform the developer that the extension should be updated!"), 
+            void a(s.extensions[e], e);
+            if (s.helper.isUndefined(o[e])) throw Error('Extension "' + e + '" could not be loaded. It was either not found or is not a valid extension.');
+            e = o[e];
         }
-        "function" == typeof e && (e = e()), showdown.helper.isArray(e) || (e = [ e ]);
-        var n = validate(e, r);
+        "function" == typeof e && (e = e()), s.helper.isArray(e) || (e = [ e ]);
+        var n = r(e, t);
         if (!n.valid) throw Error(n.error);
-        for (var t = 0; t < e.length; ++t) {
-            switch (e[t].type) {
+        for (var i = 0; i < e.length; ++i) {
+            switch (e[i].type) {
               case "lang":
-                a.push(e[t]);
+                h.push(e[i]);
                 break;
 
               case "output":
-                i.push(e[t]);
+                d.push(e[i]);
             }
-            if (e[t].hasOwnProperty(l)) for (var o in e[t].listeners) e[t].listeners.hasOwnProperty(o) && c(o, e[t].listeners[o]);
+            if (e[i].hasOwnProperty(f)) for (var l in e[i].listeners) e[i].listeners.hasOwnProperty(l) && c(l, e[i].listeners[l]);
+        }
+    }
+    function a(e, t) {
+        "function" == typeof e && (e = e(new s.Converter())), s.helper.isArray(e) || (e = [ e ]);
+        var n = r(e, t);
+        if (!n.valid) throw Error(n.error);
+        for (var a = 0; a < e.length; ++a) switch (e[a].type) {
+          case "lang":
+            h.push(e[a]);
+            break;
+
+          case "output":
+            d.push(e[a]);
+            break;
+
+          default:
+            throw Error("Extension loader error: Type unrecognized!!!");
         }
     }
     function c(e, r) {
-        if (!showdown.helper.isString(e)) throw Error("Invalid argument in converter.listen() method: name must be a string, but " + (void 0 === e ? "undefined" : _typeof(e)) + " given");
-        if ("function" != typeof r) throw Error("Invalid argument in converter.listen() method: callback must be a function, but " + (void 0 === r ? "undefined" : _typeof(r)) + " given");
-        l.hasOwnProperty(e) || (l[e] = []), l[e].push(r);
+        if (!s.helper.isString(e)) throw Error("Invalid argument in converter.listen() method: name must be a string, but " + (void 0 === e ? "undefined" : n(e)) + " given");
+        if ("function" != typeof r) throw Error("Invalid argument in converter.listen() method: callback must be a function, but " + (void 0 === r ? "undefined" : n(r)) + " given");
+        f.hasOwnProperty(e) || (f[e] = []), f[e].push(r);
     }
+    function u(e) {
+        var r = e.match(/^\s*/)[0].length, t = new RegExp("^\\s{0," + r + "}", "gm");
+        return e.replace(t, "");
+    }
+    var p = {}, h = [], d = [], f = {};
     !function() {
-        for (var e in n = n || {}, globalOptions) globalOptions.hasOwnProperty(e) && (s[e] = globalOptions[e]);
-        {
-            if ("object" !== (void 0 === n ? "undefined" : _typeof(n))) throw Error("Converter expects the passed parameter to be an object, but " + (void 0 === n ? "undefined" : _typeof(n)) + " was passed instead.");
-            for (var r in n) n.hasOwnProperty(r) && (s[r] = n[r]);
-        }
-        s.extensions && showdown.helper.forEach(s.extensions, t);
-    }(), this._dispatch = function(e, r, n, t) {
-        if (l.hasOwnProperty(e)) for (var o = 0; o < l[e].length; ++o) {
-            var s = l[e][o](e, r, this, n, t);
-            s && void 0 !== s && (r = s);
+        e = e || {};
+        for (var r in i) i.hasOwnProperty(r) && (p[r] = i[r]);
+        if ("object" !== (void 0 === e ? "undefined" : n(e))) throw Error("Converter expects the passed parameter to be an object, but " + (void 0 === e ? "undefined" : n(e)) + " was passed instead.");
+        for (var a in e) e.hasOwnProperty(a) && (p[a] = e[a]);
+        p.extensions && s.helper.forEach(p.extensions, t);
+    }(), this._dispatch = function(e, r, t, n) {
+        if (f.hasOwnProperty(e)) for (var s = 0; s < f[e].length; ++s) {
+            var a = f[e][s](e, r, this, t, n);
+            a && void 0 !== a && (r = a);
         }
         return r;
     }, this.listen = function(e, r) {
         return c(e, r), this;
-    }, this.makeHtml = function(r) {
-        if (!r) return r;
-        var e, n, t, o = {
+    }, this.makeHtml = function(e) {
+        if (!e) return e;
+        var r = {
             gHtmlBlocks: [],
             gHtmlMdBlocks: [],
             gHtmlSpans: [],
@@ -338,336 +339,355 @@ showdown.helper.matchRecursiveRegExp = function(e, r, n, t) {
             gDimensions: {},
             gListLevel: 0,
             hashLinkCounts: {},
-            langExtensions: a,
-            outputModifiers: i,
+            langExtensions: h,
+            outputModifiers: d,
             converter: this,
             ghCodeBlocks: []
         };
-        return r = (r = (r = (r = r.replace(/~/g, "~T")).replace(/\$/g, "~D")).replace(/\r\n/g, "\n")).replace(/\r/g, "\n"), 
-        s.smartIndentationFix && (n = (e = r).match(/^\s*/)[0].length, t = new RegExp("^\\s{0," + n + "}", "gm"), 
-        r = e.replace(t, "")), r = r, r = showdown.subParser("detab")(r, s, o), r = showdown.subParser("stripBlankLines")(r, s, o), 
-        showdown.helper.forEach(a, function(e) {
-            r = showdown.subParser("runExtension")(e, r, s, o);
-        }), r = showdown.subParser("hashPreCodeTags")(r, s, o), r = showdown.subParser("githubCodeBlocks")(r, s, o), 
-        r = showdown.subParser("hashHTMLBlocks")(r, s, o), r = showdown.subParser("hashHTMLSpans")(r, s, o), 
-        r = showdown.subParser("stripLinkDefinitions")(r, s, o), r = showdown.subParser("blockGamut")(r, s, o), 
-        r = showdown.subParser("unhashHTMLSpans")(r, s, o), r = (r = (r = showdown.subParser("unescapeSpecialChars")(r, s, o)).replace(/~D/g, "$$")).replace(/~T/g, "~"), 
-        showdown.helper.forEach(i, function(e) {
-            r = showdown.subParser("runExtension")(e, r, s, o);
-        }), r;
+        return e = e.replace(/~/g, "~T"), e = e.replace(/\$/g, "~D"), e = e.replace(/\r\n/g, "\n"), 
+        e = e.replace(/\r/g, "\n"), p.smartIndentationFix && (e = u(e)), e = e, e = s.subParser("detab")(e, p, r), 
+        e = s.subParser("stripBlankLines")(e, p, r), s.helper.forEach(h, function(t) {
+            e = s.subParser("runExtension")(t, e, p, r);
+        }), e = s.subParser("hashPreCodeTags")(e, p, r), e = s.subParser("githubCodeBlocks")(e, p, r), 
+        e = s.subParser("hashHTMLBlocks")(e, p, r), e = s.subParser("hashHTMLSpans")(e, p, r), 
+        e = s.subParser("stripLinkDefinitions")(e, p, r), e = s.subParser("blockGamut")(e, p, r), 
+        e = s.subParser("unhashHTMLSpans")(e, p, r), e = s.subParser("unescapeSpecialChars")(e, p, r), 
+        e = e.replace(/~D/g, "$$"), e = e.replace(/~T/g, "~"), s.helper.forEach(d, function(t) {
+            e = s.subParser("runExtension")(t, e, p, r);
+        }), e;
     }, this.setOption = function(e, r) {
-        s[e] = r;
+        p[e] = r;
     }, this.getOption = function(e) {
-        return s[e];
+        return p[e];
     }, this.getOptions = function() {
-        return s;
+        return p;
     }, this.addExtension = function(e, r) {
         t(e, r = r || null);
     }, this.useExtension = function(e) {
         t(e);
     }, this.setFlavor = function(e) {
-        if (flavor.hasOwnProperty(e)) {
-            var r = flavor[e];
-            for (var n in r) r.hasOwnProperty(n) && (s[n] = r[n]);
+        if (l.hasOwnProperty(e)) {
+            var r = l[e];
+            for (var t in r) r.hasOwnProperty(t) && (p[t] = r[t]);
         }
     }, this.removeExtension = function(e) {
-        showdown.helper.isArray(e) || (e = [ e ]);
+        s.helper.isArray(e) || (e = [ e ]);
         for (var r = 0; r < e.length; ++r) {
-            for (var n = e[r], t = 0; t < a.length; ++t) a[t] === n && a[t].splice(t, 1);
-            for (;0 < i.length; ++t) i[0] === n && i[0].splice(t, 1);
+            for (var t = e[r], n = 0; n < h.length; ++n) h[n] === t && h[n].splice(n, 1);
+            for (;0 < d.length; ++n) d[0] === t && d[0].splice(n, 1);
         }
     }, this.getAllExtensions = function() {
         return {
-            language: a,
-            output: i
+            language: h,
+            output: d
         };
     };
-}, showdown.subParser("anchors", function(e, r, p) {
-    var n = function(e, r, n, t, o, s, a, i) {
-        showdown.helper.isUndefined(i) && (i = ""), e = r;
-        var l = n, c = t.toLowerCase(), h = o, d = i;
-        if (!h) if (c || (c = l.toLowerCase().replace(/ ?\n/g, " ")), h = "#" + c, showdown.helper.isUndefined(p.gUrls[c])) {
-            if (!(-1 < e.search(/\(\s*\)$/m))) return e;
+}, s.subParser("anchors", function(e, r, t) {
+    var n = function(e, r, n, a, o, i, l, c) {
+        s.helper.isUndefined(c) && (c = ""), e = r;
+        var u = n, p = a.toLowerCase(), h = o, d = c;
+        if (!h) if (p || (p = u.toLowerCase().replace(/ ?\n/g, " ")), h = "#" + p, s.helper.isUndefined(t.gUrls[p])) {
+            if (!(e.search(/\(\s*\)$/m) > -1)) return e;
             h = "";
-        } else h = p.gUrls[c], showdown.helper.isUndefined(p.gTitles[c]) || (d = p.gTitles[c]);
-        var u = '<a href="' + (h = showdown.helper.escapeCharacters(h, "*_", !1)) + '"';
-        return "" !== d && null !== d && (d = d.replace(/"/g, "&quot;"), u += ' title="' + (d = showdown.helper.escapeCharacters(d, "*_", !1)) + '"'), 
-        u += ">" + l + "</a>";
+        } else h = t.gUrls[p], s.helper.isUndefined(t.gTitles[p]) || (d = t.gTitles[p]);
+        var f = '<a href="' + (h = s.helper.escapeCharacters(h, "*_", !1)) + '"';
+        return "" !== d && null !== d && (d = d.replace(/"/g, "&quot;"), f += ' title="' + (d = s.helper.escapeCharacters(d, "*_", !1)) + '"'), 
+        f += ">" + u + "</a>";
     };
-    return e = (e = (e = (e = p.converter._dispatch("anchors.before", e, r, p)).replace(/(\[((?:\[[^\]]*]|[^\[\]])*)][ ]?(?:\n[ ]*)?\[(.*?)])()()()()/g, n)).replace(/(\[((?:\[[^\]]*]|[^\[\]])*)]\([ \t]*()<?(.*?(?:\(.*?\).*?)?)>?[ \t]*((['"])(.*?)\6[ \t]*)?\))/g, n)).replace(/(\[([^\[\]]+)])()()()()()/g, n), 
-    e = p.converter._dispatch("anchors.after", e, r, p);
-}), showdown.subParser("autoLinks", function(e, r, n) {
-    function t(e, r) {
-        var n = r;
-        return /^www\./i.test(r) && (r = r.replace(/^www\./i, "http://www.")), '<a href="' + r + '">' + n + "</a>";
+    return e = (e = t.converter._dispatch("anchors.before", e, r, t)).replace(/(\[((?:\[[^\]]*]|[^\[\]])*)][ ]?(?:\n[ ]*)?\[(.*?)])()()()()/g, n), 
+    e = e.replace(/(\[((?:\[[^\]]*]|[^\[\]])*)]\([ \t]*()<?(.*?(?:\(.*?\).*?)?)>?[ \t]*((['"])(.*?)\6[ \t]*)?\))/g, n), 
+    e = e.replace(/(\[([^\[\]]+)])()()()()()/g, n), e = t.converter._dispatch("anchors.after", e, r, t);
+}), s.subParser("autoLinks", function(e, r, t) {
+    function n(e, r) {
+        var t = r;
+        return /^www\./i.test(r) && (r = r.replace(/^www\./i, "http://www.")), '<a href="' + r + '">' + t + "</a>";
     }
-    function o(e, r) {
-        var n = showdown.subParser("unescapeSpecialChars")(r);
-        return showdown.subParser("encodeEmailAddress")(n);
+    function a(e, r) {
+        var t = s.subParser("unescapeSpecialChars")(r);
+        return s.subParser("encodeEmailAddress")(t);
     }
-    return e = (e = (e = n.converter._dispatch("autoLinks.before", e, r, n)).replace(/<(((https?|ftp|dict):\/\/|www\.)[^'">\s]+)>/gi, t)).replace(/<(?:mailto:)?([-.\w]+@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)>/gi, o), 
-    r.simplifiedAutoLink && (e = (e = e.replace(/\b(((https?|ftp|dict):\/\/|www\.)[^'">\s]+\.[^'">\s]+)(?=\s|$)(?!["<>])/gi, t)).replace(/(?:^|[ \n\t])([A-Za-z0-9!#$%&'*+-/=?^_`\{|}~\.]+@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)(?:$|[ \n\t])/gi, o)), 
-    e = n.converter._dispatch("autoLinks.after", e, r, n);
-}), showdown.subParser("blockGamut", function(e, r, n) {
-    e = n.converter._dispatch("blockGamut.before", e, r, n), e = showdown.subParser("blockQuotes")(e, r, n), 
-    e = showdown.subParser("headers")(e, r, n);
-    var t = showdown.subParser("hashBlock")("<hr />", r, n);
-    return e = (e = (e = e.replace(/^[ ]{0,2}([ ]?\*[ ]?){3,}[ \t]*$/gm, t)).replace(/^[ ]{0,2}([ ]?\-[ ]?){3,}[ \t]*$/gm, t)).replace(/^[ ]{0,2}([ ]?_[ ]?){3,}[ \t]*$/gm, t), 
-    e = showdown.subParser("lists")(e, r, n), e = showdown.subParser("codeBlocks")(e, r, n), 
-    e = showdown.subParser("tables")(e, r, n), e = showdown.subParser("hashHTMLBlocks")(e, r, n), 
-    e = showdown.subParser("paragraphs")(e, r, n), e = n.converter._dispatch("blockGamut.after", e, r, n);
-}), showdown.subParser("blockQuotes", function(e, t, o) {
-    return e = (e = o.converter._dispatch("blockQuotes.before", e, t, o)).replace(/((^[ \t]{0,3}>[ \t]?.+\n(.+\n)*\n*)+)/gm, function(e, r) {
-        var n = r;
-        return n = (n = (n = n.replace(/^[ \t]*>[ \t]?/gm, "~0")).replace(/~0/g, "")).replace(/^[ \t]+$/gm, ""), 
-        n = showdown.subParser("githubCodeBlocks")(n, t, o), n = (n = (n = showdown.subParser("blockGamut")(n, t, o)).replace(/(^|\n)/g, "$1  ")).replace(/(\s*<pre>[^\r]+?<\/pre>)/gm, function(e, r) {
-            var n = r;
-            return n = (n = n.replace(/^  /gm, "~0")).replace(/~0/g, "");
-        }), showdown.subParser("hashBlock")("<blockquote>\n" + n + "\n</blockquote>", t, o);
-    }), e = o.converter._dispatch("blockQuotes.after", e, t, o);
-}), showdown.subParser("codeBlocks", function(e, a, i) {
-    e = i.converter._dispatch("codeBlocks.before", e, a, i);
-    return e = (e = (e += "~0").replace(/(?:\n\n|^)((?:(?:[ ]{4}|\t).*\n+)+)(\n*[ ]{0,3}[^ \t\n]|(?=~0))/g, function(e, r, n) {
-        var t = r, o = n, s = "\n";
-        return t = showdown.subParser("outdent")(t), t = showdown.subParser("encodeCode")(t), 
-        t = (t = (t = showdown.subParser("detab")(t)).replace(/^\n+/g, "")).replace(/\n+$/g, ""), 
-        a.omitExtraWLInCodeBlocks && (s = ""), t = "<pre><code>" + t + s + "</code></pre>", 
-        showdown.subParser("hashBlock")(t, a, i) + o;
-    })).replace(/~0/, ""), e = i.converter._dispatch("codeBlocks.after", e, a, i);
-}), showdown.subParser("codeSpans", function(e, r, n) {
-    return void 0 === (e = n.converter._dispatch("codeSpans.before", e, r, n)) && (e = ""), 
-    e = e.replace(/(^|[^\\])(`+)([^\r]*?[^`])\2(?!`)/gm, function(e, r, n, t) {
-        var o = t;
-        return o = (o = o.replace(/^([ \t]*)/g, "")).replace(/[ \t]*$/g, ""), r + "<code>" + (o = showdown.subParser("encodeCode")(o)) + "</code>";
-    }), e = n.converter._dispatch("codeSpans.after", e, r, n);
-}), showdown.subParser("detab", function(e) {
-    return e = (e = (e = (e = (e = e.replace(/\t(?=\t)/g, "    ")).replace(/\t/g, "~A~B")).replace(/~B(.+?)~A/g, function(e, r) {
-        for (var n = r, t = 4 - n.length % 4, o = 0; o < t; o++) n += " ";
-        return n;
-    })).replace(/~A/g, "    ")).replace(/~B/g, "");
-}), showdown.subParser("encodeAmpsAndAngles", function(e) {
-    return e = (e = e.replace(/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/g, "&amp;")).replace(/<(?![a-z\/?\$!])/gi, "&lt;");
-}), showdown.subParser("encodeBackslashEscapes", function(e) {
-    return e = (e = e.replace(/\\(\\)/g, showdown.helper.escapeCharactersCallback)).replace(/\\([`*_{}\[\]()>#+-.!])/g, showdown.helper.escapeCharactersCallback);
-}), showdown.subParser("encodeCode", function(e) {
-    return e = (e = (e = e.replace(/&/g, "&amp;")).replace(/</g, "&lt;")).replace(/>/g, "&gt;"), 
-    e = showdown.helper.escapeCharacters(e, "*_{}[]\\", !1);
-}), showdown.subParser("encodeEmailAddress", function(e) {
-    var n = [ function(e) {
+    var o = /\b(((https?|ftp|dict):\/\/|www\.)[^'">\s]+\.[^'">\s]+)(?=\s|$)(?!["<>])/gi, i = /<(((https?|ftp|dict):\/\/|www\.)[^'">\s]+)>/gi, l = /(?:^|[ \n\t])([A-Za-z0-9!#$%&'*+-/=?^_`\{|}~\.]+@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)(?:$|[ \n\t])/gi, c = /<(?:mailto:)?([-.\w]+@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)>/gi;
+    return e = (e = t.converter._dispatch("autoLinks.before", e, r, t)).replace(i, n), 
+    e = e.replace(c, a), r.simplifiedAutoLink && (e = (e = e.replace(o, n)).replace(l, a)), 
+    e = t.converter._dispatch("autoLinks.after", e, r, t);
+}), s.subParser("blockGamut", function(e, r, t) {
+    e = t.converter._dispatch("blockGamut.before", e, r, t), e = s.subParser("blockQuotes")(e, r, t), 
+    e = s.subParser("headers")(e, r, t);
+    var n = s.subParser("hashBlock")("<hr />", r, t);
+    return e = e.replace(/^[ ]{0,2}([ ]?\*[ ]?){3,}[ \t]*$/gm, n), e = e.replace(/^[ ]{0,2}([ ]?\-[ ]?){3,}[ \t]*$/gm, n), 
+    e = e.replace(/^[ ]{0,2}([ ]?_[ ]?){3,}[ \t]*$/gm, n), e = s.subParser("lists")(e, r, t), 
+    e = s.subParser("codeBlocks")(e, r, t), e = s.subParser("tables")(e, r, t), e = s.subParser("hashHTMLBlocks")(e, r, t), 
+    e = s.subParser("paragraphs")(e, r, t), e = t.converter._dispatch("blockGamut.after", e, r, t);
+}), s.subParser("blockQuotes", function(e, r, t) {
+    return e = t.converter._dispatch("blockQuotes.before", e, r, t), e = e.replace(/((^[ \t]{0,3}>[ \t]?.+\n(.+\n)*\n*)+)/gm, function(e, n) {
+        var a = n;
+        return a = a.replace(/^[ \t]*>[ \t]?/gm, "~0"), a = a.replace(/~0/g, ""), a = a.replace(/^[ \t]+$/gm, ""), 
+        a = s.subParser("githubCodeBlocks")(a, r, t), a = s.subParser("blockGamut")(a, r, t), 
+        a = a.replace(/(^|\n)/g, "$1  "), a = a.replace(/(\s*<pre>[^\r]+?<\/pre>)/gm, function(e, r) {
+            var t = r;
+            return t = t.replace(/^  /gm, "~0"), t = t.replace(/~0/g, "");
+        }), s.subParser("hashBlock")("<blockquote>\n" + a + "\n</blockquote>", r, t);
+    }), e = t.converter._dispatch("blockQuotes.after", e, r, t);
+}), s.subParser("codeBlocks", function(e, r, t) {
+    e = t.converter._dispatch("codeBlocks.before", e, r, t);
+    var n = /(?:\n\n|^)((?:(?:[ ]{4}|\t).*\n+)+)(\n*[ ]{0,3}[^ \t\n]|(?=~0))/g;
+    return e = (e += "~0").replace(n, function(e, n, a) {
+        var o = n, i = a, l = "\n";
+        return o = s.subParser("outdent")(o), o = s.subParser("encodeCode")(o), o = s.subParser("detab")(o), 
+        o = o.replace(/^\n+/g, ""), o = o.replace(/\n+$/g, ""), r.omitExtraWLInCodeBlocks && (l = ""), 
+        o = "<pre><code>" + o + l + "</code></pre>", s.subParser("hashBlock")(o, r, t) + i;
+    }), e = e.replace(/~0/, ""), e = t.converter._dispatch("codeBlocks.after", e, r, t);
+}), s.subParser("codeSpans", function(e, r, t) {
+    return void 0 === (e = t.converter._dispatch("codeSpans.before", e, r, t)) && (e = ""), 
+    e = e.replace(/(^|[^\\])(`+)([^\r]*?[^`])\2(?!`)/gm, function(e, r, t, n) {
+        var a = n;
+        return a = a.replace(/^([ \t]*)/g, ""), a = a.replace(/[ \t]*$/g, ""), a = s.subParser("encodeCode")(a), 
+        r + "<code>" + a + "</code>";
+    }), e = t.converter._dispatch("codeSpans.after", e, r, t);
+}), s.subParser("detab", function(e) {
+    return e = e.replace(/\t(?=\t)/g, "    "), e = e.replace(/\t/g, "~A~B"), e = e.replace(/~B(.+?)~A/g, function(e, r) {
+        for (var t = r, n = 4 - t.length % 4, s = 0; s < n; s++) t += " ";
+        return t;
+    }), e = e.replace(/~A/g, "    "), e = e.replace(/~B/g, "");
+}), s.subParser("encodeAmpsAndAngles", function(e) {
+    return e = e.replace(/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/g, "&amp;"), e = e.replace(/<(?![a-z\/?\$!])/gi, "&lt;");
+}), s.subParser("encodeBackslashEscapes", function(e) {
+    return e = e.replace(/\\(\\)/g, s.helper.escapeCharactersCallback), e = e.replace(/\\([`*_{}\[\]()>#+-.!])/g, s.helper.escapeCharactersCallback);
+}), s.subParser("encodeCode", function(e) {
+    return e = e.replace(/&/g, "&amp;"), e = e.replace(/</g, "&lt;"), e = e.replace(/>/g, "&gt;"), 
+    e = s.helper.escapeCharacters(e, "*_{}[]\\", !1);
+}), s.subParser("encodeEmailAddress", function(e) {
+    var r = [ function(e) {
         return "&#" + e.charCodeAt(0) + ";";
     }, function(e) {
         return "&#x" + e.charCodeAt(0).toString(16) + ";";
     }, function(e) {
         return e;
     } ];
-    return e = (e = '<a href="' + (e = (e = "mailto:" + e).replace(/./g, function(e) {
-        if ("@" === e) e = n[Math.floor(2 * Math.random())](e); else if (":" !== e) {
-            var r = Math.random();
-            e = .9 < r ? n[2](e) : .45 < r ? n[1](e) : n[0](e);
+    return e = "mailto:" + e, e = e.replace(/./g, function(e) {
+        if ("@" === e) e = r[Math.floor(2 * Math.random())](e); else if (":" !== e) {
+            var t = Math.random();
+            e = t > .9 ? r[2](e) : t > .45 ? r[1](e) : r[0](e);
         }
         return e;
-    })) + '">' + e + "</a>").replace(/">.+:/g, '">');
-}), showdown.subParser("escapeSpecialCharsWithinTagAttributes", function(e) {
-    return e = e.replace(/(<[a-z\/!$]("[^"]*"|'[^']*'|[^'">])*>|<!(--.*?--\s*)+>)/gi, function(e) {
+    }), e = '<a href="' + e + '">' + e + "</a>", e = e.replace(/">.+:/g, '">');
+}), s.subParser("escapeSpecialCharsWithinTagAttributes", function(e) {
+    var r = /(<[a-z\/!$]("[^"]*"|'[^']*'|[^'">])*>|<!(--.*?--\s*)+>)/gi;
+    return e = e.replace(r, function(e) {
         var r = e.replace(/(.)<\/?code>(?=.)/g, "$1`");
-        return r = showdown.helper.escapeCharacters(r, "\\`*_", !1);
+        return r = s.helper.escapeCharacters(r, "\\`*_", !1);
     });
-}), showdown.subParser("githubCodeBlocks", function(e, o, s) {
-    return o.ghCodeBlocks ? (e = s.converter._dispatch("githubCodeBlocks.before", e, o, s), 
-    e = (e = (e += "~0").replace(/(?:^|\n)```(.*)\n([\s\S]*?)\n```/g, function(e, r, n) {
-        var t = o.omitExtraWLInCodeBlocks ? "" : "\n";
-        return n = showdown.subParser("encodeCode")(n), n = "<pre><code" + (r ? ' class="' + r + " language-" + r + '"' : "") + ">" + (n = (n = (n = showdown.subParser("detab")(n)).replace(/^\n+/g, "")).replace(/\n+$/g, "")) + t + "</code></pre>", 
-        n = showdown.subParser("hashBlock")(n, o, s), "\n\n~G" + (s.ghCodeBlocks.push({
+}), s.subParser("githubCodeBlocks", function(e, r, t) {
+    return r.ghCodeBlocks ? (e = t.converter._dispatch("githubCodeBlocks.before", e, r, t), 
+    e += "~0", e = e.replace(/(?:^|\n)```(.*)\n([\s\S]*?)\n```/g, function(e, n, a) {
+        var o = r.omitExtraWLInCodeBlocks ? "" : "\n";
+        return a = s.subParser("encodeCode")(a), a = s.subParser("detab")(a), a = a.replace(/^\n+/g, ""), 
+        a = a.replace(/\n+$/g, ""), a = "<pre><code" + (n ? ' class="' + n + " language-" + n + '"' : "") + ">" + a + o + "</code></pre>", 
+        a = s.subParser("hashBlock")(a, r, t), "\n\n~G" + (t.ghCodeBlocks.push({
             text: e,
-            codeblock: n
+            codeblock: a
         }) - 1) + "G\n\n";
-    })).replace(/~0/, ""), s.converter._dispatch("githubCodeBlocks.after", e, o, s)) : e;
-}), showdown.subParser("hashBlock", function(e, r, n) {
-    return e = e.replace(/(^\n+|\n+$)/g, ""), "\n\n~K" + (n.gHtmlBlocks.push(e) - 1) + "K\n\n";
-}), showdown.subParser("hashElement", function(e, r, t) {
+    }), e = e.replace(/~0/, ""), t.converter._dispatch("githubCodeBlocks.after", e, r, t)) : e;
+}), s.subParser("hashBlock", function(e, r, t) {
+    return e = e.replace(/(^\n+|\n+$)/g, ""), "\n\n~K" + (t.gHtmlBlocks.push(e) - 1) + "K\n\n";
+}), s.subParser("hashElement", function(e, r, t) {
     return function(e, r) {
         var n = r;
-        return n = (n = (n = n.replace(/\n\n/g, "\n")).replace(/^\n/, "")).replace(/\n+$/g, ""), 
+        return n = n.replace(/\n\n/g, "\n"), n = n.replace(/^\n/, ""), n = n.replace(/\n+$/g, ""), 
         n = "\n\n~K" + (t.gHtmlBlocks.push(n) - 1) + "K\n\n";
     };
-}), showdown.subParser("hashHTMLBlocks", function(e, r, s) {
-    for (var n = [ "pre", "div", "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "table", "dl", "ol", "ul", "script", "noscript", "form", "fieldset", "iframe", "math", "style", "section", "header", "footer", "nav", "article", "aside", "address", "audio", "canvas", "figure", "hgroup", "output", "video", "p" ], t = function(e, r, n, t) {
-        var o = e;
-        return -1 !== n.search(/\bmarkdown\b/) && (o = n + s.converter.makeHtml(r) + t), 
-        "\n\n~K" + (s.gHtmlBlocks.push(o) - 1) + "K\n\n";
-    }, o = 0; o < n.length; ++o) e = showdown.helper.replaceRecursiveRegExp(e, t, "^(?: |\\t){0,3}<" + n[o] + "\\b[^>]*>", "</" + n[o] + ">", "gim");
-    return e = (e = (e = e.replace(/(\n[ ]{0,3}(<(hr)\b([^<>])*?\/?>)[ \t]*(?=\n{2,}))/g, showdown.subParser("hashElement")(e, r, s))).replace(/(<!--[\s\S]*?-->)/g, showdown.subParser("hashElement")(e, r, s))).replace(/(?:\n\n)([ ]{0,3}(?:<([?%])[^\r]*?\2>)[ \t]*(?=\n{2,}))/g, showdown.subParser("hashElement")(e, r, s));
-}), showdown.subParser("hashHTMLSpans", function(e, r, n) {
-    for (var t = showdown.helper.matchRecursiveRegExp(e, "<code\\b[^>]*>", "</code>", "gi"), o = 0; o < t.length; ++o) e = e.replace(t[o][0], "~L" + (n.gHtmlSpans.push(t[o][0]) - 1) + "L");
+}), s.subParser("hashHTMLBlocks", function(e, r, t) {
+    for (var n = [ "pre", "div", "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "table", "dl", "ol", "ul", "script", "noscript", "form", "fieldset", "iframe", "math", "style", "section", "header", "footer", "nav", "article", "aside", "address", "audio", "canvas", "figure", "hgroup", "output", "video", "p" ], a = 0; a < n.length; ++a) e = s.helper.replaceRecursiveRegExp(e, function(e, r, n, s) {
+        var a = e;
+        return -1 !== n.search(/\bmarkdown\b/) && (a = n + t.converter.makeHtml(r) + s), 
+        "\n\n~K" + (t.gHtmlBlocks.push(a) - 1) + "K\n\n";
+    }, "^(?: |\\t){0,3}<" + n[a] + "\\b[^>]*>", "</" + n[a] + ">", "gim");
+    return e = e.replace(/(\n[ ]{0,3}(<(hr)\b([^<>])*?\/?>)[ \t]*(?=\n{2,}))/g, s.subParser("hashElement")(e, r, t)), 
+    e = e.replace(/(<!--[\s\S]*?-->)/g, s.subParser("hashElement")(e, r, t)), e = e.replace(/(?:\n\n)([ ]{0,3}(?:<([?%])[^\r]*?\2>)[ \t]*(?=\n{2,}))/g, s.subParser("hashElement")(e, r, t));
+}), s.subParser("hashHTMLSpans", function(e, r, t) {
+    for (var n = s.helper.matchRecursiveRegExp(e, "<code\\b[^>]*>", "</code>", "gi"), a = 0; a < n.length; ++a) e = e.replace(n[a][0], "~L" + (t.gHtmlSpans.push(n[a][0]) - 1) + "L");
     return e;
-}), showdown.subParser("unhashHTMLSpans", function(e, r, n) {
-    for (var t = 0; t < n.gHtmlSpans.length; ++t) e = e.replace("~L" + t + "L", n.gHtmlSpans[t]);
+}), s.subParser("unhashHTMLSpans", function(e, r, t) {
+    for (var n = 0; n < t.gHtmlSpans.length; ++n) e = e.replace("~L" + n + "L", t.gHtmlSpans[n]);
     return e;
-}), showdown.subParser("hashPreCodeTags", function(e, r, s) {
-    return e = showdown.helper.replaceRecursiveRegExp(e, function(e, r, n, t) {
-        var o = n + showdown.subParser("encodeCode")(r) + t;
-        return "\n\n~G" + (s.ghCodeBlocks.push({
+}), s.subParser("hashPreCodeTags", function(e, r, t) {
+    return e = s.helper.replaceRecursiveRegExp(e, function(e, r, n, a) {
+        var o = n + s.subParser("encodeCode")(r) + a;
+        return "\n\n~G" + (t.ghCodeBlocks.push({
             text: e,
             codeblock: o
         }) - 1) + "G\n\n";
     }, "^(?: |\\t){0,3}<pre\\b[^>]*>\\s*<code\\b[^>]*>", "^(?: |\\t){0,3}</code>\\s*</pre>", "gim");
-}), showdown.subParser("headers", function(e, i, l) {
-    e = l.converter._dispatch("headers.before", e, i, l);
-    var t = i.prefixHeaderId, c = isNaN(parseInt(i.headerLevelStart)) ? 1 : parseInt(i.headerLevelStart), r = i.smoothLivePreview ? /^(.+)[ \t]*\n={2,}[ \t]*\n+/gm : /^(.+)[ \t]*\n=+[ \t]*\n+/gm, n = i.smoothLivePreview ? /^(.+)[ \t]*\n-{2,}[ \t]*\n+/gm : /^(.+)[ \t]*\n-+[ \t]*\n+/gm;
-    function h(e) {
+}), s.subParser("headers", function(e, r, t) {
+    function n(e) {
         var r, n = e.replace(/[^\w]/g, "").toLowerCase();
-        return l.hashLinkCounts[n] ? r = n + "-" + l.hashLinkCounts[n]++ : (r = n, l.hashLinkCounts[n] = 1), 
-        !0 === t && (t = "section"), showdown.helper.isString(t) ? t + r : r;
+        return t.hashLinkCounts[n] ? r = n + "-" + t.hashLinkCounts[n]++ : (r = n, t.hashLinkCounts[n] = 1), 
+        !0 === a && (a = "section"), s.helper.isString(a) ? a + r : r;
     }
-    return e = (e = (e = e.replace(r, function(e, r) {
-        var n = showdown.subParser("spanGamut")(r, i, l), t = i.noHeaderId ? "" : ' id="' + h(r) + '"', o = "<h" + c + t + ">" + n + "</h" + c + ">";
-        return showdown.subParser("hashBlock")(o, i, l);
-    })).replace(n, function(e, r) {
-        var n = showdown.subParser("spanGamut")(r, i, l), t = i.noHeaderId ? "" : ' id="' + h(r) + '"', o = c + 1, s = "<h" + o + t + ">" + n + "</h" + o + ">";
-        return showdown.subParser("hashBlock")(s, i, l);
-    })).replace(/^(#{1,6})[ \t]*(.+?)[ \t]*#*\n+/gm, function(e, r, n) {
-        var t = showdown.subParser("spanGamut")(n, i, l), o = i.noHeaderId ? "" : ' id="' + h(n) + '"', s = c - 1 + r.length, a = "<h" + s + o + ">" + t + "</h" + s + ">";
-        return showdown.subParser("hashBlock")(a, i, l);
-    }), e = l.converter._dispatch("headers.after", e, i, l);
-}), showdown.subParser("images", function(e, r, u) {
-    function n(e, r, n, t, o, s, a, i) {
-        var l = u.gUrls, c = u.gTitles, h = u.gDimensions;
-        if (n = n.toLowerCase(), i || (i = ""), "" === t || null === t) {
-            if ("" !== n && null !== n || (n = r.toLowerCase().replace(/ ?\n/g, " ")), t = "#" + n, 
-            showdown.helper.isUndefined(l[n])) return e;
-            t = l[n], showdown.helper.isUndefined(c[n]) || (i = c[n]), showdown.helper.isUndefined(h[n]) || (o = h[n].width, 
-            s = h[n].height);
+    e = t.converter._dispatch("headers.before", e, r, t);
+    var a = r.prefixHeaderId, o = isNaN(parseInt(r.headerLevelStart)) ? 1 : parseInt(r.headerLevelStart), i = r.smoothLivePreview ? /^(.+)[ \t]*\n={2,}[ \t]*\n+/gm : /^(.+)[ \t]*\n=+[ \t]*\n+/gm, l = r.smoothLivePreview ? /^(.+)[ \t]*\n-{2,}[ \t]*\n+/gm : /^(.+)[ \t]*\n-+[ \t]*\n+/gm;
+    return e = e.replace(i, function(e, a) {
+        var i = s.subParser("spanGamut")(a, r, t), l = r.noHeaderId ? "" : ' id="' + n(a) + '"', c = o, u = "<h" + c + l + ">" + i + "</h" + c + ">";
+        return s.subParser("hashBlock")(u, r, t);
+    }), e = e.replace(l, function(e, a) {
+        var i = s.subParser("spanGamut")(a, r, t), l = r.noHeaderId ? "" : ' id="' + n(a) + '"', c = o + 1, u = "<h" + c + l + ">" + i + "</h" + c + ">";
+        return s.subParser("hashBlock")(u, r, t);
+    }), e = e.replace(/^(#{1,6})[ \t]*(.+?)[ \t]*#*\n+/gm, function(e, a, i) {
+        var l = s.subParser("spanGamut")(i, r, t), c = r.noHeaderId ? "" : ' id="' + n(i) + '"', u = o - 1 + a.length, p = "<h" + u + c + ">" + l + "</h" + u + ">";
+        return s.subParser("hashBlock")(p, r, t);
+    }), e = t.converter._dispatch("headers.after", e, r, t);
+}), s.subParser("images", function(e, r, t) {
+    function n(e, r, n, a, o, i, l, c) {
+        var u = t.gUrls, p = t.gTitles, h = t.gDimensions;
+        if (n = n.toLowerCase(), c || (c = ""), "" === a || null === a) {
+            if ("" !== n && null !== n || (n = r.toLowerCase().replace(/ ?\n/g, " ")), a = "#" + n, 
+            s.helper.isUndefined(u[n])) return e;
+            a = u[n], s.helper.isUndefined(p[n]) || (c = p[n]), s.helper.isUndefined(h[n]) || (o = h[n].width, 
+            i = h[n].height);
         }
-        r = r.replace(/"/g, "&quot;"), r = showdown.helper.escapeCharacters(r, "*_", !1);
-        var d = '<img src="' + (t = showdown.helper.escapeCharacters(t, "*_", !1)) + '" alt="' + r + '"';
-        return i && (i = i.replace(/"/g, "&quot;"), d += ' title="' + (i = showdown.helper.escapeCharacters(i, "*_", !1)) + '"'), 
-        o && s && (d += ' width="' + (o = "*" === o ? "auto" : o) + '"', d += ' height="' + (s = "*" === s ? "auto" : s) + '"'), 
+        r = r.replace(/"/g, "&quot;"), r = s.helper.escapeCharacters(r, "*_", !1);
+        var d = '<img src="' + (a = s.helper.escapeCharacters(a, "*_", !1)) + '" alt="' + r + '"';
+        return c && (c = c.replace(/"/g, "&quot;"), d += ' title="' + (c = s.helper.escapeCharacters(c, "*_", !1)) + '"'), 
+        o && i && (d += ' width="' + (o = "*" === o ? "auto" : o) + '"', d += ' height="' + (i = "*" === i ? "auto" : i) + '"'), 
         d += " />";
     }
-    return e = (e = (e = u.converter._dispatch("images.before", e, r, u)).replace(/!\[([^\]]*?)] ?(?:\n *)?\[(.*?)]()()()()()/g, n)).replace(/!\[(.*?)]\s?\([ \t]*()<?(\S+?)>?(?: =([*\d]+[A-Za-z%]{0,4})x([*\d]+[A-Za-z%]{0,4}))?[ \t]*(?:(['"])(.*?)\6[ \t]*)?\)/g, n), 
-    e = u.converter._dispatch("images.after", e, r, u);
-}), showdown.subParser("italicsAndBold", function(e, r, n) {
-    return e = n.converter._dispatch("italicsAndBold.before", e, r, n), e = r.literalMidWordUnderscores ? (e = (e = (e = e.replace(/(^|\s|>|\b)__(?=\S)([\s\S]+?)__(?=\b|<|\s|$)/gm, "$1<strong>$2</strong>")).replace(/(^|\s|>|\b)_(?=\S)([\s\S]+?)_(?=\b|<|\s|$)/gm, "$1<em>$2</em>")).replace(/(\*\*)(?=\S)([^\r]*?\S[*]*)\1/g, "<strong>$2</strong>")).replace(/(\*)(?=\S)([^\r]*?\S)\1/g, "<em>$2</em>") : (e = e.replace(/(\*\*|__)(?=\S)([^\r]*?\S[*_]*)\1/g, "<strong>$2</strong>")).replace(/(\*|_)(?=\S)([^\r]*?\S)\1/g, "<em>$2</em>"), 
-    e = n.converter._dispatch("italicsAndBold.after", e, r, n);
-}), showdown.subParser("lists", function(e, h, d) {
-    function i(e, r) {
-        d.gListLevel++, e = e.replace(/\n{2,}$/, "\n");
-        var c = /\n[ \t]*\n(?!~0)/.test(e += "~0");
-        return e = (e = e.replace(/(\n)?(^[ \t]*)([*+-]|\d+[.])[ \t]+((\[(x|X| )?])?[ \t]*[^\r]+?(\n{1,2}))(?=\n*(~0|\2([*+-]|\d+[.])[ \t]+))/gm, function(e, r, n, t, o, s, a) {
-            a = a && "" !== a.trim();
-            var i = showdown.subParser("outdent")(o, h, d), l = "";
-            return s && h.tasklists && (l = ' class="task-list-item" style="list-style-type: none;"', 
-            i = i.replace(/^[ \t]*\[(x|X| )?]/m, function() {
+    var a = /!\[(.*?)]\s?\([ \t]*()<?(\S+?)>?(?: =([*\d]+[A-Za-z%]{0,4})x([*\d]+[A-Za-z%]{0,4}))?[ \t]*(?:(['"])(.*?)\6[ \t]*)?\)/g, o = /!\[([^\]]*?)] ?(?:\n *)?\[(.*?)]()()()()()/g;
+    return e = (e = t.converter._dispatch("images.before", e, r, t)).replace(o, n), 
+    e = e.replace(a, n), e = t.converter._dispatch("images.after", e, r, t);
+}), s.subParser("italicsAndBold", function(e, r, t) {
+    return e = t.converter._dispatch("italicsAndBold.before", e, r, t), e = r.literalMidWordUnderscores ? (e = (e = (e = e.replace(/(^|\s|>|\b)__(?=\S)([\s\S]+?)__(?=\b|<|\s|$)/gm, "$1<strong>$2</strong>")).replace(/(^|\s|>|\b)_(?=\S)([\s\S]+?)_(?=\b|<|\s|$)/gm, "$1<em>$2</em>")).replace(/(\*\*)(?=\S)([^\r]*?\S[*]*)\1/g, "<strong>$2</strong>")).replace(/(\*)(?=\S)([^\r]*?\S)\1/g, "<em>$2</em>") : (e = e.replace(/(\*\*|__)(?=\S)([^\r]*?\S[*_]*)\1/g, "<strong>$2</strong>")).replace(/(\*|_)(?=\S)([^\r]*?\S)\1/g, "<em>$2</em>"), 
+    e = t.converter._dispatch("italicsAndBold.after", e, r, t);
+}), s.subParser("lists", function(e, r, t) {
+    function n(e, n) {
+        t.gListLevel++, e = e.replace(/\n{2,}$/, "\n"), e += "~0";
+        var a = /(\n)?(^[ \t]*)([*+-]|\d+[.])[ \t]+((\[(x|X| )?])?[ \t]*[^\r]+?(\n{1,2}))(?=\n*(~0|\2([*+-]|\d+[.])[ \t]+))/gm, o = /\n[ \t]*\n(?!~0)/.test(e);
+        return e = e.replace(a, function(e, n, a, i, l, c, u) {
+            u = u && "" !== u.trim();
+            var p = s.subParser("outdent")(l, r, t), h = "";
+            return c && r.tasklists && (h = ' class="task-list-item" style="list-style-type: none;"', 
+            p = p.replace(/^[ \t]*\[(x|X| )?]/m, function() {
                 var e = '<input type="checkbox" disabled style="margin: 0px 0.35em 0.25em -1.6em; vertical-align: middle;"';
-                return a && (e += " checked"), e += ">";
-            })), r || -1 < i.search(/\n{2,}/) ? (i = showdown.subParser("githubCodeBlocks")(i, h, d), 
-            i = showdown.subParser("blockGamut")(i, h, d)) : (i = (i = showdown.subParser("lists")(i, h, d)).replace(/\n$/, ""), 
-            i = c ? showdown.subParser("paragraphs")(i, h, d) : showdown.subParser("spanGamut")(i, h, d)), 
-            i = "\n<li" + l + ">" + i + "</li>\n";
-        })).replace(/~0/g, ""), d.gListLevel--, r && (e = e.replace(/\s+$/, "")), e;
+                return u && (e += " checked"), e += ">";
+            })), n || p.search(/\n{2,}/) > -1 ? (p = s.subParser("githubCodeBlocks")(p, r, t), 
+            p = s.subParser("blockGamut")(p, r, t)) : (p = (p = s.subParser("lists")(p, r, t)).replace(/\n$/, ""), 
+            p = o ? s.subParser("paragraphs")(p, r, t) : s.subParser("spanGamut")(p, r, t)), 
+            p = "\n<li" + h + ">" + p + "</li>\n";
+        }), e = e.replace(/~0/g, ""), t.gListLevel--, n && (e = e.replace(/\s+$/, "")), 
+        e;
     }
-    function o(e, t, o) {
-        var s = "ul" === t ? /^ {0,2}\d+\.[ \t]/gm : /^ {0,2}[*+-][ \t]/gm, r = [], a = "";
+    function a(e, r, t) {
+        var s = "ul" === r ? /^ {0,2}\d+\.[ \t]/gm : /^ {0,2}[*+-][ \t]/gm, a = [], o = "";
         if (-1 !== e.search(s)) {
-            !function e(r) {
-                var n = r.search(s);
-                -1 !== n ? (a += "\n\n<" + t + ">" + i(r.slice(0, n), !!o) + "</" + t + ">\n\n", 
-                s = "ul" === (t = "ul" === t ? "ol" : "ul") ? /^ {0,2}\d+\.[ \t]/gm : /^ {0,2}[*+-][ \t]/gm, 
-                e(r.slice(n))) : a += "\n\n<" + t + ">" + i(r, !!o) + "</" + t + ">\n\n";
+            !function e(a) {
+                var i = a.search(s);
+                -1 !== i ? (o += "\n\n<" + r + ">" + n(a.slice(0, i), !!t) + "</" + r + ">\n\n", 
+                s = "ul" === (r = "ul" === r ? "ol" : "ul") ? /^ {0,2}\d+\.[ \t]/gm : /^ {0,2}[*+-][ \t]/gm, 
+                e(a.slice(i))) : o += "\n\n<" + r + ">" + n(a, !!t) + "</" + r + ">\n\n";
             }(e);
-            for (var n = 0; n < r.length; ++n) ;
-        } else a = "\n\n<" + t + ">" + i(e, !!o) + "</" + t + ">\n\n";
-        return a;
+            for (var i = 0; i < a.length; ++i) ;
+        } else o = "\n\n<" + r + ">" + n(e, !!t) + "</" + r + ">\n\n";
+        return o;
     }
-    e = d.converter._dispatch("lists.before", e, h, d), e += "~0";
-    var r = /^(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/gm;
-    return d.gListLevel ? e = e.replace(r, function(e, r, n) {
-        return o(r, -1 < n.search(/[*+-]/g) ? "ul" : "ol", !0);
-    }) : (r = /(\n\n|^\n?)(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/gm, 
-    e = e.replace(r, function(e, r, n, t) {
-        return o(n, -1 < t.search(/[*+-]/g) ? "ul" : "ol");
-    })), e = e.replace(/~0/, ""), e = d.converter._dispatch("lists.after", e, h, d);
-}), showdown.subParser("outdent", function(e) {
-    return e = (e = e.replace(/^(\t|[ ]{1,4})/gm, "~0")).replace(/~0/g, "");
-}), showdown.subParser("paragraphs", function(e, r, n) {
-    for (var t = (e = (e = (e = n.converter._dispatch("paragraphs.before", e, r, n)).replace(/^\n+/g, "")).replace(/\n+$/g, "")).split(/\n{2,}/g), o = [], s = t.length, a = 0; a < s; a++) {
-        var i = t[a];
-        0 <= i.search(/~(K|G)(\d+)\1/g) || (i = (i = showdown.subParser("spanGamut")(i, r, n)).replace(/^([ \t]*)/g, "<p>"), 
-        i += "</p>"), o.push(i);
+    e = t.converter._dispatch("lists.before", e, r, t), e += "~0";
+    var o = /^(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/gm;
+    return t.gListLevel ? e = e.replace(o, function(e, r, t) {
+        return a(r, t.search(/[*+-]/g) > -1 ? "ul" : "ol", !0);
+    }) : (o = /(\n\n|^\n?)(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/gm, 
+    e = e.replace(o, function(e, r, t, n) {
+        return a(t, n.search(/[*+-]/g) > -1 ? "ul" : "ol");
+    })), e = e.replace(/~0/, ""), e = t.converter._dispatch("lists.after", e, r, t);
+}), s.subParser("outdent", function(e) {
+    return e = e.replace(/^(\t|[ ]{1,4})/gm, "~0"), e = e.replace(/~0/g, "");
+}), s.subParser("paragraphs", function(e, r, t) {
+    for (var n = (e = (e = (e = t.converter._dispatch("paragraphs.before", e, r, t)).replace(/^\n+/g, "")).replace(/\n+$/g, "")).split(/\n{2,}/g), a = [], o = n.length, i = 0; i < o; i++) {
+        var l = n[i];
+        l.search(/~(K|G)(\d+)\1/g) >= 0 ? a.push(l) : (l = (l = s.subParser("spanGamut")(l, r, t)).replace(/^([ \t]*)/g, "<p>"), 
+        l += "</p>", a.push(l));
     }
-    for (s = o.length, a = 0; a < s; a++) {
-        for (var l = "", c = o[a], h = !1; 0 <= c.search(/~(K|G)(\d+)\1/); ) {
-            var d = RegExp.$1, u = RegExp.$2;
-            l = (l = "K" === d ? n.gHtmlBlocks[u] : h ? showdown.subParser("encodeCode")(n.ghCodeBlocks[u].text) : n.ghCodeBlocks[u].codeblock).replace(/\$/g, "$$$$"), 
-            c = c.replace(/(\n\n)?~(K|G)\d+\2(\n\n)?/, l), /^<pre\b[^>]*>\s*<code\b[^>]*>/.test(c) && (h = !0);
+    for (o = a.length, i = 0; i < o; i++) {
+        for (var c = "", u = a[i], p = !1; u.search(/~(K|G)(\d+)\1/) >= 0; ) {
+            var h = RegExp.$1, d = RegExp.$2;
+            c = (c = "K" === h ? t.gHtmlBlocks[d] : p ? s.subParser("encodeCode")(t.ghCodeBlocks[d].text) : t.ghCodeBlocks[d].codeblock).replace(/\$/g, "$$$$"), 
+            u = u.replace(/(\n\n)?~(K|G)\d+\2(\n\n)?/, c), /^<pre\b[^>]*>\s*<code\b[^>]*>/.test(u) && (p = !0);
         }
-        o[a] = c;
+        a[i] = u;
     }
-    return e = (e = (e = o.join("\n\n")).replace(/^\n+/g, "")).replace(/\n+$/g, ""), 
-    n.converter._dispatch("paragraphs.after", e, r, n);
-}), showdown.subParser("runExtension", function(e, r, n, t) {
-    if (e.filter) r = e.filter(r, t.converter, n); else if (e.regex) {
-        var o = e.regex;
-        !o instanceof RegExp && (o = new RegExp(o, "g")), r = r.replace(o, e.replace);
+    return e = a.join("\n\n"), e = e.replace(/^\n+/g, ""), e = e.replace(/\n+$/g, ""), 
+    t.converter._dispatch("paragraphs.after", e, r, t);
+}), s.subParser("runExtension", function(e, r, t, n) {
+    if (e.filter) r = e.filter(r, n.converter, t); else if (e.regex) {
+        var s = e.regex;
+        !s instanceof RegExp && (s = new RegExp(s, "g")), r = r.replace(s, e.replace);
     }
     return r;
-}), showdown.subParser("spanGamut", function(e, r, n) {
-    return e = n.converter._dispatch("spanGamut.before", e, r, n), e = showdown.subParser("codeSpans")(e, r, n), 
-    e = showdown.subParser("escapeSpecialCharsWithinTagAttributes")(e, r, n), e = showdown.subParser("encodeBackslashEscapes")(e, r, n), 
-    e = showdown.subParser("images")(e, r, n), e = showdown.subParser("anchors")(e, r, n), 
-    e = showdown.subParser("autoLinks")(e, r, n), e = showdown.subParser("encodeAmpsAndAngles")(e, r, n), 
-    e = showdown.subParser("italicsAndBold")(e, r, n), e = (e = showdown.subParser("strikethrough")(e, r, n)).replace(/  +\n/g, " <br />\n"), 
-    e = n.converter._dispatch("spanGamut.after", e, r, n);
-}), showdown.subParser("strikethrough", function(e, r, n) {
-    return r.strikethrough && (e = (e = n.converter._dispatch("strikethrough.before", e, r, n)).replace(/(?:~T){2}([\s\S]+?)(?:~T){2}/g, "<del>$1</del>"), 
-    e = n.converter._dispatch("strikethrough.after", e, r, n)), e;
-}), showdown.subParser("stripBlankLines", function(e) {
+}), s.subParser("spanGamut", function(e, r, t) {
+    return e = t.converter._dispatch("spanGamut.before", e, r, t), e = s.subParser("codeSpans")(e, r, t), 
+    e = s.subParser("escapeSpecialCharsWithinTagAttributes")(e, r, t), e = s.subParser("encodeBackslashEscapes")(e, r, t), 
+    e = s.subParser("images")(e, r, t), e = s.subParser("anchors")(e, r, t), e = s.subParser("autoLinks")(e, r, t), 
+    e = s.subParser("encodeAmpsAndAngles")(e, r, t), e = s.subParser("italicsAndBold")(e, r, t), 
+    e = s.subParser("strikethrough")(e, r, t), e = e.replace(/  +\n/g, " <br />\n"), 
+    e = t.converter._dispatch("spanGamut.after", e, r, t);
+}), s.subParser("strikethrough", function(e, r, t) {
+    return r.strikethrough && (e = (e = t.converter._dispatch("strikethrough.before", e, r, t)).replace(/(?:~T){2}([\s\S]+?)(?:~T){2}/g, "<del>$1</del>"), 
+    e = t.converter._dispatch("strikethrough.after", e, r, t)), e;
+}), s.subParser("stripBlankLines", function(e) {
     return e.replace(/^[ \t]+$/gm, "");
-}), showdown.subParser("stripLinkDefinitions", function(e, i, l) {
-    return e = (e = (e += "~0").replace(/^ {0,3}\[(.+)]:[ \t]*\n?[ \t]*<?(\S+?)>?(?: =([*\d]+[A-Za-z%]{0,4})x([*\d]+[A-Za-z%]{0,4}))?[ \t]*\n?[ \t]*(?:(\n*)["|'(](.+?)["|')][ \t]*)?(?:\n+|(?=~0))/gm, function(e, r, n, t, o, s, a) {
-        return r = r.toLowerCase(), l.gUrls[r] = showdown.subParser("encodeAmpsAndAngles")(n), 
-        s ? s + a : (a && (l.gTitles[r] = a.replace(/"|'/g, "&quot;")), i.parseImgDimensions && t && o && (l.gDimensions[r] = {
-            width: t,
-            height: o
+}), s.subParser("stripLinkDefinitions", function(e, r, t) {
+    var n = /^ {0,3}\[(.+)]:[ \t]*\n?[ \t]*<?(\S+?)>?(?: =([*\d]+[A-Za-z%]{0,4})x([*\d]+[A-Za-z%]{0,4}))?[ \t]*\n?[ \t]*(?:(\n*)["|'(](.+?)["|')][ \t]*)?(?:\n+|(?=~0))/gm;
+    return e += "~0", e = e.replace(n, function(e, n, a, o, i, l, c) {
+        return n = n.toLowerCase(), t.gUrls[n] = s.subParser("encodeAmpsAndAngles")(a), 
+        l ? l + c : (c && (t.gTitles[n] = c.replace(/"|'/g, "&quot;")), r.parseImgDimensions && o && i && (t.gDimensions[n] = {
+            width: o,
+            height: i
         }), "");
-    })).replace(/~0/, "");
-}), showdown.subParser("tables", function(e, g, b) {
-    if (!g.tables) return e;
-    return e = (e = b.converter._dispatch("tables.before", e, g, b)).replace(/^[ \t]{0,3}\|?.+\|.+\n[ \t]{0,3}\|?[ \t]*:?[ \t]*(?:-|=){2,}[ \t]*:?[ \t]*\|[ \t]*:?[ \t]*(?:-|=){2,}[\s\S]+?(?:\n\n|~0)/gm, function(e) {
-        var r, n = e.split("\n");
-        for (r = 0; r < n.length; ++r) /^[ \t]{0,3}\|/.test(n[r]) && (n[r] = n[r].replace(/^[ \t]{0,3}\|/, "")), 
-        /\|[ \t]*$/.test(n[r]) && (n[r] = n[r].replace(/\|[ \t]*$/, ""));
-        var t, o, s, a, i, l = n[0].split("|").map(function(e) {
+    }), e = e.replace(/~0/, "");
+}), s.subParser("tables", function(e, r, t) {
+    function n(e) {
+        return /^:[ \t]*--*$/.test(e) ? ' style="text-align:left;"' : /^--*[ \t]*:[ \t]*$/.test(e) ? ' style="text-align:right;"' : /^:[ \t]*--*[ \t]*:$/.test(e) ? ' style="text-align:center;"' : "";
+    }
+    function a(e, n) {
+        var a = "";
+        return e = e.trim(), r.tableHeaderId && (a = ' id="' + e.replace(/ /g, "_").toLowerCase() + '"'), 
+        e = s.subParser("spanGamut")(e, r, t), "<th" + a + n + ">" + e + "</th>\n";
+    }
+    function o(e, n) {
+        return "<td" + n + ">" + s.subParser("spanGamut")(e, r, t) + "</td>\n";
+    }
+    function i(e, r) {
+        for (var t = "<table>\n<thead>\n<tr>\n", n = e.length, s = 0; s < n; ++s) t += e[s];
+        for (t += "</tr>\n</thead>\n<tbody>\n", s = 0; s < r.length; ++s) {
+            t += "<tr>\n";
+            for (var a = 0; a < n; ++a) t += r[s][a];
+            t += "</tr>\n";
+        }
+        return t += "</tbody>\n</table>\n";
+    }
+    if (!r.tables) return e;
+    var l = /^[ \t]{0,3}\|?.+\|.+\n[ \t]{0,3}\|?[ \t]*:?[ \t]*(?:-|=){2,}[ \t]*:?[ \t]*\|[ \t]*:?[ \t]*(?:-|=){2,}[\s\S]+?(?:\n\n|~0)/gm;
+    return e = t.converter._dispatch("tables.before", e, r, t), e = e.replace(l, function(e) {
+        var r, t = e.split("\n");
+        for (r = 0; r < t.length; ++r) /^[ \t]{0,3}\|/.test(t[r]) && (t[r] = t[r].replace(/^[ \t]{0,3}\|/, "")), 
+        /\|[ \t]*$/.test(t[r]) && (t[r] = t[r].replace(/\|[ \t]*$/, ""));
+        var l = t[0].split("|").map(function(e) {
             return e.trim();
-        }), c = n[1].split("|").map(function(e) {
+        }), c = t[1].split("|").map(function(e) {
             return e.trim();
-        }), h = [], d = [], u = [], p = [];
-        for (n.shift(), n.shift(), r = 0; r < n.length; ++r) "" !== n[r].trim() && h.push(n[r].split("|").map(function(e) {
+        }), u = [], p = [], h = [], d = [];
+        for (t.shift(), t.shift(), r = 0; r < t.length; ++r) "" !== t[r].trim() && u.push(t[r].split("|").map(function(e) {
             return e.trim();
         }));
         if (l.length < c.length) return e;
-        for (r = 0; r < c.length; ++r) u.push((t = c[r], /^:[ \t]*--*$/.test(t) ? ' style="text-align:left;"' : /^--*[ \t]*:[ \t]*$/.test(t) ? ' style="text-align:right;"' : /^:[ \t]*--*[ \t]*:$/.test(t) ? ' style="text-align:center;"' : ""));
-        for (r = 0; r < l.length; ++r) showdown.helper.isUndefined(u[r]) && (u[r] = ""), 
-        d.push((o = l[r], s = u[r], a = void 0, a = "", o = o.trim(), g.tableHeaderId && (a = ' id="' + o.replace(/ /g, "_").toLowerCase() + '"'), 
-        "<th" + a + s + ">" + (o = showdown.subParser("spanGamut")(o, g, b)) + "</th>\n"));
-        for (r = 0; r < h.length; ++r) {
-            for (var w = [], f = 0; f < d.length; ++f) showdown.helper.isUndefined(h[r][f]), 
-            w.push((i = h[r][f], "<td" + u[f] + ">" + showdown.subParser("spanGamut")(i, g, b) + "</td>\n"));
-            p.push(w);
+        for (r = 0; r < c.length; ++r) h.push(n(c[r]));
+        for (r = 0; r < l.length; ++r) s.helper.isUndefined(h[r]) && (h[r] = ""), p.push(a(l[r], h[r]));
+        for (r = 0; r < u.length; ++r) {
+            for (var f = [], g = 0; g < p.length; ++g) s.helper.isUndefined(u[r][g]), f.push(o(u[r][g], h[g]));
+            d.push(f);
         }
-        return function(e, r) {
-            for (var n = "<table>\n<thead>\n<tr>\n", t = e.length, o = 0; o < t; ++o) n += e[o];
-            for (n += "</tr>\n</thead>\n<tbody>\n", o = 0; o < r.length; ++o) {
-                n += "<tr>\n";
-                for (var s = 0; s < t; ++s) n += r[o][s];
-                n += "</tr>\n";
-            }
-            return n += "</tbody>\n</table>\n";
-        }(d, p);
-    }), e = b.converter._dispatch("tables.after", e, g, b);
-}), showdown.subParser("unescapeSpecialChars", function(e) {
+        return i(p, d);
+    }), e = t.converter._dispatch("tables.after", e, r, t);
+}), s.subParser("unescapeSpecialChars", function(e) {
     return e = e.replace(/~E(\d+)E/g, function(e, r) {
-        var n = parseInt(r);
-        return String.fromCharCode(n);
+        var t = parseInt(r);
+        return String.fromCharCode(t);
     });
-}), module.exports = showdown;
+}), module.exports = s;

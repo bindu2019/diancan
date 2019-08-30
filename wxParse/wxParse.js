@@ -1,12 +1,10 @@
-var _showdown = require("./showdown.js"), _showdown2 = _interopRequireDefault(_showdown), _html2json = require("./html2json.js"), _html2json2 = _interopRequireDefault(_html2json);
-
-function _interopRequireDefault(e) {
+function e(e) {
     return e && e.__esModule ? e : {
         default: e
     };
 }
 
-function _defineProperty(e, t, a) {
+function t(e, t, a) {
     return t in e ? Object.defineProperty(e, t, {
         value: a,
         enumerable: !0,
@@ -15,80 +13,71 @@ function _defineProperty(e, t, a) {
     }) : e[t] = a, e;
 }
 
-var realWindowWidth = 0, realWindowHeight = 0;
-
-function wxParse() {
-    var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : "wxParseData", t = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : "html", a = 2 < arguments.length && void 0 !== arguments[2] ? arguments[2] : '<div class="color:red;">数据不能为空</div>', i = arguments[3], r = arguments[4], o = i, n = {};
-    if ("html" == t) n = _html2json2.default.html2json(a, e), console.log(JSON.stringify(n, " ", " ")); else if ("md" == t || "markdown" == t) {
-        var d = new _showdown2.default.Converter().makeHtml(a);
-        n = _html2json2.default.html2json(d, e), console.log(JSON.stringify(n, " ", " "));
-    }
-    n.view = {}, void (n.view.imagePadding = 0) !== r && (n.view.imagePadding = r);
-    var s = {};
-    s[e] = n, o.setData(s), o.wxParseImgLoad = wxParseImgLoad, o.wxParseImgTap = wxParseImgTap;
-}
-
-function wxParseImgTap(e) {
-    var t = e.target.dataset.src, a = e.target.dataset.from;
-    void 0 !== a && 0 < a.length && wx.previewImage({
-        current: t,
-        urls: this.data[a].imageUrls
+function a(e) {
+    var t = this, a = e.target.dataset.src, i = e.target.dataset.from;
+    void 0 !== i && i.length > 0 && wx.previewImage({
+        current: a,
+        urls: t.data[i].imageUrls
     });
 }
 
-function wxParseImgLoad(e) {
-    var t = e.target.dataset.from, a = e.target.dataset.idx;
-    void 0 !== t && 0 < t.length && calMoreImageInfo(e, a, this, t);
+function i(e) {
+    var t = this, a = e.target.dataset.from, i = e.target.dataset.idx;
+    void 0 !== a && a.length > 0 && r(e, i, t, a);
 }
 
-function calMoreImageInfo(e, t, a, i) {
-    var r, o = a.data[i];
-    if (o && 0 != o.images.length) {
-        var n = o.images, d = wxAutoImageCal(e.detail.width, e.detail.height, a, i), s = n[t].index, l = "" + i, g = !0, m = !1, h = void 0;
+function r(e, a, i, r) {
+    var o, d = i.data[r];
+    if (d && 0 != d.images.length) {
+        var s = d.images, l = n(e.detail.width, e.detail.height, i, r), g = s[a].index, h = "" + r, m = !0, u = !1, v = void 0;
         try {
-            for (var w, u = s.split(".")[Symbol.iterator](); !(g = (w = u.next()).done); g = !0) {
-                l += ".nodes[" + w.value + "]";
-            }
+            for (var f, w = g.split(".")[Symbol.iterator](); !(m = (f = w.next()).done); m = !0) h += ".nodes[" + f.value + "]";
         } catch (e) {
-            m = !0, h = e;
+            u = !0, v = e;
         } finally {
             try {
-                !g && u.return && u.return();
+                !m && w.return && w.return();
             } finally {
-                if (m) throw h;
+                if (u) throw v;
             }
         }
-        var f = l + ".width", v = l + ".height";
-        a.setData((_defineProperty(r = {}, f, d.imageWidth), _defineProperty(r, v, d.imageheight), 
-        r));
+        var c = h + ".width", x = h + ".height";
+        i.setData((o = {}, t(o, c, l.imageWidth), t(o, x, l.imageheight), o));
     }
 }
 
-function wxAutoImageCal(e, t, a, i) {
-    var r, o = 0, n = 0, d = {}, s = a.data[i].view.imagePadding;
-    return realWindowHeight, (r = realWindowWidth - 2 * s) < e ? (n = (o = r) * t / e, 
-    d.imageWidth = o, d.imageheight = n) : (d.imageWidth = e, d.imageheight = t), d;
+function n(e, t, a, i) {
+    var r = 0, n = 0, o = 0, d = {}, g = a.data[i].view.imagePadding;
+    return r = s - 2 * g, l, e > r ? (o = (n = r) * t / e, d.imageWidth = n, d.imageheight = o) : (d.imageWidth = e, 
+    d.imageheight = t), d;
 }
 
-function wxParseTemArray(e, t, a, i) {
-    for (var r = [], o = i.data, n = null, d = 0; d < a; d++) {
-        var s = o[t + d].nodes;
-        r.push(s);
-    }
-    e = e || "wxParseTemArray", (n = JSON.parse('{"' + e + '":""}'))[e] = r, i.setData(n);
-}
-
-function emojisInit() {
-    var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : "", t = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : "/wxParse/emojis/", a = arguments[2];
-    _html2json2.default.emojisInit(e, t, a);
-}
+var o = e(require("./showdown.js")), d = e(require("./html2json.js")), s = 0, l = 0;
 
 wx.getSystemInfo({
     success: function(e) {
-        realWindowWidth = e.windowWidth, realWindowHeight = e.windowHeight;
+        s = e.windowWidth, l = e.windowHeight;
     }
 }), module.exports = {
-    wxParse: wxParse,
-    wxParseTemArray: wxParseTemArray,
-    emojisInit: emojisInit
+    wxParse: function() {
+        var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "wxParseData", t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "html", r = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : '<div class="color:red;">数据不能为空</div>', n = arguments[3], s = arguments[4], l = n, g = {};
+        if ("html" == t) g = d.default.html2json(r, e), console.log(JSON.stringify(g, " ", " ")); else if ("md" == t || "markdown" == t) {
+            var h = new o.default.Converter().makeHtml(r);
+            g = d.default.html2json(h, e), console.log(JSON.stringify(g, " ", " "));
+        }
+        g.view = {}, g.view.imagePadding = 0, void 0 !== s && (g.view.imagePadding = s);
+        var m = {};
+        m[e] = g, l.setData(m), l.wxParseImgLoad = i, l.wxParseImgTap = a;
+    },
+    wxParseTemArray: function(e, t, a, i) {
+        for (var r = [], n = i.data, o = null, d = 0; d < a; d++) {
+            var s = n[t + d].nodes;
+            r.push(s);
+        }
+        e = e || "wxParseTemArray", (o = JSON.parse('{"' + e + '":""}'))[e] = r, i.setData(o);
+    },
+    emojisInit: function() {
+        var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "", t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "/wxParse/emojis/", a = arguments[2];
+        d.default.emojisInit(e, t, a);
+    }
 };

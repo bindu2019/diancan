@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -8,7 +8,7 @@ Page({
     onReady: function() {},
     onShow: function() {
         var e = this;
-        app.util.request({
+        t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !0,
@@ -23,7 +23,7 @@ Page({
                     memberBgColor: t.result.bg_color
                 }));
             }
-        }), app.util.getUserInfo(function() {
+        }), t.util.getUserInfo(function() {
             var t = wx.getStorageSync("userInfo");
             "" != t ? (console.log(t.memberInfo), e.setData({
                 userInfo: t,
@@ -31,7 +31,7 @@ Page({
             })) : wx.navigateTo({
                 url: "/deam_food/pages/auth/auth"
             });
-        }), app.util.request({
+        }), t.util.request({
             url: "entry/wxapp/data",
             cachetime: "0",
             showLoading: !0,
@@ -57,15 +57,15 @@ Page({
         });
     },
     payBtn: function() {
-        var e = this, t = parseFloat(e.data.rechargeValue);
-        0 < t ? app.util.request({
+        var e = this, a = parseFloat(e.data.rechargeValue);
+        a > 0 ? t.util.request({
             url: "entry/wxapp/deampost",
             cachetime: "0",
             showLoading: !0,
             method: "post",
             data: {
                 op: "recharge",
-                price: t
+                price: a
             },
             success: function(t) {
                 "1" == (t = t.data).status ? wx.requestPayment({
@@ -106,9 +106,9 @@ Page({
         });
     },
     tabActive: function() {
-        var t = this.data.isopen;
-        t = "0" == t ? "1" : "0", this.setData({
-            isopen: t
+        var t = this, e = t.data.isopen;
+        e = "0" == e ? "1" : "0", t.setData({
+            isopen: e
         });
     }
 });

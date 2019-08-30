@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -27,61 +27,61 @@ Page({
         balance: "0.00",
         choosePayType: 0
     },
-    onLoad: function(t) {
-        var o = this, e = wx.getStorageSync("cart"), a = wx.getStorageSync("cartCount"), r = wx.getStorageSync("cartPrice"), s = r, n = wx.getStorageSync("remarkValue"), i = wx.getStorageSync("remarkValue"), d = wx.getStorageSync("pboxPrice"), c = wx.getStorageSync("sendFee"), u = 0;
-        c = 0 <= parseFloat(c) ? parseFloat(c) : 0, null != t.type && "" != t.type && (o.setData({
+    onLoad: function(e) {
+        var a = this, o = wx.getStorageSync("cart"), r = wx.getStorageSync("cartCount"), s = wx.getStorageSync("cartPrice"), n = s, i = wx.getStorageSync("remarkValue"), d = wx.getStorageSync("remarkValue"), c = wx.getStorageSync("pboxPrice"), u = wx.getStorageSync("sendFee"), l = 0;
+        u = parseFloat(u) >= 0 ? parseFloat(u) : 0, void 0 != e.type && "" != e.type && (a.setData({
             storeType: "takeout"
-        }), r = o.changeTwoDecimal_f(c + parseFloat(r)), s = r, c = o.changeTwoDecimal_f(c)), 
-        app.util.request({
+        }), s = a.changeTwoDecimal_f(u + parseFloat(s)), n = s, u = a.changeTwoDecimal_f(u)), 
+        t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !1,
             data: {
                 op: "storeInfo",
-                store_id: t.store_id
+                store_id: e.store_id
             },
             success: function(t) {
                 if ("1" == (t = t.data).status) {
-                    var e = parseFloat(s);
-                    0 < t.result.storeinfo.enoughmoney && 0 < t.result.storeinfo.enoughdeduct && e >= t.result.storeinfo.enoughmoney ? (u = t.result.storeinfo.enoughdeduct, 
-                    s = o.changeTwoDecimal_f(e - u), o.setData({
-                        payPrice: s,
-                        enoughdeduct: u,
+                    var e = parseFloat(n);
+                    t.result.storeinfo.enoughmoney > 0 && t.result.storeinfo.enoughdeduct > 0 && e >= t.result.storeinfo.enoughmoney ? (l = t.result.storeinfo.enoughdeduct, 
+                    n = a.changeTwoDecimal_f(e - l), a.setData({
+                        payPrice: n,
+                        enoughdeduct: l,
+                        cartPrice: n
+                    }), console.log("有满减")) : (console.log("无满减"), a.setData({
+                        payPrice: n,
                         cartPrice: s
-                    }), console.log("有满减")) : (console.log("无满减"), o.setData({
-                        payPrice: s,
-                        cartPrice: r
                     }));
                 }
             }
-        }), o.setData({
-            cart: e,
-            cartCount: a,
-            placeholder: n,
-            texareaCon: i,
-            store_id: t.store_id,
-            desk_id: t.desk_id,
-            pboxPrice: d,
-            sendFee: 0 <= c ? c : 0,
-            enoughdeduct: u
-        }), "takeout" == o.data.storeType && wx.getLocation({
+        }), a.setData({
+            cart: o,
+            cartCount: r,
+            placeholder: i,
+            texareaCon: d,
+            store_id: e.store_id,
+            desk_id: e.desk_id,
+            pboxPrice: c,
+            sendFee: u >= 0 ? u : 0,
+            enoughdeduct: l
+        }), "takeout" == a.data.storeType && wx.getLocation({
             type: "wgs84",
-            success: function(t) {
-                var e = t.latitude, a = t.longitude;
-                t.speed, t.accuracy;
-                app.util.getUserInfo(function() {
-                    "" != wx.getStorageSync("userInfo") ? app.util.request({
+            success: function(e) {
+                var o = e.latitude, r = e.longitude;
+                e.speed, e.accuracy;
+                t.util.getUserInfo(function() {
+                    "" != wx.getStorageSync("userInfo") ? t.util.request({
                         url: "entry/wxapp/data",
                         cachetime: "0",
                         showLoading: !0,
                         data: {
                             op: "first_addr",
-                            latitude: e,
-                            longitude: a,
-                            store_id: o.data.store_id
+                            latitude: o,
+                            longitude: r,
+                            store_id: a.data.store_id
                         },
                         success: function(t) {
-                            "1" == (t = t.data).status && o.setData({
+                            "1" == (t = t.data).status && a.setData({
                                 myAddrInfo: t.result,
                                 isAddr: 1
                             });
@@ -105,88 +105,88 @@ Page({
     },
     onReady: function() {},
     onShow: function() {
-        var a = this;
-        app.util.request({
+        var e = this;
+        t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !0,
             data: {
                 op: "storeInfo",
-                store_id: a.data.store_id
+                store_id: e.data.store_id
             },
             success: function(t) {
                 if ("1" == (t = t.data).status) {
                     wx.setNavigationBarColor && wx.setNavigationBarColor({
                         frontColor: t.result.fg_color,
                         backgroundColor: t.result.bg_color
-                    }), "takeout" == a.data.storeType ? wx.setNavigationBarTitle({
+                    }), "takeout" == e.data.storeType ? wx.setNavigationBarTitle({
                         title: "订单配送至"
                     }) : wx.setNavigationBarTitle({
                         title: "确认订单"
                     });
-                    var e = "";
-                    e = "0" == t.result.storeinfo.deliver_type ? "商家配送" : "1" == t.result.storeinfo.deliver_type && "1" == t.result.deliver_dada_status ? "达达配送" : "商家配送", 
-                    a.setData({
+                    var a = "";
+                    a = "0" == t.result.storeinfo.deliver_type ? "商家配送" : "1" == t.result.storeinfo.deliver_type && "1" == t.result.deliver_dada_status ? "达达配送" : "商家配送", 
+                    e.setData({
                         isShow: 1,
-                        deliverText: e,
+                        deliverText: a,
                         storeinfo: t.result.storeinfo,
                         openBalance: t.result.sets.open_banlance
                     });
                 }
             }
-        }), "1" == a.data.isAddr && app.util.getUserInfo(function() {
+        }), "1" == e.data.isAddr && t.util.getUserInfo(function() {
             wx.getStorageSync("userInfo");
-            app.util.request({
+            t.util.request({
                 url: "entry/wxapp/data",
                 cachetime: "0",
                 showLoading: !0,
                 data: {
                     op: "check_addr",
-                    address_id: a.data.myAddrInfo.id
+                    address_id: e.data.myAddrInfo.id
                 },
                 success: function(t) {
-                    "0" == (t = t.data).status && a.setData({
+                    "0" == (t = t.data).status && e.setData({
                         myAddrInfo: {},
                         isAddr: 0
                     });
                 }
             });
         });
-        var o = a.data.useCoupon;
-        0 < o ? app.util.request({
+        var a = e.data.useCoupon;
+        a > 0 ? t.util.request({
             url: "entry/wxapp/coupon",
             cachetime: "0",
             showLoading: !0,
             data: {
-                store_id: a.data.store_id,
-                price: a.data.cartPrice,
-                store_type: a.data.storeType,
+                store_id: e.data.store_id,
+                price: e.data.cartPrice,
+                store_type: e.data.storeType,
                 op: "choose"
             },
             success: function(t) {
-                0 <= (t = t.data).status && t.result.list.forEach(function(t, e) {
-                    console.log(t), t.id == o && a.setData({
+                (t = t.data).status >= 0 && t.result.list.forEach(function(t, o) {
+                    console.log(t), t.id == a && e.setData({
                         couponTitle: t.title,
                         couponUse: t.max_use,
-                        couponPrice: a.changeTwoDecimal_f(t.total_reduce_cost),
-                        payPrice: a.changeTwoDecimal_f(parseFloat(a.data.cartPrice) - parseFloat(t.total_reduce_cost))
+                        couponPrice: e.changeTwoDecimal_f(t.total_reduce_cost),
+                        payPrice: e.changeTwoDecimal_f(parseFloat(e.data.cartPrice) - parseFloat(t.total_reduce_cost))
                     });
                 });
             }
-        }) : a.setData({
+        }) : e.setData({
             couponUse: 0,
             couponPrice: 0,
-            payPrice: a.data.cartPrice
-        }), a.getUserInfo(), "takeout" != a.data.storeType && app.util.request({
+            payPrice: e.data.cartPrice
+        }), e.getUserInfo(), "takeout" != e.data.storeType && t.util.request({
             url: "entry/wxapp/data",
             cachetime: "0",
             showLoading: !0,
             data: {
-                store_id: a.data.store_id,
+                store_id: e.data.store_id,
                 op: "getfood_time"
             },
             success: function(t) {
-                1 == (t = t.data).status && a.setData({
+                1 == (t = t.data).status && e.setData({
                     getFoodTimeArr: t.result.getfood_time,
                     getFoodTime: "立即取餐"
                 });
@@ -199,14 +199,14 @@ Page({
     onReachBottom: function() {},
     getUserInfo: function() {
         var e = this;
-        app.util.getUserInfo(function() {
+        t.util.getUserInfo(function() {
             var t = wx.getStorageSync("userInfo");
             "" != t ? e.setData({
                 userInfo: t
             }) : wx.navigateTo({
                 url: "/deam_food/pages/auth/auth"
             });
-        }), app.util.request({
+        }), t.util.request({
             url: "entry/wxapp/data",
             cachetime: "0",
             showLoading: !0,
@@ -253,12 +253,12 @@ Page({
             }
         });
     },
-    submitOrder: function(t) {
-        var a = this, e = t.currentTarget.dataset.status, o = t.currentTarget.dataset.type;
-        if (1 <= e) return !1;
-        null == o && (o = "wechat"), console.log(o), a.setData({
+    submitOrder: function(e) {
+        var a = this, o = e.currentTarget.dataset.status, r = e.currentTarget.dataset.type;
+        if (o >= 1) return !1;
+        void 0 == r && (r = "wechat"), console.log(r), a.setData({
             isSubmit: 1
-        }), app.util.request({
+        }), t.util.request({
             url: "entry/wxapp/deampost",
             cachetime: "0",
             showLoading: !0,
@@ -279,20 +279,20 @@ Page({
                 coupon_price: a.data.couponPrice,
                 enoughdeduct: a.data.enoughdeduct,
                 getfood_time: a.data.getFoodTime,
-                pay_type: o
+                pay_type: r
             },
-            success: function(e) {
-                "1" == (e = e.data).status ? "balance" == o ? wx.redirectTo({
-                    url: "/deam_food/pages/order/detail?id=" + e.result.order_id
-                }) : "wechat" == o && (console.log(123), wx.requestPayment({
-                    timeStamp: e.result.timeStamp.toString(),
-                    nonceStr: e.result.nonceStr,
-                    package: e.result.package,
+            success: function(t) {
+                "1" == (t = t.data).status ? "balance" == r ? wx.redirectTo({
+                    url: "/deam_food/pages/order/detail?id=" + t.result.order_id
+                }) : "wechat" == r && (console.log(123), wx.requestPayment({
+                    timeStamp: t.result.timeStamp.toString(),
+                    nonceStr: t.result.nonceStr,
+                    package: t.result.package,
                     signType: "MD5",
-                    paySign: e.result.paySign,
-                    success: function(t) {
+                    paySign: t.result.paySign,
+                    success: function(e) {
                         wx.redirectTo({
-                            url: "/deam_food/pages/order/detail?id=" + e.result.order_id
+                            url: "/deam_food/pages/order/detail?id=" + t.result.order_id
                         });
                     },
                     fail: function(t) {
@@ -302,7 +302,7 @@ Page({
                     }
                 })) : (wx.showModal({
                     title: "提示",
-                    content: e.result.message,
+                    content: t.result.message,
                     confirmText: "好的",
                     confirmColor: "#ff9c37",
                     showCancel: !1
@@ -312,9 +312,9 @@ Page({
             }
         });
     },
-    submitOrder_1: function(t) {
-        var a = this, e = t.currentTarget.dataset.status;
-        return console.log(e), !(1 <= e) && ("takeout" == a.data.storeType && "0" == a.data.isAddr ? (wx.showModal({
+    submitOrder_1: function(e) {
+        var a = this, o = e.currentTarget.dataset.status;
+        return console.log(o), !(o >= 1) && ("takeout" == a.data.storeType && "0" == a.data.isAddr ? (wx.showModal({
             title: "提示",
             content: "请先选择配送地址",
             confirmText: "好的",
@@ -325,7 +325,7 @@ Page({
             }
         }), !1) : (a.setData({
             isSubmit: 1
-        }), void app.util.request({
+        }), void t.util.request({
             url: "entry/wxapp/deampost",
             cachetime: "0",
             showLoading: !0,
@@ -347,16 +347,16 @@ Page({
                 enoughdeduct: a.data.enoughdeduct,
                 getfood_time: a.data.getFoodTime
             },
-            success: function(e) {
-                "1" == (e = e.data).status ? wx.requestPayment({
-                    timeStamp: e.result.timeStamp.toString(),
-                    nonceStr: e.result.nonceStr,
-                    package: e.result.package,
+            success: function(t) {
+                "1" == (t = t.data).status ? wx.requestPayment({
+                    timeStamp: t.result.timeStamp.toString(),
+                    nonceStr: t.result.nonceStr,
+                    package: t.result.package,
                     signType: "MD5",
-                    paySign: e.result.paySign,
-                    success: function(t) {
+                    paySign: t.result.paySign,
+                    success: function(e) {
                         wx.redirectTo({
-                            url: "/deam_food/pages/order/detail?id=" + e.result.order_id
+                            url: "/deam_food/pages/order/detail?id=" + t.result.order_id
                         });
                     },
                     fail: function(t) {
@@ -366,7 +366,7 @@ Page({
                     }
                 }) : wx.showModal({
                     title: "提示",
-                    content: e.result.message,
+                    content: t.result.message,
                     showCancel: !1,
                     success: function(t) {
                         t.confirm;
@@ -376,17 +376,17 @@ Page({
         })));
     },
     checkCount: function(t) {
-        var e = t.detail.value.length, a = this.data.remarkLength;
-        a = 0 <= 20 - e ? 20 - e : "0", this.setData({
-            remarkLength: a
+        var e = this, a = t.detail.value.length, o = e.data.remarkLength;
+        o = 20 - a >= 0 ? 20 - a : "0", e.setData({
+            remarkLength: o
         });
     },
     saveRemark: function(t) {
-        var e = t.detail.value, a = e;
-        "" == e && (a = this.data.texareaCon), this.setData({
-            remarkValue: e,
+        var e = this, a = t.detail.value, o = a;
+        "" == a && (o = e.data.texareaCon), e.setData({
+            remarkValue: a,
             textareaInputField: 0,
-            texareaCon: a
+            texareaCon: o
         });
     },
     changeTwoDecimal_f: function(t) {
@@ -397,13 +397,15 @@ Page({
         return a;
     },
     selectAddr: function() {
+        var t = this;
         wx.navigateTo({
-            url: "/deam_food/pages/address/selector?store_id=" + this.data.store_id + "&address_id=" + this.data.myAddrInfo.id
+            url: "/deam_food/pages/address/selector?store_id=" + t.data.store_id + "&address_id=" + t.data.myAddrInfo.id
         });
     },
     chooseCoupon: function() {
+        var t = this;
         wx.navigateTo({
-            url: "/deam_food/pages/coupon/choose?store_id=" + this.data.store_id + "&price=" + this.data.cartPrice + "&type=" + this.data.storeType + "&useCoupon=" + this.data.useCoupon
+            url: "/deam_food/pages/coupon/choose?store_id=" + t.data.store_id + "&price=" + t.data.cartPrice + "&type=" + t.data.storeType + "&useCoupon=" + t.data.useCoupon
         });
     },
     switchInputField: function() {
@@ -413,8 +415,14 @@ Page({
         });
     },
     bindPickerChange: function(t) {
-        this.setData({
-            getFoodTime: this.data.getFoodTimeArr[t.detail.value]
+        var e = this;
+        e.setData({
+            getFoodTime: e.data.getFoodTimeArr[t.detail.value]
+        });
+    },
+    closeBtn: function(t) {
+        this.data({
+            choosePayType: 0
         });
     }
 });

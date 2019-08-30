@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {},
@@ -17,8 +17,8 @@ Page({
     onPullDownRefresh: function() {},
     onReachBottom: function() {},
     onShareAppMessage: function() {},
-    topay: function(t) {
-        app.util.request({
+    topay: function(n) {
+        t.util.request({
             url: "entry/wxapp/sandbox",
             cachetime: "0",
             showLoading: !0,

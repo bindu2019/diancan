@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -14,37 +14,37 @@ Page({
     onLoad: function(t) {},
     onReady: function() {},
     onShow: function() {
-        var r = this;
-        app.util.request({
+        var e = this;
+        t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !0,
             success: function(t) {
                 if ("1" == (t = t.data).status) {
-                    wx.setNavigationBarColor && wx.setNavigationBarColor({
+                    wx.setStorageSync("wx_settings", t.result), wx.setNavigationBarColor && wx.setNavigationBarColor({
                         frontColor: t.result.fg_color,
                         backgroundColor: t.result.bg_color
                     }), wx.setNavigationBarTitle({
-                        title: "我的"
-                    }), r.setData({
+                        title: "会员中心"
+                    }), e.setData({
                         shareTitle: t.result.share_title,
                         memberBgColor: t.result.bg_color,
                         store_blogo: t.result.store_blogo,
                         copyright: t.result.copyright,
                         openBalance: t.result.sets.open_banlance
                     });
-                    var o = "" == r.data.store_blogo ? 0 : 30, e = "" == r.data.copyright ? 0 : 24, a = "" != r.data.store_blogo || "" == r.data.copyright ? 30 : 0, n = wx.getSystemInfoSync();
-                    r.setData({
-                        mainBodyHeight: n.windowHeight - o - e - a
+                    var o = "" == e.data.store_blogo ? 0 : 30, a = "" == e.data.copyright ? 0 : 24, n = "" != e.data.store_blogo || "" == e.data.copyright ? 30 : 0, s = wx.getSystemInfoSync();
+                    e.setData({
+                        mainBodyHeight: s.windowHeight - o - a - n
                     });
                 }
             }
-        }), app.util.getUserInfo(function() {
-            var t = wx.getStorageSync("userInfo");
-            "" != t ? (r.setData({
-                userInfo: t,
+        }), t.util.getUserInfo(function() {
+            var o = wx.getStorageSync("userInfo");
+            "" != o ? (e.setData({
+                userInfo: o,
                 isShow: 1
-            }), app.util.request({
+            }), t.util.request({
                 url: "entry/wxapp/data",
                 cachetime: "0",
                 showLoading: !0,
@@ -52,7 +52,7 @@ Page({
                     op: "memberinfo"
                 },
                 success: function(t) {
-                    "1" == (t = t.data).status && r.setData({
+                    "1" == (t = t.data).status && e.setData({
                         memberInfo: t.result
                     });
                 }
@@ -79,9 +79,32 @@ Page({
         });
     },
     jumpLink: function(t) {
-        var o = t.currentTarget.dataset.url;
-        "" != o && wx.navigateTo({
-            url: o
+        var e = t.currentTarget.dataset.url;
+        console.log(t), "" != e && wx.navigateTo({
+            url: e
+        });
+    },
+    getPhoneNumber: function(e) {
+        var o = this;
+        console.log(e.detail), e.detail.encryptedData && t.util.request({
+            url: "entry/wxapp/data",
+            cachetime: "0",
+            showLoading: !0,
+            data: {
+                op: "getPhoneNumber",
+                encryptedData: encodeURIComponent(e.detail.encryptedData),
+                iv: e.detail.iv
+            },
+            success: function(t) {
+                "1" == (t = t.data).status ? o.setData({
+                    memberInfo: t.result
+                }) : wx.showModal({
+                    title: "提示",
+                    content: t.result.message,
+                    showCancel: !1,
+                    confirmColor: "#ff9c37"
+                });
+            }
         });
     }
 });

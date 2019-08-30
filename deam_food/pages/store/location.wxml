@@ -8,8 +8,8 @@
 </view>
 <view class="store-list">
     <view class="none-store" wx:if="{{total<='0'}}">当前位置附近没有门店</view>
-    <scroll-view bindscrolltolower="getlist" lowerThreshold="50" scrollY="true" style="height:{{scrollHeight}}px">
-        <view bindtap="toStore" class="dui-list" data-storeid="{{item.id}}" wx:for="{{list}}">
+    <view bindtap="toStore" class="dui-list-group dui-list-group-o" data-storeid="{{item.id}}" wx:for="{{list}}">
+        <view class="dui-list">
             <view class="dui-title">
                 <view class="title">{{item.name}}</view>
                 <view class="distance">{{item.distance}}km</view>
@@ -18,5 +18,5 @@
         {{item.province}}{{item.city}}{{item.district_edit_self=='1'?'':item.district}}{{item.address}}
       </view>
         </view>
-    </scroll-view>
+    </view>
 </view>

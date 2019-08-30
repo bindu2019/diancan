@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -9,9 +9,19 @@ Page({
         isShow: 0
     },
     onLoad: function(t) {
-        var a = wx.getSystemInfoSync().windowHeight;
-        this.setData({
-            scrollHeight: a
+        var a = this, o = wx.getStorageSync("wx_settings");
+        o.fg_color && o.bg_color ? wx.setNavigationBarColor && wx.setNavigationBarColor({
+            frontColor: o.fg_color,
+            backgroundColor: o.bg_color
+        }) : wx.setNavigationBarColor({
+            frontColor: "#000000",
+            backgroundColor: "#FFFFFF"
+        }), wx.setNavigationBarTitle({
+            title: "我的余额"
+        }), o || (o = {
+            bg_color: "#FFFFFF"
+        }), a.setData({
+            wx_settings: o
         });
     },
     onReady: function() {},
@@ -21,7 +31,7 @@ Page({
             page: 1,
             hasMore: 1,
             list: []
-        }), app.util.request({
+        }), t.util.request({
             url: "entry/wxapp/data",
             cachetime: "0",
             showLoading: !0,
@@ -38,42 +48,50 @@ Page({
     onHide: function() {},
     onUnload: function() {},
     onPullDownRefresh: function() {},
-    onReachBottom: function() {},
+    onReachBottom: function() {
+        this.getRecordList();
+    },
     getRecordList: function() {
-        var e = this, s = e.data.page, o = e.data.hasMore, n = e.data.list;
-        "1" == o && (e.setData({
+        var a = this, o = a.data.page, e = a.data.hasMore, s = a.data.list;
+        "1" == e && (a.setData({
             hasMore: 0
-        }), app.util.getUserInfo(function() {
-            "" != wx.getStorageSync("userInfo") ? app.util.request({
+        }), t.util.getUserInfo(function() {
+            "" != wx.getStorageSync("userInfo") ? t.util.request({
                 url: "entry/wxapp/data",
                 cachetime: "0",
                 showLoading: !0,
                 data: {
                     op: "credits_record",
-                    page: s
+                    page: o
                 },
                 success: function(t) {
-                    t = t.data;
-                    if (e.setData({
+                    var t = t.data;
+                    if (a.setData({
                         isShow: 1
-                    }), 0 < t.result.total) {
-                        o = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1;
-                        var a = t.result.list;
-                        e.setData({
+                    }), t.result.total > 0) {
+                        e = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1;
+                        var r = t.result.list;
+                        a.setData({
                             total: t.result.total,
-                            list: n.concat(a),
-                            hasMore: o
+                            list: s.concat(r),
+                            hasMore: e
                         });
-                    } else e.setData({
+                    } else a.setData({
                         hasMore: 0
                     });
-                    s++, e.setData({
-                        page: s
+                    o++, a.setData({
+                        page: o
                     });
                 }
             }) : wx.navigateTo({
                 url: "/deam_food/pages/auth/auth"
             });
         }));
+    },
+    jumpLink: function(t) {
+        var a = t.currentTarget.dataset.url;
+        console.log(t), "" != a && wx.navigateTo({
+            url: a
+        });
     }
 });

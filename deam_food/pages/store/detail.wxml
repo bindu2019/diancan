@@ -23,9 +23,9 @@
                             <text>￥{{goods.price}}</text>
                             <text class="unit"> /{{goods.unit}}</text>
                             <view class="number">
-                                <i catchtap="minus" class="icon icon-minus" data-goodsid="{{goods.id}}" data-goodsprice="{{goods.price}}" data-hasoption="{{goods.hasoption}}" data-ispbox="{{goods.is_pbox}}" data-pboxprice="{{goods.pbox_price}}" wx:if="{{cart[goods.id]['count']>0}}"></i>
-                                <text wx:if="{{cart[goods.id]['count']>0}}">{{cart[goods.id]['count']}}</text>
-                                <i catchtap="plus" class="icon icon-plus" data-goodsid="{{goods.id}}" data-goodsname="{{goods.name}}" data-goodsprice="{{goods.price}}" data-hasoption="{{goods.hasoption}}" data-ispbox="{{goods.is_pbox}}" data-pboxprice="{{goods.pbox_price}}"></i>
+                                <i catchtap="minus" class="icon icon-minus" data-classInId="{{index}}" data-goodsInId="{{goodsIndex}}" data-goodsid="{{goods.id}}" data-goodsprice="{{goods.price}}" data-hasoption="{{goods.hasoption}}" data-ispbox="{{goods.is_pbox}}" data-pboxprice="{{goods.pbox_price}}" wx:if="{{goods.count>0}}"></i>
+                                <text wx:if="{{goods.count>0}}">{{goods.count}}</text>
+                                <i catchtap="plus" class="icon icon-plus" data-classInId="{{index}}" data-goodsInId="{{goodsIndex}}" data-goodsid="{{goods.id}}" data-goodsname="{{goods.name}}" data-goodsprice="{{goods.price}}" data-hasoption="{{goods.hasoption}}" data-ispbox="{{goods.is_pbox}}" data-pboxprice="{{goods.pbox_price}}"></i>
                             </view>
                         </view>
                     </view>
@@ -115,7 +115,7 @@
     </view>
     <view bindtap="hiddenDetail" class="alert-mask" wx:if="{{goodsMask>0}}"></view>
     <view class="goods-maskshow" style="height:{{goodsMaskHeight}}px;width:{{goodsMaskWidth}}px" wx:if="{{goodsMask>0}}">
-        <view class="goods-img" style="background-image: url(\"{{dGoodsImage}}\");"></view>
+        <view class="goods-img" style="height:{{goodsMaskWidth}}px;background-image: url(\"{{dGoodsImage}}\");"></view>
         <view class="goods-info">
             <view class="title">{{dGoodsName}}</view>
             <view class="price">¥ {{dGoodsPrice}}</view>

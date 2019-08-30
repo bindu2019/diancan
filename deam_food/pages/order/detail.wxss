@@ -85,8 +85,8 @@ page {
 }
 
 .cart-goods {
-    margin: 0px 15px;
-    padding: 10px 0;
+    margin: 0px 26rpx;
+    padding: 16rpx 0;
     position: relative;
     display: -webkit-box;
     display: -webkit-flex;
@@ -118,11 +118,12 @@ page {
 
 .cart-goods .list-title .title {
     color: #333333;
+    font-size: 32rpx;
 }
 
 .cart-goods .list-title .remark {
     color: #999999;
-    font-size: 12pt;
+    font-size: 26rpx;
 }
 
 .cart-goods .count {
@@ -155,7 +156,7 @@ page {
     -webkit-box-flex: 1;
     flex: 1;
     color: #999999;
-    font-size: 12pt;
+    font-size: 26rpx;
     line-height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;

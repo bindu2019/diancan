@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -9,9 +9,9 @@ Page({
         isShow: 0
     },
     onLoad: function(t) {
-        var a = wx.getSystemInfoSync().windowHeight;
-        this.setData({
-            scrollHeight: a
+        var a = this, e = wx.getSystemInfoSync().windowHeight;
+        a.setData({
+            scrollHeight: e
         });
     },
     onReady: function() {},
@@ -21,7 +21,7 @@ Page({
             page: 1,
             hasMore: 1,
             list: []
-        }), app.util.request({
+        }), t.util.request({
             url: "entry/wxapp/data",
             cachetime: "0",
             showLoading: !0,
@@ -38,38 +38,40 @@ Page({
     onHide: function() {},
     onUnload: function() {},
     onPullDownRefresh: function() {},
-    onReachBottom: function() {},
+    onReachBottom: function() {
+        this.getRecordList();
+    },
     getRecordList: function() {
-        var e = this, s = e.data.page, o = e.data.hasMore, n = e.data.list;
-        "1" == o && (e.setData({
+        var a = this, e = a.data.page, s = a.data.hasMore, o = a.data.list;
+        "1" == s && (a.setData({
             hasMore: 0
-        }), app.util.getUserInfo(function() {
-            "" != wx.getStorageSync("userInfo") ? app.util.request({
+        }), t.util.getUserInfo(function() {
+            "" != wx.getStorageSync("userInfo") ? t.util.request({
                 url: "entry/wxapp/data",
                 cachetime: "0",
                 showLoading: !0,
                 data: {
                     op: "credits_record",
                     type: "credit1",
-                    page: s
+                    page: e
                 },
                 success: function(t) {
-                    t = t.data;
-                    if (e.setData({
+                    var t = t.data;
+                    if (a.setData({
                         isShow: 1
-                    }), 0 < t.result.total) {
-                        o = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1;
-                        var a = t.result.list;
-                        e.setData({
+                    }), t.result.total > 0) {
+                        s = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1;
+                        var n = t.result.list;
+                        a.setData({
                             total: t.result.total,
-                            list: n.concat(a),
-                            hasMore: o
+                            list: o.concat(n),
+                            hasMore: s
                         });
-                    } else e.setData({
+                    } else a.setData({
                         hasMore: 0
                     });
-                    s++, e.setData({
-                        page: s
+                    e++, a.setData({
+                        page: e
                     });
                 }
             }) : wx.navigateTo({

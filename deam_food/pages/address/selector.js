@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -14,7 +14,8 @@ Page({
     },
     onReady: function() {},
     onShow: function() {
-        app.util.request({
+        var a = this;
+        t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !1,
@@ -26,7 +27,7 @@ Page({
                     title: "选择收货地址"
                 }));
             }
-        }), this.getlist();
+        }), a.getlist();
     },
     onHide: function() {},
     onUnload: function() {},
@@ -45,13 +46,13 @@ Page({
                 startX: t.touches[0].clientX
             });
             var e = a.data.trueList;
-            null != e && (e.forEach(function(t, a) {
+            void 0 != e && (e.forEach(function(t, a) {
                 e[a].txtStyle = "transform:translateX(0px);", e[a].delStyle = "transform:translateX(88px);";
             }), a.setData({
                 trueList: e
             }));
             var s = a.data.falseList;
-            null != s && (s.forEach(function(t, a) {
+            void 0 != s && (s.forEach(function(t, a) {
                 s[a].txtStyle = "transform:translateX(0px);", s[a].delStyle = "transform:translateX(88px);";
             }), a.setData({
                 falseList: s
@@ -62,20 +63,19 @@ Page({
         var a = this;
         if (1 == t.touches.length) {
             var e = t.touches[0].clientX, s = a.data.startX - e, r = a.data.delBtnWidth, n = "", o = "";
-            if (0 == s || s < 0) n = "transform:translateX(0px);", o = "transform:translateX(88px);"; else if (0 < s) {
-                n = "transform:translateX(-" + s + "px);", o = "transform:translateX(" + (r - s) + "px);", 
-                r <= s && (n = "transform:translateX(-88px);", o = "transform:translateX(0px);");
-            }
+            0 == s || s < 0 ? (n = "transform:translateX(0px);", o = "transform:translateX(88px);") : s > 0 && (n = "transform:translateX(-" + s + "px);", 
+            o = "transform:translateX(" + (r - s) + "px);", s >= r && (n = "transform:translateX(-88px);", 
+            o = "transform:translateX(0px);"));
             var l = t.currentTarget.dataset.index, i = t.currentTarget.dataset.type;
             if (console.log(i), "0" == i) {
-                var u = a.data.falseList;
-                u[l].txtStyle = n, u[l].delStyle = o, a.setData({
-                    falseList: u
+                var d = a.data.falseList;
+                d[l].txtStyle = n, d[l].delStyle = o, a.setData({
+                    falseList: d
                 });
             } else {
-                var d = a.data.trueList;
-                d[l].txtStyle = n, d[l].delStyle = o, a.setData({
-                    trueList: d
+                var u = a.data.trueList;
+                u[l].txtStyle = n, u[l].delStyle = o, a.setData({
+                    trueList: u
                 });
             }
         }
@@ -83,16 +83,16 @@ Page({
     touchE: function(t) {
         var a = this;
         if (1 == t.changedTouches.length) {
-            var e = t.changedTouches[0].clientX, s = a.data.startX - e, r = a.data.delBtnWidth, n = r / 2 < s ? "transform:translateX(-88px);" : "transform:translateX(0px);", o = r / 2 < s ? "transform:translateX(0px);" : "transform:translateX(88px);", l = t.currentTarget.dataset.index;
+            var e = t.changedTouches[0].clientX, s = a.data.startX - e, r = a.data.delBtnWidth, n = s > r / 2 ? "transform:translateX(-88px);" : "transform:translateX(0px);", o = s > r / 2 ? "transform:translateX(0px);" : "transform:translateX(88px);", l = t.currentTarget.dataset.index;
             if ("0" == t.currentTarget.dataset.type) {
                 var i = a.data.falseList;
                 i[l].txtStyle = n, i[l].delStyle = o, a.setData({
                     falseList: i
                 });
             } else {
-                var u = a.data.trueList;
-                u[l].txtStyle = n, u[l].delStyle = o, a.setData({
-                    trueList: u
+                var d = a.data.trueList;
+                d[l].txtStyle = n, d[l].delStyle = o, a.setData({
+                    trueList: d
                 });
             }
         }
@@ -104,8 +104,8 @@ Page({
             delBtnWidth: 88
         });
         a.data.page, a.data.hasMore, a.data.list;
-        app.util.getUserInfo(function() {
-            "" != wx.getStorageSync("userInfo") ? app.util.request({
+        t.util.getUserInfo(function() {
+            "" != wx.getStorageSync("userInfo") ? t.util.request({
                 url: "entry/wxapp/data",
                 cachetime: "0",
                 showLoading: !0,
@@ -114,10 +114,10 @@ Page({
                     store_id: a.data.store_id
                 },
                 success: function(t) {
-                    t = t.data;
+                    var t = t.data;
                     a.setData({
                         isShow: 1
-                    }), 0 < t.result.total ? a.setData({
+                    }), t.result.total > 0 ? a.setData({
                         total: t.result.total,
                         trueList: t.result.truelist,
                         truecount: t.result.truecount,
@@ -133,13 +133,13 @@ Page({
         });
     },
     delAddr: function(a) {
-        var r = this;
+        var e = this;
         wx.showModal({
             title: "删除地址",
             content: "确认删除该收货地址吗？",
             confirmColor: "#ff9c37",
-            success: function(t) {
-                if (t.confirm) app.util.request({
+            success: function(s) {
+                if (s.confirm) t.util.request({
                     url: "entry/wxapp/deampost",
                     cachetime: "0",
                     showLoading: !0,
@@ -149,7 +149,7 @@ Page({
                         addressid: a.target.dataset.addrid
                     },
                     success: function(t) {
-                        "1" == (t = t.data).status ? r.getlist() : wx.showModal({
+                        "1" == (t = t.data).status ? e.getlist() : wx.showModal({
                             title: "提示",
                             content: t.result.message,
                             showCancel: !1,
@@ -159,18 +159,18 @@ Page({
                             }
                         });
                     }
-                }); else if (t.cancel) {
-                    var e = r.data.trueList;
-                    null != e && (e.forEach(function(t, a) {
-                        e[a].txtStyle = "transform:translateX(0px);", e[a].delStyle = "transform:translateX(88px);";
-                    }), r.setData({
-                        trueList: e
+                }); else if (s.cancel) {
+                    var r = e.data.trueList;
+                    void 0 != r && (r.forEach(function(t, a) {
+                        r[a].txtStyle = "transform:translateX(0px);", r[a].delStyle = "transform:translateX(88px);";
+                    }), e.setData({
+                        trueList: r
                     }));
-                    var s = r.data.falseList;
-                    null != s && (s.forEach(function(t, a) {
-                        s[a].txtStyle = "transform:translateX(0px);", s[a].delStyle = "transform:translateX(88px);";
-                    }), r.setData({
-                        falseList: s
+                    var n = e.data.falseList;
+                    void 0 != n && (n.forEach(function(t, a) {
+                        n[a].txtStyle = "transform:translateX(0px);", n[a].delStyle = "transform:translateX(88px);";
+                    }), e.setData({
+                        falseList: n
                     }));
                 }
             }

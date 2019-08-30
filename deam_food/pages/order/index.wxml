@@ -1,5 +1,5 @@
 <block wx:if="{{isShow==1}}">
-    <scroll-view bindscrolltolower="getOrderList" class="container" lowerThreshold="50" scrollY="true" style="height:{{scrollHeight}}px" wx:if="{{total>0}}">
+    <view bindscrolltolower="getOrderList" class="container" wx:if="{{total>0}}">
         <view class="dui-list-group dui-list-group-o" wx:for="{{list}}">
             <view class="dui-list-group-title">{{item.store_name}}
       <text class="status {item.status_style}}">{{item.status_text}}</text>
@@ -17,7 +17,7 @@
                 <view bindtap="jumpDetail" class="show-detail" data-orderid="{{item.id}}">查看详情</view>
             </view>
         </view>
-    </scroll-view>
+    </view>
     <view class="content-empty" wx:if="{{total==0}}">
         <i class="icon icon-list"></i>
         <text>没有订单记录</text>

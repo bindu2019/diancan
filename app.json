@@ -7,6 +7,7 @@
     "deam_food/pages/order/detail",
     "deam_food/pages/order/index",
     "deam_food/pages/mine/index",
+    "deam_food/pages/mine/info",
     "deam_food/pages/mine/recharge",
     "deam_food/pages/mine/balance",
     "deam_food/pages/mine/credit",
@@ -20,6 +21,11 @@
     "deam_food/pages/sandbox/wechat",
     "deam_food/pages/auth/auth"
   ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于斌度点点确定位置所用"
+    }
+  },
   "window": {
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "",
@@ -50,5 +56,5 @@
       }
     ]
   },
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap92.json"
 }

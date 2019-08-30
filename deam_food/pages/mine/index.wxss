@@ -83,3 +83,104 @@ page {
     display: inline-block;
     padding: 2px 15px;
 }
+
+.dui-list-media image.avatar {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 120rpx;
+    border: rgba(255,255,255,0.3) solid 4px;
+    vertical-align: middle;
+}
+
+.dui-list {
+    padding: 16rpx 30rpx;
+}
+
+.dui-list .angle:after {
+    border-color: #ffffff;
+    height: 14rpx;
+    width: 14rpx;
+}
+
+.dui-list-inner .text {
+    color: #ffffff;
+    display: inline-block;
+    background-color: rgba(255,255,255,0.2);
+    padding: 5rpx 10rpx;
+    border-radius: 8rpx;
+    font-size: 22rpx;
+}
+
+.dui-block-group {
+    margin-top: 0;
+    margin-bottom: 20rpx;
+}
+
+.dui-block-group .dui-block-child {
+    text-align: center;
+}
+
+.dui-block-group .dui-block-child:before {
+    border-right: 2rpx solid #eeeeee;
+}
+
+.dui-block-group .dui-block-child:after {
+    border-bottom: 0;
+}
+
+.credit-value {
+    font-size: 42rpx;
+    font-weight: 700;
+}
+
+.credit-value text {
+    font-size: 22rpx;
+    font-weight: 400;
+}
+
+.credit-value.first {
+    color: #4993f7;
+}
+
+.credit-value.second {
+    color: #ec6a4a;
+}
+
+.credit-value.third {
+    color: #f1a63b;
+}
+
+.credit-title {
+    font-size: 26rpx;
+    color: #666666;
+}
+
+button {
+    border: 0px;
+    line-height: 1.5;
+}
+
+button::after {
+    border: 0;
+}
+
+.button-hover {
+    background-color: transparent;
+}
+
+.dui-list-inner .tel {
+    color: #ffffff;
+    font-size: 26rpx;
+}
+
+.dui-list-inner .tel i {
+    font-size: 24rpx;
+}
+
+.icon.icon-settings {
+    position: absolute;
+    top: 18rpx;
+    right: 36rpx;
+    font-size: 30rpx;
+    color: #ffffff;
+}

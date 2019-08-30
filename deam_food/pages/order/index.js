@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -10,16 +10,9 @@ Page({
         isShow: 0,
         shareTitle: ""
     },
-    onLoad: function(t) {
-        var a = wx.getSystemInfoSync().windowHeight;
-        this.setData({
-            scrollHeight: a
-        });
-    },
-    onReady: function() {},
-    onShow: function() {
-        var a = this;
-        app.util.request({
+    onLoad: function(a) {
+        var e = this;
+        t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !1,
@@ -29,20 +22,24 @@ Page({
                     backgroundColor: t.result.bg_color
                 }), wx.setNavigationBarTitle({
                     title: "我的订单"
-                }), a.setData({
+                }), e.setData({
                     shareTitle: t.result.share_title
                 }));
             }
-        }), a.setData({
+        }), e.setData({
             page: 1,
             hasMore: 1,
             list: []
-        }), a.getOrderList();
+        }), e.getOrderList();
     },
+    onReady: function() {},
+    onShow: function() {},
     onHide: function() {},
     onUnload: function() {},
     onPullDownRefresh: function() {},
-    onReachBottom: function() {},
+    onReachBottom: function() {
+        this.getOrderList();
+    },
     onShareAppMessage: function() {
         return {
             title: this.data.shareTitle,
@@ -53,7 +50,7 @@ Page({
     },
     jumpDetail: function(t) {
         var a = t.currentTarget.dataset.orderid;
-        0 < a ? wx.navigateTo({
+        a > 0 ? wx.navigateTo({
             url: "/deam_food/pages/order/detail?id=" + a
         }) : wx.showModal({
             title: "提示",
@@ -63,37 +60,37 @@ Page({
         });
     },
     getOrderList: function() {
-        var e = this, s = e.data.page, i = e.data.hasMore, n = e.data.list;
-        "1" == i && (e.setData({
+        var a = this, e = a.data.page, o = a.data.hasMore, s = a.data.list;
+        "1" == o && (a.setData({
             hasMore: 0
-        }), app.util.getUserInfo(function() {
-            "" != wx.getStorageSync("userInfo") ? app.util.request({
+        }), t.util.getUserInfo(function() {
+            "" != wx.getStorageSync("userInfo") ? t.util.request({
                 url: "entry/wxapp/data",
                 cachetime: "0",
                 showLoading: !0,
                 data: {
                     op: "orderlist",
-                    page: s
+                    page: e
                 },
                 success: function(t) {
-                    t = t.data;
-                    if (e.setData({
+                    var t = t.data;
+                    if (a.setData({
                         isShow: 1
-                    }), 0 < t.result.total) {
-                        i = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1;
-                        var a = t.result.list, o = [];
-                        a.forEach(function(t, a, e) {
-                            e[a].goods_list = JSON.parse(e[a].goods_list), o = e;
-                        }), e.setData({
+                    }), t.result.total > 0) {
+                        o = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1;
+                        var r = [];
+                        t.result.list.forEach(function(t, a, e) {
+                            e[a].goods_list = JSON.parse(e[a].goods_list), r = e;
+                        }), a.setData({
                             total: t.result.total,
-                            list: n.concat(o),
-                            hasMore: i
+                            list: s.concat(r),
+                            hasMore: o
                         });
-                    } else e.setData({
+                    } else a.setData({
                         hasMore: 0
                     });
-                    s++, e.setData({
-                        page: s
+                    e++, a.setData({
+                        page: e
                     });
                 }
             }) : wx.navigateTo({

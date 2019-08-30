@@ -1,4 +1,4 @@
-var app = getApp();
+var e = getApp();
 
 Page({
     data: {
@@ -8,28 +8,28 @@ Page({
         userInfo: {}
     },
     onLoad: function() {
-        var a = this;
-        app.util.footer(a), app.util.request({
+        var s = this;
+        e.util.footer(s), e.util.request({
             url: "wxapp/home/nav",
             cachetime: "30",
             success: function(e) {
-                e.data.message.errno || (console.log(e.data.message.message), a.setData({
+                e.data.message.errno || (console.log(e.data.message.message), s.setData({
                     navs: e.data.message.message
                 }));
             }
-        }), app.util.request({
+        }), e.util.request({
             url: "wxapp/home/slide",
             cachetime: "30",
             success: function(e) {
-                e.data.message.errno || a.setData({
+                e.data.message.errno || s.setData({
                     slide: e.data.message.message
                 });
             }
-        }), app.util.request({
+        }), e.util.request({
             url: "wxapp/home/commend",
             cachetime: "30",
             success: function(e) {
-                e.data.message.errno || a.setData({
+                e.data.message.errno || s.setData({
                     commend: e.data.message.message
                 });
             }

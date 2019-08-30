@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -12,7 +12,8 @@ Page({
     onLoad: function(t) {},
     onReady: function() {},
     onShow: function() {
-        app.util.request({
+        var a = this;
+        t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !1,
@@ -24,7 +25,7 @@ Page({
                     title: "我的地址"
                 }));
             }
-        }), this.getlist();
+        }), a.getlist();
     },
     onHide: function() {},
     onUnload: function() {},
@@ -37,14 +38,15 @@ Page({
         });
     },
     touchS: function(t) {
+        var a = this;
         if (1 == t.touches.length) {
             this.setData({
                 startX: t.touches[0].clientX
             });
-            var e = this.data.list;
+            var e = a.data.list;
             e.forEach(function(t, a) {
                 e[a].txtStyle = "transform:translateX(0px);", e[a].delStyle = "transform:translateX(88px);";
-            }), this.setData({
+            }), a.setData({
                 list: e
             });
         }
@@ -52,13 +54,12 @@ Page({
     touchM: function(t) {
         var a = this;
         if (1 == t.touches.length) {
-            var e = t.touches[0].clientX, s = a.data.startX - e, n = a.data.delBtnWidth, r = "", o = "";
-            if (0 == s || s < 0) r = "transform:translateX(0px);", o = "transform:translateX(88px);"; else if (0 < s) {
-                r = "transform:translateX(-" + s + "px);", o = "transform:translateX(" + (n - s) + "px);", 
-                n <= s && (r = "transform:translateX(-88px);", o = "transform:translateX(0px);");
-            }
+            var e = t.touches[0].clientX, s = a.data.startX - e, r = a.data.delBtnWidth, n = "", o = "";
+            0 == s || s < 0 ? (n = "transform:translateX(0px);", o = "transform:translateX(88px);") : s > 0 && (n = "transform:translateX(-" + s + "px);", 
+            o = "transform:translateX(" + (r - s) + "px);", s >= r && (n = "transform:translateX(-88px);", 
+            o = "transform:translateX(0px);"));
             var l = t.currentTarget.dataset.index, i = a.data.list;
-            i[l].txtStyle = r, i[l].delStyle = o, a.setData({
+            i[l].txtStyle = n, i[l].delStyle = o, a.setData({
                 list: i
             });
         }
@@ -66,51 +67,51 @@ Page({
     touchE: function(t) {
         var a = this;
         if (1 == t.changedTouches.length) {
-            var e = t.changedTouches[0].clientX, s = a.data.startX - e, n = a.data.delBtnWidth, r = n / 2 < s ? "transform:translateX(-88px);" : "transform:translateX(0px);", o = n / 2 < s ? "transform:translateX(0px);" : "transform:translateX(88px);", l = t.currentTarget.dataset.index, i = a.data.list;
-            i[l].txtStyle = r, i[l].delStyle = o, a.setData({
+            var e = t.changedTouches[0].clientX, s = a.data.startX - e, r = a.data.delBtnWidth, n = s > r / 2 ? "transform:translateX(-88px);" : "transform:translateX(0px);", o = s > r / 2 ? "transform:translateX(0px);" : "transform:translateX(88px);", l = t.currentTarget.dataset.index, i = a.data.list;
+            i[l].txtStyle = n, i[l].delStyle = o, a.setData({
                 list: i
             });
         }
     },
     getlist: function() {
-        var e = this;
-        e.setData({
+        var a = this;
+        a.setData({
             total: 0,
             list: [],
             page: 1,
             hasMore: 1,
             delBtnWidth: 88
         });
-        var s = e.data.page, n = e.data.hasMore, r = e.data.list;
-        "1" == n && (e.setData({
+        var e = a.data.page, s = a.data.hasMore, r = a.data.list;
+        "1" == s && (a.setData({
             hasMore: 0
-        }), app.util.getUserInfo(function() {
-            "" != wx.getStorageSync("userInfo") ? app.util.request({
+        }), t.util.getUserInfo(function() {
+            "" != wx.getStorageSync("userInfo") ? t.util.request({
                 url: "entry/wxapp/data",
                 cachetime: "0",
                 showLoading: !0,
                 data: {
                     op: "address",
-                    page: s
+                    page: e
                 },
                 success: function(t) {
-                    t = t.data;
-                    if (e.setData({
+                    var t = t.data;
+                    if (a.setData({
                         isShow: 1
-                    }), 0 < t.result.total) {
-                        n = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1;
-                        var a = t.result.list;
-                        e.setData({
+                    }), t.result.total > 0) {
+                        s = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1;
+                        var n = t.result.list;
+                        a.setData({
                             total: t.result.total,
-                            list: r.concat(a),
-                            hasMore: n
+                            list: r.concat(n),
+                            hasMore: s
                         });
-                    } else e.setData({
+                    } else a.setData({
                         hasMore: 0,
                         total: 0
                     });
-                    s++, e.setData({
-                        page: s
+                    e++, a.setData({
+                        page: e
                     });
                 }
             }) : wx.navigateTo({
@@ -119,13 +120,13 @@ Page({
         }));
     },
     delAddr: function(a) {
-        var s = this;
+        var e = this;
         wx.showModal({
             title: "删除地址",
             content: "确认删除该收货地址吗？",
             confirmColor: "#ff9c37",
-            success: function(t) {
-                if (t.confirm) app.util.request({
+            success: function(s) {
+                if (s.confirm) t.util.request({
                     url: "entry/wxapp/deampost",
                     cachetime: "0",
                     showLoading: !0,
@@ -135,7 +136,7 @@ Page({
                         addressid: a.target.dataset.addrid
                     },
                     success: function(t) {
-                        "1" == (t = t.data).status ? s.getlist() : wx.showModal({
+                        "1" == (t = t.data).status ? e.getlist() : wx.showModal({
                             title: "提示",
                             content: t.result.message,
                             showCancel: !1,
@@ -145,12 +146,12 @@ Page({
                             }
                         });
                     }
-                }); else if (t.cancel) {
-                    var e = s.data.list;
-                    e.forEach(function(t, a) {
-                        e[a].txtStyle = "transform:translateX(0px);", e[a].delStyle = "transform:translateX(88px);";
-                    }), s.setData({
-                        list: e
+                }); else if (s.cancel) {
+                    var r = e.data.list;
+                    r.forEach(function(t, a) {
+                        r[a].txtStyle = "transform:translateX(0px);", r[a].delStyle = "transform:translateX(88px);";
+                    }), e.setData({
+                        list: r
                     });
                 }
             }

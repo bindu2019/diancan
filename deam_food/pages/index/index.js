@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -22,8 +22,8 @@ Page({
     onLoad: function(t) {},
     onReady: function() {},
     onShow: function() {
-        var s = this;
-        app.util.request({
+        var e = this;
+        t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !1,
@@ -34,7 +34,7 @@ Page({
                         backgroundColor: t.result.bg_color
                     }), wx.setNavigationBarTitle({
                         title: t.result.name
-                    }), s.setData({
+                    }), e.setData({
                         shareTitle: t.result.share_title,
                         storeType: t.result.type,
                         single_storeid: t.result.single_storeid,
@@ -45,13 +45,13 @@ Page({
                         wxappGetself: t.result.wxapp_getself,
                         wxappSettings: t.result
                     });
-                    var e = "" == s.data.store_blogo ? 0 : 30, a = "" == s.data.copyright ? 0 : 24, o = "" != s.data.store_blogo || "" == s.data.copyright ? 30 : 0, i = wx.getSystemInfoSync();
-                    s.setData({
-                        mainBodyHeight: i.windowHeight - e - a - o
+                    var a = "" == e.data.store_blogo ? 0 : 30, o = "" == e.data.copyright ? 0 : 24, i = "" != e.data.store_blogo || "" == e.data.copyright ? 30 : 0, s = wx.getSystemInfoSync();
+                    e.setData({
+                        mainBodyHeight: s.windowHeight - a - o - i
                     });
                 }
             }
-        }), app.util.request({
+        }), t.util.request({
             url: "entry/wxapp/data",
             cachetime: "0",
             showLoading: !0,
@@ -59,10 +59,9 @@ Page({
                 op: "index"
             },
             success: function(t) {
-                t = t.data;
-                var e = wx.getSystemInfoSync(), a = t.result.adv_width / t.result.adv_height, o = e.windowWidth / a;
-                "1" == t.status && s.setData({
-                    swiperHeight: o,
+                var t = t.data, a = wx.getSystemInfoSync(), o = t.result.adv_width / t.result.adv_height, i = a.windowWidth / o;
+                "1" == t.status && e.setData({
+                    swiperHeight: i,
                     advShow: 1,
                     adv: t.result.adv,
                     isShow: 1,
@@ -84,27 +83,29 @@ Page({
         };
     },
     imageLoad: function(t) {
-        var e = wx.getSystemInfoSync();
+        var e = this, a = wx.getSystemInfoSync();
         if (0 == t.target.dataset.index) {
-            var a = t.detail.width / t.detail.height, o = e.windowWidth / a;
-            this.setData({
-                swiperHeight: o,
-                swiperWidth: e.windowWidth
+            var o = t.detail.width / t.detail.height, i = a.windowWidth / o;
+            e.setData({
+                swiperHeight: i,
+                swiperWidth: a.windowWidth
             });
         }
     },
     jumpStore: function(t) {
-        "2" == this.data.storeType ? wx.navigateTo({
+        var e = this;
+        "2" == e.data.storeType ? wx.navigateTo({
             url: "/deam_food/pages/store/location"
         }) : wx.navigateTo({
-            url: "/deam_food/pages/store/detail?store_id=" + this.data.single_storeid
+            url: "/deam_food/pages/store/detail?store_id=" + e.data.single_storeid
         });
     },
     jumpTakeout: function(t) {
-        "2" == this.data.storeType ? wx.navigateTo({
+        var e = this;
+        "2" == e.data.storeType ? wx.navigateTo({
             url: "/deam_food/pages/store/location?type=takeout"
         }) : wx.navigateTo({
-            url: "/deam_food/pages/store/detail?type=takeout&store_id=" + this.data.single_storeid
+            url: "/deam_food/pages/store/detail?type=takeout&store_id=" + e.data.single_storeid
         });
     },
     scanWxacode: function(t) {
@@ -129,11 +130,11 @@ Page({
         });
     },
     adLoad: function(t) {
-        var a = this, e = wx.createSelectorQuery();
-        console.log(111), e.select(".ad").boundingClientRect(), e.exec(function(t) {
-            var e = t[0].height;
-            console.log(e), a.setData({
-                adHeight: e
+        var e = this, a = wx.createSelectorQuery();
+        console.log(111), a.select(".ad").boundingClientRect(), a.exec(function(t) {
+            var a = t[0].height;
+            console.log(a), e.setData({
+                adHeight: a
             });
         });
     },

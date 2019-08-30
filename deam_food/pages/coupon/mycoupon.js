@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -14,11 +14,9 @@ Page({
         noneTips: "",
         shareTitle: ""
     },
-    onLoad: function(t) {},
-    onReady: function() {},
-    onShow: function() {
-        var a = this;
-        app.util.request({
+    onLoad: function(a) {
+        var e = this;
+        t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !1,
@@ -28,11 +26,11 @@ Page({
                     backgroundColor: t.result.bg_color
                 }), wx.setNavigationBarTitle({
                     title: "我的优惠"
-                }), a.setData({
+                }), e.setData({
                     shareTitle: t.result.share_title
                 }));
             }
-        }), app.util.request({
+        }), t.util.request({
             url: "entry/wxapp/coupon",
             cachetime: "0",
             showLoading: !1,
@@ -50,12 +48,16 @@ Page({
                     }
                 });
             }
-        }), a.getlist();
+        }), e.getlist();
     },
+    onReady: function() {},
+    onShow: function() {},
     onHide: function() {},
     onUnload: function() {},
     onPullDownRefresh: function() {},
-    onReachBottom: function() {},
+    onReachBottom: function() {
+        this.getlist();
+    },
     onShareAppMessage: function() {
         return {
             title: this.data.shareTitle,
@@ -65,45 +67,38 @@ Page({
         };
     },
     getlist: function() {
-        var e = this;
-        e.setData({
-            total: -1,
-            list: [],
-            page: 1,
-            hasMore: 1
-        });
-        var s = e.data.page, o = e.data.hasMore, i = e.data.list;
-        "1" == o && (e.setData({
+        var a = this, e = a.data.page, s = a.data.hasMore, o = a.data.list;
+        "1" == s && (a.setData({
             hasMore: 0
-        }), app.util.getUserInfo(function() {
-            "" != wx.getStorageSync("userInfo") ? app.util.request({
+        }), t.util.getUserInfo(function() {
+            "" != wx.getStorageSync("userInfo") ? t.util.request({
                 url: "entry/wxapp/data",
                 cachetime: "0",
                 showLoading: !0,
                 data: {
                     op: "couponlist",
-                    page: s,
-                    status: e.data.tabid
+                    page: e,
+                    status: a.data.tabid
                 },
                 success: function(t) {
-                    t = t.data;
-                    if (e.setData({
+                    var t = t.data;
+                    if (a.setData({
                         isShow: 1,
                         noneTips: t.result.tips
-                    }), 0 < t.result.total) {
-                        o = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1;
-                        var a = t.result.list;
-                        e.setData({
+                    }), t.result.total > 0) {
+                        s = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1;
+                        var i = t.result.list;
+                        a.setData({
                             total: t.result.total,
-                            list: i.concat(a),
-                            hasMore: o
+                            list: o.concat(i),
+                            hasMore: s
                         });
-                    } else e.setData({
+                    } else a.setData({
                         hasMore: 0,
                         total: 0
                     });
-                    s++, e.setData({
-                        page: s
+                    e++, a.setData({
+                        page: e
                     });
                 }
             }) : wx.navigateTo({
@@ -112,18 +107,24 @@ Page({
         }));
     },
     changeTab: function(t) {
-        this.setData({
+        var a = this;
+        a.setData({
+            total: -1,
+            list: [],
+            page: 1,
+            hasMore: 1
+        }), a.setData({
             tabid: t.currentTarget.dataset.id
-        }), this.getlist();
+        }), a.getlist();
     },
-    uploadWechat: function(t) {
-        var a = t.currentTarget.dataset.couponid;
-        app.util.request({
+    uploadWechat: function(a) {
+        var e = a.currentTarget.dataset.couponid;
+        t.util.request({
             url: "entry/wxapp/coupon",
             cachetime: "0",
             showLoading: !0,
             data: {
-                couponid: a,
+                couponid: e,
                 op: "upload_wechat"
             },
             success: function(t) {

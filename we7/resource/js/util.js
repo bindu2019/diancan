@@ -1,9 +1,3 @@
-var _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e) {
-    return typeof e;
-} : function(e) {
-    return e && "function" == typeof Symbol && e.constructor === Symbol && e !== Symbol.prototype ? "symbol" : typeof e;
-};
-
 function _defineProperty(e, t, n) {
     return t in e ? Object.defineProperty(e, t, {
         value: n,
@@ -12,8 +6,6 @@ function _defineProperty(e, t, n) {
         writable: !0
     }) : e[t] = n, e;
 }
-
-var util = {};
 
 function getQuery(e) {
     var t = [];
@@ -43,71 +35,77 @@ function getSign(e, t, n) {
     o = a.sortBy(o, "name"), o = a.uniq(o, !0, "name");
     for (var c = "", g = 0; g < o.length; g++) o[g] && o[g].name && o[g].value && (c += o[g].name + "=" + o[g].value, 
     g < o.length - 1 && (c += "&"));
-    return i = r(c + (n = n || getApp().siteInfo.token));
+    return n = n || getApp().siteInfo.token, i = r(c + n);
 }
+
+var _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e) {
+    return typeof e;
+} : function(e) {
+    return e && "function" == typeof Symbol && e.constructor === Symbol && e !== Symbol.prototype ? "symbol" : typeof e;
+}, util = {};
 
 util.url = function(e, t) {
     var n = getApp(), a = n.siteInfo.siteroot + "?i=" + n.siteInfo.uniacid + "&t=" + n.siteInfo.multiid + "&v=" + n.siteInfo.version + "&from=wxapp&";
     if (e && ((e = e.split("/"))[0] && (a += "c=" + e[0] + "&"), e[1] && (a += "a=" + e[1] + "&"), 
     e[2] && (a += "do=" + e[2] + "&")), t && "object" === (void 0 === t ? "undefined" : _typeof(t))) for (var r in t) r && t.hasOwnProperty(params) && t[r] && (a += r + "=" + t[r] + "&");
     return a;
-}, util.request = function(a) {
+}, util.request = function(e) {
     require("underscore.js");
-    var e, t = require("md5.js"), r = getApp();
-    (a = a || {}).cachetime = a.cachetime ? a.cachetime : 0, a.showLoading = void 0 === a.showLoading || a.showLoading;
-    var n = wx.getStorageSync("userInfo").sessionid, o = a.url;
+    var t, n = require("md5.js"), a = getApp();
+    (e = e || {}).cachetime = e.cachetime ? e.cachetime : 0, e.showLoading = void 0 === e.showLoading || e.showLoading;
+    var r = wx.getStorageSync("userInfo").sessionid, o = e.url;
     if (-1 == o.indexOf("http://") && -1 == o.indexOf("https://") && (o = util.url(o)), 
-    getUrlParam(o, "state") || a.data && a.data.state || !n || (o = o + "&state=we7sid-" + n), 
-    !a.data || !a.data.m) {
+    getUrlParam(o, "state") || e.data && e.data.state || !r || (o = o + "&state=we7sid-" + r), 
+    !e.data || !e.data.m) {
         var i = getCurrentPages();
         i && (i = i[getCurrentPages().length - 1]).__route__ && (o = o + "&m=" + i.__route__.split("/")[0]);
     }
-    var s = getSign(o, a.data);
+    var s = getSign(o, e.data);
     if (s && (o = o + "&sign=" + s), !o) return !1;
-    if (wx.showNavigationBarLoading(), a.showLoading && util.showLoading(a.showLoadingText), 
-    a.cachetime) {
-        var u = t(o), c = wx.getStorageSync(u), g = Date.parse(new Date());
+    if (wx.showNavigationBarLoading(), e.showLoading && util.showLoading(e.showLoadingText), 
+    e.cachetime) {
+        var u = n(o), c = wx.getStorageSync(u), g = Date.parse(new Date());
         if (c && c.data) {
-            if (c.expire > g) return a.complete && "function" == typeof a.complete && a.complete(c), 
-            a.success && "function" == typeof a.success && a.success(c), console.log("cache:" + o), 
+            if (c.expire > g) return e.complete && "function" == typeof e.complete && e.complete(c), 
+            e.success && "function" == typeof e.success && e.success(c), console.log("cache:" + o), 
             wx.hideLoading(), wx.hideNavigationBarLoading(), !0;
             wx.removeStorageSync(u);
         }
     }
-    wx.request((_defineProperty(e = {
+    wx.request((t = {
         url: o,
-        data: a.data ? a.data : {},
-        header: a.header ? a.header : {},
-        method: a.method ? a.method : "GET"
-    }, "header", {
+        data: e.data ? e.data : {},
+        header: e.header ? e.header : {},
+        method: e.method ? e.method : "GET"
+    }, _defineProperty(t, "header", {
         "content-type": "application/x-www-form-urlencoded"
-    }), _defineProperty(e, "success", function(e) {
-        if (wx.hideNavigationBarLoading(), wx.hideLoading(), e.data.errno) {
-            if ("41009" == e.data.errno) return wx.setStorageSync("userInfo", ""), void util.getUserInfo(function() {
-                util.request(a);
+    }), _defineProperty(t, "success", function(t) {
+        if (wx.hideNavigationBarLoading(), wx.hideLoading(), t.data.errno) {
+            if ("41009" == t.data.errno) return wx.setStorageSync("userInfo", ""), void util.getUserInfo(function() {
+                util.request(e);
             });
-            if (a.fail && "function" == typeof a.fail) a.fail(e); else if (e.data.message) {
-                if (null != e.data.data && e.data.data.redirect) var t = e.data.data.redirect; else t = "";
-                r.util.message(e.data.message, t, "error");
+            if (e.fail && "function" == typeof e.fail) e.fail(t); else if (t.data.message) {
+                if (null != t.data.data && t.data.data.redirect) n = t.data.data.redirect; else var n = "";
+                a.util.message(t.data.message, n, "error");
             }
-        } else if (a.success && "function" == typeof a.success && a.success(e), a.cachetime) {
-            var n = {
-                data: e.data,
-                expire: g + 1e3 * a.cachetime
+        } else if (e.success && "function" == typeof e.success && e.success(t), e.cachetime) {
+            var r = {
+                data: t.data,
+                expire: g + 1e3 * e.cachetime
             };
-            wx.setStorageSync(u, n);
+            wx.setStorageSync(u, r);
         }
-    }), _defineProperty(e, "fail", function(e) {
+    }), _defineProperty(t, "fail", function(t) {
         wx.hideNavigationBarLoading(), wx.hideLoading();
-        var t = require("md5.js")(o), n = wx.getStorageSync(t);
-        if (n && n.data) return a.success && "function" == typeof a.success && a.success(n), 
+        var n = require("md5.js")(o), a = wx.getStorageSync(n);
+        if (a && a.data) return e.success && "function" == typeof e.success && e.success(a), 
         console.log("failreadcache:" + o), !0;
-        a.fail && "function" == typeof a.fail && a.fail(e);
-    }), _defineProperty(e, "complete", function(e) {
-        a.complete && "function" == typeof a.complete && a.complete(e);
-    }), e));
-}, util.getUserInfo = function(n) {
-    var e = function() {
+        e.fail && "function" == typeof e.fail && e.fail(t);
+    }), _defineProperty(t, "complete", function(t) {
+        e.complete && "function" == typeof e.complete && e.complete(t);
+    }), t));
+}, util.getUserInfo = function(e) {
+    var t = function() {
         console.log("start login");
         var t = {
             sessionid: "",
@@ -115,40 +113,40 @@ util.url = function(e, t) {
             memberInfo: ""
         };
         wx.login({
-            success: function(e) {
+            success: function(n) {
                 util.request({
                     url: "auth/session/openid",
                     data: {
-                        code: e.code
+                        code: n.code
                     },
                     cachetime: 0,
                     showLoading: !1,
-                    success: function(e) {
-                        e.data.errno || (t.sessionid = e.data.data.sessionid, wx.setStorageSync("userInfo", t), 
+                    success: function(n) {
+                        n.data.errno || (t.sessionid = n.data.data.sessionid, wx.setStorageSync("userInfo", t), 
                         wx.getUserInfo({
-                            success: function(e) {
-                                t.wxInfo = e.userInfo, wx.setStorageSync("userInfo", t), util.request({
+                            success: function(n) {
+                                t.wxInfo = n.userInfo, wx.setStorageSync("userInfo", t), util.request({
                                     url: "auth/session/userinfo",
                                     showLoading: !1,
                                     data: {
-                                        signature: e.signature,
-                                        rawData: e.rawData,
-                                        iv: e.iv,
-                                        encryptedData: e.encryptedData
+                                        signature: n.signature,
+                                        rawData: n.rawData,
+                                        iv: n.iv,
+                                        encryptedData: n.encryptedData
                                     },
                                     method: "POST",
                                     header: {
                                         "content-type": "application/x-www-form-urlencoded"
                                     },
                                     cachetime: 0,
-                                    success: function(e) {
-                                        e.data.errno || (t.memberInfo = e.data.data, wx.setStorageSync("userInfo", t)), 
-                                        "function" == typeof n && n(t);
+                                    success: function(n) {
+                                        n.data.errno || (t.memberInfo = n.data.data, wx.setStorageSync("userInfo", t)), 
+                                        "function" == typeof e && e(t);
                                     }
                                 });
                             },
-                            fail: function(e) {
-                                console.log("getUserInfo error"), wx.removeStorageSync("userInfo"), "function" == typeof n && n(t);
+                            fail: function(n) {
+                                console.log("getUserInfo error"), wx.removeStorageSync("userInfo"), "function" == typeof e && e(t);
                             }
                         }));
                     }
@@ -158,31 +156,31 @@ util.url = function(e, t) {
                 console.log(e), console.log("login error"), wx.removeStorageSync("userInfo");
             }
         });
-    }, t = wx.getStorageSync("userInfo");
-    t.sessionid ? wx.checkSession({
+    }, n = wx.getStorageSync("userInfo");
+    n.sessionid ? wx.checkSession({
         success: function() {
-            "function" == typeof n && n(t);
+            "function" == typeof e && e(n);
         },
         fail: function() {
-            t.sessionid = "", console.log("relogin"), wx.removeStorageSync("userInfo"), e();
+            n.sessionid = "", console.log("relogin"), wx.removeStorageSync("userInfo"), t();
         }
-    }) : e();
-}, util.navigateBack = function(t) {
-    var e = t.delta ? t.delta : 1;
-    if (t.data) {
-        var n = getCurrentPages(), a = n[n.length - (e + 1)];
-        a.pageForResult ? a.pageForResult(t.data) : a.setData(t.data);
+    }) : t();
+}, util.navigateBack = function(e) {
+    var t = e.delta ? e.delta : 1;
+    if (e.data) {
+        var n = getCurrentPages(), a = n[n.length - (t + 1)];
+        a.pageForResult ? a.pageForResult(e.data) : a.setData(e.data);
     }
     wx.navigateBack({
-        delta: e,
-        success: function(e) {
-            "function" == typeof t.success && t.success(e);
+        delta: t,
+        success: function(t) {
+            "function" == typeof e.success && e.success(t);
         },
-        fail: function(e) {
-            "function" == typeof t.fail && t.function(e);
+        fail: function(t) {
+            "function" == typeof e.fail && e.function(t);
         },
         complete: function() {
-            "function" == typeof t.complete && t.complete();
+            "function" == typeof e.complete && e.complete();
         }
     });
 }, util.footer = function(e) {
@@ -223,7 +221,7 @@ util.url = function(e, t) {
         }
     });
 }, util.user = util.getUserInfo, util.showLoading = function() {
-    var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : "加载中";
+    var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "加载中";
     wx.getStorageSync("isShowLoading") && (wx.hideLoading(), wx.setStorageSync("isShowLoading", !1)), 
     wx.showLoading({
         title: e,
@@ -242,18 +240,24 @@ util.url = function(e, t) {
     });
 }, util.parseContent = function(e) {
     if (!e) return e;
-    var t = e.match(new RegExp([ "\ud83c[\udf00-\udfff]", "\ud83d[\udc00-\ude4f]", "\ud83d[\ude80-\udeff]" ].join("|"), "g"));
-    if (t) for (var n in t) e = e.replace(t[n], "[U+" + t[n].codePointAt(0).toString(16).toUpperCase() + "]");
+    var t = [ "\ud83c[\udf00-\udfff]", "\ud83d[\udc00-\ude4f]", "\ud83d[\ude80-\udeff]" ], n = e.match(new RegExp(t.join("|"), "g"));
+    if (n) for (var a in n) e = e.replace(n[a], "[U+" + n[a].codePointAt(0).toString(16).toUpperCase() + "]");
     return e;
 }, util.date = function() {
     this.isLeapYear = function(e) {
         return 0 == e.getYear() % 4 && (e.getYear() % 100 != 0 || e.getYear() % 400 == 0);
     }, this.dateToStr = function(e, t) {
-        e = e || "yyyy-MM-dd HH:mm:ss", t = t || new Date();
-        var n = e;
-        return n = (n = (n = (n = (n = (n = (n = (n = (n = (n = (n = (n = (n = n.replace(/yyyy|YYYY/, t.getFullYear())).replace(/yy|YY/, 9 < t.getYear() % 100 ? (t.getYear() % 100).toString() : "0" + t.getYear() % 100)).replace(/MM/, 9 < t.getMonth() ? t.getMonth() + 1 : "0" + (t.getMonth() + 1))).replace(/M/g, t.getMonth())).replace(/w|W/g, [ "日", "一", "二", "三", "四", "五", "六" ][t.getDay()])).replace(/dd|DD/, 9 < t.getDate() ? t.getDate().toString() : "0" + t.getDate())).replace(/d|D/g, t.getDate())).replace(/hh|HH/, 9 < t.getHours() ? t.getHours().toString() : "0" + t.getHours())).replace(/h|H/g, t.getHours())).replace(/mm/, 9 < t.getMinutes() ? t.getMinutes().toString() : "0" + t.getMinutes())).replace(/m/g, t.getMinutes())).replace(/ss|SS/, 9 < t.getSeconds() ? t.getSeconds().toString() : "0" + t.getSeconds())).replace(/s|S/g, t.getSeconds());
+        e = arguments[0] || "yyyy-MM-dd HH:mm:ss", t = arguments[1] || new Date();
+        var n = e, a = [ "日", "一", "二", "三", "四", "五", "六" ];
+        return n = n.replace(/yyyy|YYYY/, t.getFullYear()), n = n.replace(/yy|YY/, t.getYear() % 100 > 9 ? (t.getYear() % 100).toString() : "0" + t.getYear() % 100), 
+        n = n.replace(/MM/, t.getMonth() > 9 ? t.getMonth() + 1 : "0" + (t.getMonth() + 1)), 
+        n = n.replace(/M/g, t.getMonth()), n = n.replace(/w|W/g, a[t.getDay()]), n = n.replace(/dd|DD/, t.getDate() > 9 ? t.getDate().toString() : "0" + t.getDate()), 
+        n = n.replace(/d|D/g, t.getDate()), n = n.replace(/hh|HH/, t.getHours() > 9 ? t.getHours().toString() : "0" + t.getHours()), 
+        n = n.replace(/h|H/g, t.getHours()), n = n.replace(/mm/, t.getMinutes() > 9 ? t.getMinutes().toString() : "0" + t.getMinutes()), 
+        n = n.replace(/m/g, t.getMinutes()), n = n.replace(/ss|SS/, t.getSeconds() > 9 ? t.getSeconds().toString() : "0" + t.getSeconds()), 
+        n = n.replace(/s|S/g, t.getSeconds());
     }, this.dateAdd = function(e, t, n) {
-        switch (n = n || new Date(), e) {
+        switch (n = arguments[2] || new Date(), e) {
           case "s":
             return new Date(n.getTime() + 1e3 * t);
 
@@ -303,17 +307,17 @@ util.url = function(e, t) {
         return t[1] = t[1] - 1, eval("var d = new Date(" + t.join(",") + ");"), d;
     }, this.strFormatToDate = function(e, t) {
         var n = 0, a = -1, r = t.length;
-        -1 < (a = e.indexOf("yyyy")) && a < r && (n = t.substr(a, 4));
+        (a = e.indexOf("yyyy")) > -1 && a < r && (n = t.substr(a, 4));
         var o = 0;
-        -1 < (a = e.indexOf("MM")) && a < r && (o = parseInt(t.substr(a, 2)) - 1);
+        (a = e.indexOf("MM")) > -1 && a < r && (o = parseInt(t.substr(a, 2)) - 1);
         var i = 0;
-        -1 < (a = e.indexOf("dd")) && a < r && (i = parseInt(t.substr(a, 2)));
+        (a = e.indexOf("dd")) > -1 && a < r && (i = parseInt(t.substr(a, 2)));
         var s = 0;
-        (-1 < (a = e.indexOf("HH")) || 1 < (a = e.indexOf("hh"))) && a < r && (s = parseInt(t.substr(a, 2)));
+        ((a = e.indexOf("HH")) > -1 || (a = e.indexOf("hh")) > 1) && a < r && (s = parseInt(t.substr(a, 2)));
         var u = 0;
-        -1 < (a = e.indexOf("mm")) && a < r && (u = t.substr(a, 2));
+        (a = e.indexOf("mm")) > -1 && a < r && (u = t.substr(a, 2));
         var c = 0;
-        return -1 < (a = e.indexOf("ss")) && a < r && (c = t.substr(a, 2)), new Date(n, o, i, s, u, c);
+        return (a = e.indexOf("ss")) > -1 && a < r && (c = t.substr(a, 2)), new Date(n, o, i, s, u, c);
     }, this.dateToLong = function(e) {
         return e.getTime();
     }, this.longToDate = function(e) {
@@ -327,19 +331,19 @@ util.url = function(e, t) {
         var o = e.substring(r, r + 2), i = t.indexOf("dd");
         if (-1 == i) return !1;
         var s = e.substring(i, i + 2);
-        return !(!isNumber(a) || "2100" < a || a < "1900") && (!(!isNumber(o) || "12" < o || o < "01") && !(s > getMaxDay(a, o) || s < "01"));
+        return !(!isNumber(a) || a > "2100" || a < "1900") && (!(!isNumber(o) || o > "12" || o < "01") && !(s > getMaxDay(a, o) || s < "01"));
     }, this.getMaxDay = function(e, t) {
         return 4 == t || 6 == t || 9 == t || 11 == t ? "30" : 2 == t ? e % 4 == 0 && e % 100 != 0 || e % 400 == 0 ? "29" : "28" : "31";
     }, this.isNumber = function(e) {
         return /^\d+$/g.test(e);
     }, this.toArray = function(e) {
-        e = e || new Date();
+        e = arguments[0] || new Date();
         var t = Array();
         return t[0] = e.getFullYear(), t[1] = e.getMonth(), t[2] = e.getDate(), t[3] = e.getHours(), 
         t[4] = e.getMinutes(), t[5] = e.getSeconds(), t;
     }, this.datePart = function(e, t) {
-        t = t || new Date();
-        var n = "";
+        t = arguments[1] || new Date();
+        var n = "", a = [ "日", "一", "二", "三", "四", "五", "六" ];
         switch (e) {
           case "y":
             n = t.getFullYear();
@@ -354,7 +358,7 @@ util.url = function(e, t) {
             break;
 
           case "w":
-            n = [ "日", "一", "二", "三", "四", "五", "六" ][t.getDay()];
+            n = a[t.getDay()];
             break;
 
           case "ww":
@@ -374,7 +378,7 @@ util.url = function(e, t) {
         }
         return n;
     }, this.maxDayOfDate = function(e) {
-        (e = e || new Date()).setDate(1), e.setMonth(e.getMonth() + 1);
+        (e = arguments[0] || new Date()).setDate(1), e.setMonth(e.getMonth() + 1);
         var t = e.getTime() - 864e5;
         return new Date(t).getDate();
     };

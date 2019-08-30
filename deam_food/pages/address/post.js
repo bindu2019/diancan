@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -17,8 +17,8 @@ Page({
     },
     onLoad: function(e) {
         var a = this;
-        null != e.addr_id && app.util.getUserInfo(function() {
-            "" != wx.getStorageSync("userInfo") ? app.util.request({
+        void 0 != e.addr_id && t.util.getUserInfo(function() {
+            "" != wx.getStorageSync("userInfo") ? t.util.request({
                 url: "entry/wxapp/data",
                 cachetime: "0",
                 showLoading: !0,
@@ -53,7 +53,7 @@ Page({
     onReady: function() {},
     onShow: function() {
         var e = this;
-        app.util.request({
+        t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !1,
@@ -67,11 +67,6 @@ Page({
                     title: "添加地址"
                 }));
             }
-        }), app.util.getUserInfo(function() {
-            wx.getStorageSync("userInfo");
-            e.setData({
-                isShow: 1
-            });
         });
     },
     onHide: function() {},
@@ -79,15 +74,15 @@ Page({
     onPullDownRefresh: function() {},
     onReachBottom: function() {},
     chooseAddr: function() {
-        var o = this;
+        var t = this;
         wx.chooseLocation({
-            success: function(t) {
-                var e = t.latitude, a = t.longitude;
-                o.setData({
-                    latitude: e,
-                    longitude: a,
-                    name: t.name,
-                    address: t.address
+            success: function(e) {
+                var a = e.latitude, o = e.longitude;
+                t.setData({
+                    latitude: a,
+                    longitude: o,
+                    name: e.name,
+                    address: e.address
                 });
             },
             fail: function(t) {
@@ -118,45 +113,45 @@ Page({
         });
     },
     submitAddr: function() {
-        var t = this;
-        return "" == t.data.realname ? (wx.showModal({
+        var e = this;
+        return "" == e.data.realname ? (wx.showModal({
             title: "提示",
             content: "请填写联系人",
             confirmText: "好的",
             confirmColor: "#ff9c37",
             showCancel: !1,
             success: function(t) {}
-        }), !1) : "" == t.data.telphone ? (wx.showModal({
+        }), !1) : "" == e.data.telphone ? (wx.showModal({
             title: "提示",
             content: "请填写联系电话",
             confirmText: "好的",
             confirmColor: "#ff9c37",
             showCancel: !1,
             success: function(t) {}
-        }), !1) : /^1[34578]\d{9}$/.test(t.data.telphone) ? "" == t.data.name ? (wx.showModal({
+        }), !1) : /^1[34578]\d{9}$/.test(e.data.telphone) ? "" == e.data.name ? (wx.showModal({
             title: "提示",
             content: "请选择收货地址",
             confirmText: "好的",
             confirmColor: "#ff9c37",
             showCancel: !1,
             success: function(t) {}
-        }), !1) : (t.setData({
+        }), !1) : (e.setData({
             isSubmit: 1
-        }), void app.util.request({
+        }), void t.util.request({
             url: "entry/wxapp/deampost",
             cachetime: "0",
             showLoading: !0,
             method: "post",
             data: {
                 op: "submitaddr",
-                addressid: t.data.addressid,
-                realname: t.data.realname,
-                telphone: t.data.telphone,
-                address: t.data.address,
-                name: t.data.name,
-                latitude: t.data.latitude,
-                longitude: t.data.longitude,
-                addrnumber: t.data.addrNumber
+                addressid: e.data.addressid,
+                realname: e.data.realname,
+                telphone: e.data.telphone,
+                address: e.data.address,
+                name: e.data.name,
+                latitude: e.data.latitude,
+                longitude: e.data.longitude,
+                addrnumber: e.data.addrNumber
             },
             success: function(t) {
                 "1" == (t = t.data).status ? (wx.showToast({

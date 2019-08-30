@@ -14,19 +14,48 @@
 
 .credits-title {
     color: #000;
-    font-size: 12pt;
+    font-size: 34rpx;
 }
 
 .credits-time {
-    color: #808080;
-    font-size: 11pt;
-}
-
-.dui-cell-group .dui-cell:nth-child(1):before {
-    border-top: 2px solid #ebebeb;
-    right: 0;
+    color: #999999;
+    font-size: 30rpx;
+    margin-top: 12rpx;
 }
 
 .dui-cell-group .dui-cell:before {
     border-top: 2px dashed #ebebeb;
+}
+
+.balance-top-box {
+    padding: 5rpx 20rpx 16rpx 20rpx;
+}
+
+.balance-title {
+    color: #666666;
+    font-size: 26rpx;
+}
+
+.balance-value {
+    color: #333333;
+    margin-top: 10rpx;
+    font-size: 56rpx;
+    font-family: Arial,Helvetica,sans-serif;
+}
+
+.recharge-btn {
+    background: #ec6b2c;
+    color: #ffffff;
+    padding: 18rpx 40rpx;
+    border-radius: 5rpx;
+}
+
+.dui-cell-group.dui-cell-group-o {
+    border-radius: 10rpx;
+}
+
+.balance-tips {
+    font-size: 26rpx;
+    margin: 20rpx 0 0 14rpx;
+    color: #acacac;
 }

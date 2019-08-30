@@ -1,4 +1,4 @@
-var app = getApp();
+var o = getApp();
 
 Page({
     data: {
@@ -11,10 +11,11 @@ Page({
         totalPrice: 0,
         orderInfo: {}
     },
-    onLoad: function(o) {
-        this.setData({
-            order_id: o.id
-        }), app.util.request({
+    onLoad: function(e) {
+        var t = this;
+        t.setData({
+            order_id: e.id
+        }), o.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !1,
@@ -26,7 +27,7 @@ Page({
                     title: "订单详情"
                 }));
             }
-        }), this.getOrderInfo();
+        }), t.getOrderInfo();
     },
     onReady: function() {},
     onShow: function() {},
@@ -38,30 +39,30 @@ Page({
         });
     },
     onReachBottom: function() {},
-    getOrderInfo: function(t) {
-        var r = this;
-        app.util.getUserInfo(function() {
-            "" != wx.getStorageSync("userInfo") ? app.util.request({
+    getOrderInfo: function(e) {
+        var t = this;
+        o.util.getUserInfo(function() {
+            "" != wx.getStorageSync("userInfo") ? o.util.request({
                 url: "entry/wxapp/data",
                 cachetime: "0",
                 showLoading: !0,
                 data: {
                     op: "orderinfo",
-                    order_id: r.data.order_id
+                    order_id: t.data.order_id
                 },
                 success: function(o) {
                     if ("1" == (o = o.data).status) {
-                        var e = JSON.parse(o.result.goods_list);
-                        r.setData({
+                        var r = JSON.parse(o.result.goods_list);
+                        t.setData({
                             orderNumber: o.result.order_number,
                             ticketRemark: o.result.ticket_remark,
-                            goodsList: e,
+                            goodsList: r,
                             totalPrice: o.result.pay_price,
                             useCoupon: o.result.use_coupon,
                             couponPrice: o.result.coupon_price,
                             orderInfo: o.result,
                             isShow: 1
-                        }), 0 < o.result.need_send_coupon && 0 == o.result.is_send_coupon && wx.showModal({
+                        }), o.result.need_send_coupon > 0 && 0 == o.result.is_send_coupon && wx.showModal({
                             title: "提示",
                             content: "本次订单获得" + o.result.need_send_coupon + "张优惠券，已放入您的卡包！",
                             showCancel: !1,
@@ -70,7 +71,7 @@ Page({
                             success: function(o) {
                                 o.confirm;
                             }
-                        }), t && t();
+                        }), e && e();
                     } else wx.showModal({
                         title: "提示",
                         content: o.result.message,

@@ -1,38 +1,46 @@
 <block wx:if="{{isShow==1}}">
     <view class="main-body" style="min-height:{{mainBodyHeight}}px">
-        <view class="member-box" style="background:{{memberBgColor}}" wx:if="{{openBalance=='0'}}">
-            <image class="avatar" src="{{userInfo.wxInfo.avatarUrl}}"></image>
-            <view class="nickname">{{userInfo.wxInfo.nickName}}</view>
+        <view class="dui-list" style="background:{{memberBgColor}}">
+            <view class="dui-list-media">
+                <image class="avatar" src="{{userInfo.wxInfo.avatarUrl}}"></image>
+            </view>
+            <view class="dui-list-inner">
+                <view class="subtitle" style="color: #ffffff;">{{userInfo.wxInfo.nickName}}</view>
+                <button bindgetphonenumber="getPhoneNumber" class="text" hoverClass="none" hoverStopPropagation="true" openType="getPhoneNumber" wx:if="{{memberInfo.telephone==''}}">绑定手机号</button>
+                <view class="tel" wx:if="{{memberInfo.telephone!=''}}">
+                    <i class="icon icon-mobile"></i>{{memberInfo.telephone}}</view>
+            </view>
+            <view class="dui-list-angle"></view>
+            <i bindtap="jumpLink" class="icon icon-settings" data-url="/deam_food/pages/mine/info"></i>
         </view>
-        <view class="member-box member-box-new" style="background:{{memberBgColor}}" wx:if="{{openBalance=='1'}}">
-            <view class="child">
-                <view bindtap="jumpLink" class="title" data-url="/deam_food/pages/mine/balance">余额</view>
-                <view bindtap="jumpLink" class="num" data-url="/deam_food/pages/mine/balance" style="color: #fef31f;">{{memberInfo.credit2}}</view>
-                <view bindtap="jumpLink" class="paybtn" data-url="/deam_food/pages/mine/recharge">充值</view>
-            </view>
-            <view class="child userinfo">
-                <view class="face">
-                    <image class="avatar" src="{{userInfo.wxInfo.avatarUrl}}"></image>
+        <view class="dui-block-group" wx:if="{{openBalance=='1'}}">
+            <view bindtap="jumpLink" class="dui-block-child" data-url="/deam_food/pages/mine/balance">
+                <view class="credit-value first">{{memberInfo.credit2}}<text>元</text>
                 </view>
-                <view class="nickname">{{userInfo.wxInfo.nickName}}</view>
+                <view class="credit-title">余额</view>
             </view>
-            <view class="child">
-                <view bindtap="jumpLink" class="title" data-url="/deam_food/pages/mine/credit">积分</view>
-                <view bindtap="jumpLink" class="num" data-url="/deam_food/pages/mine/credit" style="color: #fef31f;">{{memberInfo.credit1}}</view>
-                <view style="color:{{memberBgColor}}">-</view>
+            <view bindtap="jumpLink" class="dui-block-child" data-url="/deam_food/pages/coupon/mycoupon">
+                <view class="credit-value second">{{memberInfo.couponCount}}<text>个</text>
+                </view>
+                <view class="credit-title">优惠</view>
+            </view>
+            <view bindtap="jumpLink" class="dui-block-child" data-url="/deam_food/pages/mine/credit">
+                <view class="credit-value third">{{memberInfo.credit1}}<text>个</text>
+                </view>
+                <view class="credit-title">积分</view>
             </view>
         </view>
         <view class="dui-cell-group nomargin">
             <view bindtap="jumpLink" class="dui-cell" data-url="/deam_food/pages/coupon/mycoupon">
-                <view class="dui-cell-icon">
-                    <i class="icon icon-coupon"></i>
+                <view class="dui-cell-icon" style="color:#ec6a4a">
+                    <i class="icon icon-coupon-full"></i>
                 </view>
                 <view class="dui-cell-text">我的优惠券</view>
                 <view class="dui-cell-remark"></view>
             </view>
             <view bindtap="jumpLink" class="dui-cell" data-url="/deam_food/pages/address/index">
-                <view class="dui-cell-icon">
-                    <i class="icon icon-address"></i>
+                <view class="dui-cell-icon" style="color:#4993f7">
+                    <i class="icon icon-location-full"></i>
                 </view>
                 <view class="dui-cell-text">地址管理</view>
                 <view class="dui-cell-remark"></view>
@@ -40,8 +48,8 @@
         </view>
         <view class="dui-cell-group">
             <view bindtap="aboutUs" class="dui-cell">
-                <view class="dui-cell-icon">
-                    <i class="icon icon-aboutus"></i>
+                <view class="dui-cell-icon" style="color:#ff9c37">
+                    <i class="icon icon-store-full"></i>
                 </view>
                 <view class="dui-cell-text">关于我们</view>
                 <view class="dui-cell-remark"></view>

@@ -1,4 +1,4 @@
-var app = getApp();
+var t = getApp();
 
 Page({
     data: {
@@ -14,15 +14,11 @@ Page({
         storeType: "",
         shareTitle: ""
     },
-    onLoad: function(t) {
-        var e = this;
-        null != t.type && "" != t.type && e.setData({
+    onLoad: function(e) {
+        var a = this;
+        void 0 != e.type && "" != e.type && a.setData({
             storeType: "takeout"
-        });
-        var a = wx.getSystemInfoSync().windowHeight;
-        e.setData({
-            scrollHeight: a - 67 - 51 - 11
-        }), app.util.request({
+        }), t.util.request({
             url: "entry/wxapp/settings",
             cachetime: "0",
             showLoading: !1,
@@ -32,7 +28,7 @@ Page({
                     backgroundColor: t.result.bg_color
                 }), wx.setNavigationBarTitle({
                     title: t.result.name
-                }), e.setData({
+                }), a.setData({
                     shareTitle: t.result.share_title
                 }));
             }
@@ -40,12 +36,15 @@ Page({
     },
     onReady: function() {},
     onShow: function() {
-        "0" == this.data.isGetlocation && this.getLocation();
+        var t = this;
+        "0" == t.data.isGetlocation && t.getLocation();
     },
     onHide: function() {},
     onUnload: function() {},
     onPullDownRefresh: function() {},
-    onReachBottom: function() {},
+    onReachBottom: function() {
+        this.getlist();
+    },
     onShareAppMessage: function() {
         return {
             title: this.data.shareTitle,
@@ -55,49 +54,49 @@ Page({
         };
     },
     chooseLocation: function() {
-        var o = this;
+        var t = this;
         wx.chooseLocation({
-            success: function(t) {
-                console.log(t);
-                var e = t.latitude, a = t.longitude;
-                o.setData({
-                    locationAddr: t.address,
+            success: function(e) {
+                console.log(e);
+                var a = e.latitude, o = e.longitude;
+                t.setData({
+                    locationAddr: e.address,
                     list: [],
                     page: 1,
                     hasMore: 1
-                }), o.getStoreList(e, a);
+                }), t.getStoreList(a, o);
             },
             fail: function(t) {}
         });
     },
-    getStoreList: function(t, e) {
-        var a = this, o = a.data.page, s = a.data.hasMore, i = a.data.list;
-        a.setData({
-            latitude: t,
-            longitude: e
-        }), "1" == s && (a.setData({
+    getStoreList: function(e, a) {
+        var o = this, s = o.data.page, i = o.data.hasMore, n = o.data.list;
+        o.setData({
+            latitude: e,
+            longitude: a
+        }), "1" == i && (o.setData({
             hasMore: 0
-        }), app.util.request({
+        }), t.util.request({
             url: "entry/wxapp/data",
             cachetime: "0",
             showLoading: !0,
             data: {
                 op: "storelist",
-                latitude: t,
-                longitude: e,
-                page: o,
-                store_type: a.data.storeType
+                latitude: e,
+                longitude: a,
+                page: s,
+                store_type: o.data.storeType
             },
             success: function(t) {
-                0 < (t = t.data).result.total ? (s = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1, 
-                a.setData({
+                (t = t.data).result.total > 0 ? (i = t.result.list.length <= 0 || t.result.list.length < t.result.pagesize ? 0 : 1, 
+                o.setData({
                     total: t.result.total,
-                    list: i.concat(t.result.list),
-                    hasMore: s
-                })) : a.setData({
+                    list: n.concat(t.result.list),
+                    hasMore: i
+                })) : o.setData({
                     hasMore: 0
-                }), o++, a.setData({
-                    page: o
+                }), s++, o.setData({
+                    page: s
                 });
             }
         }));
@@ -107,32 +106,32 @@ Page({
         t.getStoreList(e, a);
     },
     getLocation: function() {
-        var o = this;
+        var e = this;
         wx.getLocation({
-            type: "wgs84",
-            success: function(t) {
-                var e = t.latitude, a = t.longitude;
-                t.speed, t.accuracy;
-                app.util.request({
+            type: "gcj02",
+            success: function(a) {
+                var o = a.latitude, s = a.longitude;
+                a.speed, a.accuracy;
+                t.util.request({
                     url: "entry/wxapp/api",
                     cachetime: "0",
                     showLoading: !1,
                     data: {
                         op: "getaddr",
-                        latitude: e,
-                        longitude: a
+                        latitude: o,
+                        longitude: s
                     },
                     success: function(t) {
-                        "1" == (t = t.data).status && o.setData({
+                        "1" == (t = t.data).status && e.setData({
                             locationAddr: t.result.address,
                             isGetlocation: 1
                         });
                     }
-                }), o.setData({
+                }), e.setData({
                     list: [],
                     page: 1,
                     hasMore: 1
-                }), o.getStoreList(e, a);
+                }), e.getStoreList(o, s);
             },
             fail: function(t) {
                 console.log(t), wx.showModal({
@@ -147,9 +146,9 @@ Page({
         });
     },
     toStore: function(t) {
-        var e = t.currentTarget.dataset.storeid;
-        wx.redirectTo({
-            url: "/deam_food/pages/store/detail?store_id=" + e + "&type=" + this.data.storeType
+        var e = this, a = t.currentTarget.dataset.storeid;
+        wx.navigateTo({
+            url: "/deam_food/pages/store/detail?store_id=" + a + "&type=" + e.data.storeType
         });
     }
 });
