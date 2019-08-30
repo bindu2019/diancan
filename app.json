@@ -23,7 +23,7 @@
   ],
   "permission": {
     "scope.userLocation": {
-      "desc": "你的位置信息将用于斌度点点确定位置所用"
+      "desc": "你的位置信息将用于到点点餐确定位置所用"
     }
   },
   "window": {

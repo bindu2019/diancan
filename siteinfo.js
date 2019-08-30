@@ -1,5 +1,5 @@
 var i = {
-    name: "斌度点点",
+    name: "到点点餐",
     uniacid: "2",
     acid: "2",
     multiid: "0",
