@@ -421,7 +421,7 @@ Page({
         });
     },
     closeBtn: function(t) {
-        this.data({
+        this.setData({
             choosePayType: 0
         });
     }
